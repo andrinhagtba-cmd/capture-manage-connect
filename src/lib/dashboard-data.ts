@@ -340,6 +340,22 @@ function buildSampleDashboard(
       quotes: Math.round((6 - i) * 6 + Math.random() * 6),
     }));
 
+  const sampleCats: CategoryPerf[] = (categories.length
+    ? categories
+    : ["Câmeras", "Drones", "Lentes", "Estabilizadores", "Acessórios"].map((n, i) => ({
+        id: `c${i}`,
+        name: n,
+      }))
+  )
+    .slice(0, 6)
+    .map((c, i) => ({
+      id: c.id,
+      name: c.name,
+      views: Math.round((6 - i) * 44 + Math.random() * 30),
+      quotes: Math.round((6 - i) * 5 + Math.random() * 5),
+    }));
+
+
   return {
     isSample: true,
     kpis: {
