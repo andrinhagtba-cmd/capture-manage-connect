@@ -5,6 +5,7 @@ import { DronesShowcase } from "@/components/DronesShowcase";
 import { CanonShowcase } from "@/components/CanonShowcase";
 import { SonyShowcase } from "@/components/SonyShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
+import { GridGlowBackground } from "@/components/ui/grid-glow-background";
 import { Button } from "@/components/ui/button";
 import { useBrands, useProducts } from "@/lib/catalog";
 import { BRAND_THEME, COMPANY_NAME } from "@/lib/site";
