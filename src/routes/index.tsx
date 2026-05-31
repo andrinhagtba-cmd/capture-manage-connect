@@ -122,6 +122,10 @@ function Home() {
       {/* Drones premium showcase */}
       <DronesShowcase />
 
+      {/* Canon premium showcase */}
+      <CanonShowcase />
+
+
 
 
       {/* Featured products */}
