@@ -2,14 +2,18 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PublicLayout } from "@/components/PublicLayout";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { Button } from "@/components/ui/button";
+import { useCompany, useSitePage } from "@/lib/site-content";
 import {
-  WHATSAPP_DISPLAY,
-  ADDRESS,
-  INSTAGRAM_URL,
-  whatsappUrl,
-} from "@/lib/site";
-import { useSitePage } from "@/lib/site-content";
-import { MapPin, Phone, Instagram, Clock, MessageCircle } from "lucide-react";
+  MapPin,
+  Phone,
+  Instagram,
+  Clock,
+  MessageCircle,
+  Mail,
+  Facebook,
+  Youtube,
+  Navigation,
+} from "lucide-react";
 
 export const Route = createFileRoute("/contato")({
   head: () => ({
@@ -30,6 +34,14 @@ export const Route = createFileRoute("/contato")({
 
 function Contato() {
   const { data: page } = useSitePage("contato");
+  const company = useCompany();
+
+  const mapEmbed = company.googleMapsEmbed.trim();
+  const mapIsIframe = mapEmbed.includes("<iframe");
+  const mapSrc = mapEmbed && !mapIsIframe
+    ? mapEmbed
+    : "https://www.google.com/maps?q=Feira+dos+Importados+de+Bras%C3%ADlia&output=embed";
+
   return (
     <PublicLayout>
       <section className="border-b border-border bg-surface">
@@ -40,46 +52,73 @@ function Contato() {
           </h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">
             {page?.subheading ??
-              "Tire dúvidas, peça um orçamento ou agende uma visita à nossa loja na Feira dos Importados de Brasília."}
+              `Tire dúvidas, peça um orçamento ou agende uma visita à ${company.name}.`}
           </p>
         </div>
       </section>
-
 
       <div className="container-page grid gap-10 py-14 lg:grid-cols-2">
         <div className="space-y-5">
           <ContactItem icon={Phone} title="WhatsApp / Telefone">
             <a
-              href={whatsappUrl()}
+              href={company.whatsappLink()}
               target="_blank"
               rel="noreferrer"
               className="text-primary hover:underline"
             >
-              {WHATSAPP_DISPLAY}
+              {company.whatsappDisplay}
             </a>
           </ContactItem>
+
+          {company.email && (
+            <ContactItem icon={Mail} title="E-mail">
+              <a href={`mailto:${company.email}`} className="text-primary hover:underline">
+                {company.email}
+              </a>
+            </ContactItem>
+          )}
+
           <ContactItem icon={MapPin} title="Endereço">
-            {ADDRESS}
+            {company.address}
+            {company.storeLocation ? ` · ${company.storeLocation}` : ""}
           </ContactItem>
+
           <ContactItem icon={Clock} title="Horário de atendimento">
-            Segunda a Sábado · 9h às 18h
+            {company.openingHours}
           </ContactItem>
-          <ContactItem icon={Instagram} title="Instagram">
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="text-primary hover:underline"
-            >
-              @nlfotoevideo
-            </a>
-          </ContactItem>
+
+          {(company.instagramUrl || company.facebookUrl || company.youtubeUrl || company.tiktokUrl) && (
+            <ContactItem icon={Instagram} title="Redes sociais">
+              <span className="flex flex-wrap items-center gap-4">
+                {company.instagramUrl && (
+                  <a href={company.instagramUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-primary hover:underline">
+                    <Instagram className="h-4 w-4" /> {company.instagramHandle}
+                  </a>
+                )}
+                {company.facebookUrl && (
+                  <a href={company.facebookUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-primary hover:underline">
+                    <Facebook className="h-4 w-4" /> Facebook
+                  </a>
+                )}
+                {company.youtubeUrl && (
+                  <a href={company.youtubeUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-primary hover:underline">
+                    <Youtube className="h-4 w-4" /> YouTube
+                  </a>
+                )}
+                {company.tiktokUrl && (
+                  <a href={company.tiktokUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+                    TikTok
+                  </a>
+                )}
+              </span>
+            </ContactItem>
+          )}
 
           <div className="flex flex-wrap gap-3 pt-2">
             <Button asChild size="lg" className="gap-2">
               <a
-                href={whatsappUrl(
-                  "Olá! Gostaria de falar com a equipe da NL Foto e Vídeo.",
+                href={company.whatsappLink(
+                  `Olá! Gostaria de falar com a equipe da ${company.name}.`,
                 )}
                 target="_blank"
                 rel="noreferrer"
@@ -90,16 +129,30 @@ function Contato() {
             <QuoteDialog
               trigger={<Button size="lg" variant="outline">Solicitar orçamento</Button>}
             />
+            {company.directionsUrl && (
+              <Button asChild size="lg" variant="ghost" className="gap-2">
+                <a href={company.directionsUrl} target="_blank" rel="noreferrer">
+                  <Navigation className="h-4 w-4" /> Como chegar
+                </a>
+              </Button>
+            )}
           </div>
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-border">
-          <iframe
-            title="Mapa NL Foto e Vídeo"
-            src="https://www.google.com/maps?q=Feira+dos+Importados+de+Bras%C3%ADlia&output=embed"
-            className="h-full min-h-[360px] w-full"
-            loading="lazy"
-          />
+          {mapIsIframe ? (
+            <div
+              className="h-full min-h-[360px] w-full [&>iframe]:h-full [&>iframe]:min-h-[360px] [&>iframe]:w-full"
+              dangerouslySetInnerHTML={{ __html: mapEmbed }}
+            />
+          ) : (
+            <iframe
+              title={`Mapa ${company.name}`}
+              src={mapSrc}
+              className="h-full min-h-[360px] w-full"
+              loading="lazy"
+            />
+          )}
         </div>
       </div>
     </PublicLayout>
