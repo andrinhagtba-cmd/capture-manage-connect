@@ -51,3 +51,10 @@ Tabela: `site_pages` (expandida) + `site_settings`.
 Cada fase é várias migrações + várias telas. Vou implementar **uma fase por vez**, validando o build e o preview antes de seguir. Se preferir uma ordem diferente (ex.: começar por Banners/Home em vez de Footer), me diga.
 
 Ao aprovar, inicio pela **Fase 1**.
+---
+
+## Progresso
+
+- ✅ **Fase 1 concluída** — Tabelas `company_settings`, `footer_settings`, `footer_link_groups`, `footer_links`, `navigation_items`. Abas Configurações da Empresa, Footer e Menu/Navegação. Frontend `SiteHeader`, `CinematicFooter` e `WhatsAppDock` lendo do banco com fallback.
+- ✅ **Fase 2 concluída** — Tabela `media_assets` + bucket `media`. Aba Biblioteca de Mídia com upload de imagens/vídeos, pastas, copiar URL, editar alt/descrição/pasta e excluir.
+- ⏭️ **Próximo: Fase 3** — Banners/Heros + Home Page dinâmica.

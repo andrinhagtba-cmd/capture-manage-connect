@@ -20,6 +20,7 @@ import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 import { Route as MarcaSlugRouteImport } from './routes/marca.$slug'
 import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
 import { Route as AdminOrcamentosRouteImport } from './routes/admin.orcamentos'
+import { Route as AdminMidiaRouteImport } from './routes/admin.midia'
 import { Route as AdminMenuRouteImport } from './routes/admin.menu'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminFooterRouteImport } from './routes/admin.footer'
@@ -80,6 +81,11 @@ const AdminOrcamentosRoute = AdminOrcamentosRouteImport.update({
   path: '/orcamentos',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminMidiaRoute = AdminMidiaRouteImport.update({
+  id: '/midia',
+  path: '/midia',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminMenuRoute = AdminMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/admin/footer': typeof AdminFooterRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/menu': typeof AdminMenuRoute
+  '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/marca/$slug': typeof MarcaSlugRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/admin/footer': typeof AdminFooterRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/menu': typeof AdminMenuRoute
+  '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/marca/$slug': typeof MarcaSlugRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/admin/footer': typeof AdminFooterRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/menu': typeof AdminMenuRoute
+  '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/marca/$slug': typeof MarcaSlugRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/admin/footer'
     | '/admin/leads'
     | '/admin/menu'
+    | '/admin/midia'
     | '/admin/orcamentos'
     | '/admin/produtos'
     | '/marca/$slug'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/admin/footer'
     | '/admin/leads'
     | '/admin/menu'
+    | '/admin/midia'
     | '/admin/orcamentos'
     | '/admin/produtos'
     | '/marca/$slug'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/admin/footer'
     | '/admin/leads'
     | '/admin/menu'
+    | '/admin/midia'
     | '/admin/orcamentos'
     | '/admin/produtos'
     | '/marca/$slug'
@@ -295,6 +307,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrcamentosRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/midia': {
+      id: '/admin/midia'
+      path: '/midia'
+      fullPath: '/admin/midia'
+      preLoaderRoute: typeof AdminMidiaRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/menu': {
       id: '/admin/menu'
       path: '/menu'
@@ -331,6 +350,7 @@ interface AdminRouteChildren {
   AdminFooterRoute: typeof AdminFooterRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminMenuRoute: typeof AdminMenuRoute
+  AdminMidiaRoute: typeof AdminMidiaRoute
   AdminOrcamentosRoute: typeof AdminOrcamentosRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -341,6 +361,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFooterRoute: AdminFooterRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminMenuRoute: AdminMenuRoute,
+  AdminMidiaRoute: AdminMidiaRoute,
   AdminOrcamentosRoute: AdminOrcamentosRoute,
   AdminProdutosRoute: AdminProdutosRoute,
   AdminIndexRoute: AdminIndexRoute,

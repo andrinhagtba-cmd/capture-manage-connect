@@ -14,6 +14,13 @@ import {
   whatsappUrl,
 } from "@/lib/site";
 import { useBrands } from "@/lib/catalog";
+import {
+  useCompanySettings,
+  useFooterSettings,
+  useFooterGroups,
+  useFooterLinks,
+  buildWhatsappUrl,
+} from "@/lib/site-content";
 import logoNlLight from "@/assets/logo-nl-light.png";
 import footerBg from "@/assets/footer-bg.jpg";
 
@@ -204,6 +211,31 @@ const MarqueeRow = () => (
 // -------------------------------------------------------------------------
 export function CinematicFooter() {
   const { data: brands } = useBrands();
+  const { data: company } = useCompanySettings();
+  const { data: footer } = useFooterSettings();
+  const { data: groups } = useFooterGroups();
+  const { data: links } = useFooterLinks();
+
+  const companyName = company?.company_name || COMPANY_NAME;
+  const tagline =
+    footer?.description || company?.short_description || COMPANY_TAGLINE;
+  const address = company?.address || ADDRESS;
+  const phone = company?.phone || company?.whatsapp || WHATSAPP_DISPLAY;
+  const instagram = company?.instagram_url || INSTAGRAM_URL;
+  const openingHours = company?.opening_hours || "Seg a Sáb · 9h às 18h";
+  const logoSrc = footer?.logo_url || company?.logo_url || logoNlLight;
+  const copyright =
+    footer?.copyright_text ||
+    `© ${new Date().getFullYear()} ${companyName}. Todos os direitos reservados.`;
+  const waHref = company?.whatsapp
+    ? buildWhatsappUrl(company.whatsapp, "Olá! Gostaria de um orçamento.")
+    : whatsappUrl("Olá! Gostaria de um orçamento.");
+  const waPlainHref = company?.whatsapp
+    ? buildWhatsappUrl(company.whatsapp)
+    : whatsappUrl();
+  const activeGroups = (groups ?? []).filter((g) => g.is_active);
+  const linksFor = (groupId: string) =>
+    (links ?? []).filter((l) => l.is_active && l.group_id === groupId);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const giantTextRef = useRef<HTMLDivElement | null>(null);
   const headingRef = useRef<HTMLDivElement | null>(null);
@@ -286,37 +318,41 @@ export function CinematicFooter() {
             <div className="flex items-center gap-3">
               <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 p-2 ring-1 ring-white/10 backdrop-blur">
                 <img
-                  src={logoNlLight}
-                  alt="NL Foto e Vídeo"
+                  src={logoSrc}
+                  alt={companyName}
                   width={512}
                   height={512}
                   className="h-full w-full object-contain"
                 />
               </span>
-              <span className="text-2xl font-extrabold tracking-tight">{COMPANY_NAME}</span>
+              <span className="text-2xl font-extrabold tracking-tight">{companyName}</span>
             </div>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-[var(--cf-fg)]/60 md:text-base">
-              {COMPANY_TAGLINE}
+              {tagline}
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <MagneticButton
-                as="a"
-                href={whatsappUrl("Olá! Gostaria de um orçamento.")}
-                target="_blank"
-                rel="noreferrer"
-                className="footer-glass-pill flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--cf-fg)]"
-              >
-                <Phone className="h-4 w-4" /> Falar no WhatsApp
-              </MagneticButton>
-              <MagneticButton
-                as="a"
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="footer-glass-pill flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--cf-fg)]"
-              >
-                <Instagram className="h-4 w-4" /> @nlfotoevideo
-              </MagneticButton>
+              {footer?.show_whatsapp !== false && (
+                <MagneticButton
+                  as="a"
+                  href={waHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="footer-glass-pill flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--cf-fg)]"
+                >
+                  <Phone className="h-4 w-4" /> Falar no WhatsApp
+                </MagneticButton>
+              )}
+              {footer?.show_social_links !== false && (
+                <MagneticButton
+                  as="a"
+                  href={instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="footer-glass-pill flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--cf-fg)]"
+                >
+                  <Instagram className="h-4 w-4" /> @nlfotoevideo
+                </MagneticButton>
+              )}
             </div>
           </div>
 
@@ -344,51 +380,79 @@ export function CinematicFooter() {
               </ul>
             </div>
 
-            <div>
-              <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--cf-fg)]/40">
-                Navegação
-              </h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link to="/catalogo" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
-                    Catálogo
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/sobre" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
-                    Sobre nós
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contato" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
-                    Contato
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/login" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
-                    Área administrativa
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            {activeGroups.length > 0 ? (
+              activeGroups.slice(0, 1).map((group) => (
+                <div key={group.id}>
+                  <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--cf-fg)]/40">
+                    {group.title}
+                  </h4>
+                  <ul className="space-y-2 text-sm">
+                    {linksFor(group.id).map((link) => (
+                      <li key={link.id}>
+                        <a
+                          href={link.url}
+                          className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]"
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <div>
+                <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--cf-fg)]/40">
+                  Navegação
+                </h4>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <Link to="/catalogo" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
+                      Catálogo
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/sobre" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
+                      Sobre nós
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contato" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
+                      Contato
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/login" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
+                      Área administrativa
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
 
             <div className="sm:col-span-2">
               <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--cf-fg)]/40">
                 Contato
               </h4>
               <ul className="mx-auto inline-flex flex-col gap-3 text-sm text-[var(--cf-fg)]/70 sm:mx-0">
-                <li className="flex items-start gap-2">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cf-primary)]" /> {ADDRESS}
-                </li>
-                <li className="flex items-center gap-2">
-                  <Phone className="h-4 w-4 shrink-0 text-[var(--cf-primary)]" />
-                  <a href={whatsappUrl()} target="_blank" rel="noreferrer" className="hover:text-[var(--cf-fg)]">
-                    {WHATSAPP_DISPLAY}
-                  </a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 shrink-0 text-[var(--cf-primary)]" /> Seg a Sáb · 9h às 18h
-                </li>
+                {footer?.show_company_address !== false && (
+                  <li className="flex items-start gap-2">
+                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cf-primary)]" /> {address}
+                  </li>
+                )}
+                {footer?.show_whatsapp !== false && (
+                  <li className="flex items-center gap-2">
+                    <Phone className="h-4 w-4 shrink-0 text-[var(--cf-primary)]" />
+                    <a href={waPlainHref} target="_blank" rel="noreferrer" className="hover:text-[var(--cf-fg)]">
+                      {phone}
+                    </a>
+                  </li>
+                )}
+                {footer?.show_opening_hours !== false && (
+                  <li className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 shrink-0 text-[var(--cf-primary)]" /> {openingHours}
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -408,7 +472,7 @@ export function CinematicFooter() {
         {/* Bottom bar */}
         <div className="relative z-10 flex flex-col items-center justify-between gap-4 border-t border-[var(--cf-fg)]/10 px-6 py-6 text-center sm:flex-row sm:text-left">
           <p className="text-xs text-[var(--cf-fg)]/50">
-            © {new Date().getFullYear()} {COMPANY_NAME}. Todos os direitos reservados.
+            {copyright}
           </p>
           <MagneticButton
             onClick={scrollToTop}

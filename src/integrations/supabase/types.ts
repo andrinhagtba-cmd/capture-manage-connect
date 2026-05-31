@@ -444,6 +444,57 @@ export type Database = {
         }
         Relationships: []
       }
+      media_assets: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          description: string | null
+          file_name: string
+          file_path: string | null
+          file_url: string
+          folder: string | null
+          height: number | null
+          id: string
+          media_type: string
+          mime_type: string | null
+          size_bytes: number | null
+          updated_at: string
+          width: number | null
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          description?: string | null
+          file_name: string
+          file_path?: string | null
+          file_url: string
+          folder?: string | null
+          height?: number | null
+          id?: string
+          media_type?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          updated_at?: string
+          width?: number | null
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          description?: string | null
+          file_name?: string
+          file_path?: string | null
+          file_url?: string
+          folder?: string | null
+          height?: number | null
+          id?: string
+          media_type?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          updated_at?: string
+          width?: number | null
+        }
+        Relationships: []
+      }
       navigation_items: {
         Row: {
           created_at: string

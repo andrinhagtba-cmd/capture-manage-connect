@@ -1,13 +1,20 @@
 import { MessageCircle } from "lucide-react";
 import { whatsappUrl, WHATSAPP_DISPLAY } from "@/lib/site";
+import { useCompanySettings, buildWhatsappUrl } from "@/lib/site-content";
 
 export function WhatsAppDock() {
-  const msg = "Olá! Vim pelo site da NL Foto e Vídeo e gostaria de mais informações.";
+  const { data: company } = useCompanySettings();
+  const msg =
+    "Olá! Vim pelo site da NL Foto e Vídeo e gostaria de mais informações.";
+  const href = company?.whatsapp
+    ? buildWhatsappUrl(company.whatsapp, msg)
+    : whatsappUrl(msg);
+  const display = company?.phone || company?.whatsapp || WHATSAPP_DISPLAY;
   return (
     <>
       {/* Floating button (desktop & tablet) */}
       <a
-        href={whatsappUrl(msg)}
+        href={href}
         target="_blank"
         rel="noreferrer"
         aria-label="Falar no WhatsApp"
@@ -18,13 +25,13 @@ export function WhatsAppDock() {
 
       {/* Fixed bottom bar (mobile) */}
       <a
-        href={whatsappUrl(msg)}
+        href={href}
         target="_blank"
         rel="noreferrer"
         className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-center gap-2 bg-[#25D366] py-3.5 text-sm font-semibold text-white shadow-[0_-4px_16px_rgba(0,0,0,0.12)] sm:hidden"
       >
         <MessageCircle className="h-5 w-5" />
-        Falar no WhatsApp · {WHATSAPP_DISPLAY}
+        Falar no WhatsApp · {display}
       </a>
     </>
   );

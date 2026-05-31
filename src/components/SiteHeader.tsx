@@ -5,12 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useBrands, useCategories } from "@/lib/catalog";
 import { COMPANY_NAME, BRAND_THEME } from "@/lib/site";
+import { useCompanySettings, useNavigationItems } from "@/lib/site-content";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import logoNlLight from "@/assets/logo-nl-light.png";
 
 export function SiteHeader() {
   const { data: brands } = useBrands();
   const { data: categories } = useCategories();
+  const { data: company } = useCompanySettings();
+  const { data: navItems } = useNavigationItems("header");
+  const companyName = company?.company_name || COMPANY_NAME;
+  const customNav = (navItems ?? []).filter((n) => n.is_active);
   const [openBrand, setOpenBrand] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -33,15 +38,18 @@ export function SiteHeader() {
         <Link to="/" className="group flex items-center gap-3">
           <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink p-1.5 shadow-elegant transition-transform duration-300 group-hover:scale-105">
             <img
-              src={logoNlLight}
-              alt="NL Foto e Vídeo"
+              src={company?.logo_url || logoNlLight}
+              alt={companyName}
               width={512}
               height={512}
               className="h-full w-full object-contain"
             />
           </span>
           <span className="text-lg font-bold leading-tight tracking-tight text-foreground">
-            NL <span className="text-gradient-red">Foto e Vídeo</span>
+            {companyName.split(" ")[0]}{" "}
+            <span className="text-gradient-red">
+              {companyName.split(" ").slice(1).join(" ")}
+            </span>
           </span>
         </Link>
 
@@ -83,6 +91,17 @@ export function SiteHeader() {
           >
             Contato
           </Link>
+          {customNav.map((item) => (
+            <a
+              key={item.id}
+              href={item.url}
+              target={item.opens_new_tab ? "_blank" : undefined}
+              rel={item.opens_new_tab ? "noreferrer" : undefined}
+              className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+            >
+              {item.label}
+            </a>
+          ))}
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
@@ -101,7 +120,7 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[88vw] max-w-sm overflow-y-auto p-0">
               <div className="flex items-center justify-between border-b border-border px-5 py-4">
-                <span className="font-bold">{COMPANY_NAME}</span>
+                <span className="font-bold">{companyName}</span>
                 <Button
                   variant="ghost"
                   size="icon"
