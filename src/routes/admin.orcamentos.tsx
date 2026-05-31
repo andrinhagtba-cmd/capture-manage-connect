@@ -42,7 +42,7 @@ function Orcamentos() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("quote_requests")
-        .select("*, products(name)")
+        .select("*, products(name, slug)")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
