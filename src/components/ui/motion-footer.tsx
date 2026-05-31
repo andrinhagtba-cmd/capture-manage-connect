@@ -380,33 +380,55 @@ export function CinematicFooter() {
               </ul>
             </div>
 
-            <div>
-              <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--cf-fg)]/40">
-                Navegação
-              </h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link to="/catalogo" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
-                    Catálogo
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/sobre" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
-                    Sobre nós
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contato" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
-                    Contato
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/login" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
-                    Área administrativa
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            {activeGroups.length > 0 ? (
+              activeGroups.slice(0, 1).map((group) => (
+                <div key={group.id}>
+                  <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--cf-fg)]/40">
+                    {group.title}
+                  </h4>
+                  <ul className="space-y-2 text-sm">
+                    {linksFor(group.id).map((link) => (
+                      <li key={link.id}>
+                        <a
+                          href={link.url}
+                          className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]"
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <div>
+                <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--cf-fg)]/40">
+                  Navegação
+                </h4>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <Link to="/catalogo" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
+                      Catálogo
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/sobre" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
+                      Sobre nós
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contato" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
+                      Contato
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/login" className="text-[var(--cf-fg)]/70 transition-colors hover:text-[var(--cf-fg)]">
+                      Área administrativa
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
 
             <div className="sm:col-span-2">
               <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--cf-fg)]/40">
