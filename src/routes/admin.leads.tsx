@@ -113,7 +113,7 @@ function Leads() {
                   {l.phone && (
                     <Button asChild variant="ghost" size="icon">
                       <a
-                        href={whatsappUrl(`Olá ${l.name}! Aqui é da NL Foto e Vídeo.`)}
+                        href={whatsappTo(l.phone, `Olá ${l.name}! Aqui é da NL Foto e Vídeo.`)}
                         target="_blank"
                         rel="noreferrer"
                       >
