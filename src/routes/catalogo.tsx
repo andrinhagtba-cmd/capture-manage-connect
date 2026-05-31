@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { z } from "zod";
 import { PublicLayout } from "@/components/PublicLayout";
 import { ProductCard } from "@/components/ProductCard";
 import { useBrands, useCategories, useProducts } from "@/lib/catalog";
+import { track } from "@/lib/analytics";
 import {
   AVAILABILITY_LABELS,
   BRAND_THEME,
