@@ -165,7 +165,7 @@ function ProdutosAdmin() {
   async function toggle(id: string, field: "is_active" | "is_featured", val: boolean) {
     const { error } = await supabase
       .from("products")
-      .update({ [field]: val })
+      .update({ [field]: val } as any)
       .eq("id", id);
     if (error) return toast.error(error.message);
     qc.invalidateQueries({ queryKey: ["admin-products"] });
