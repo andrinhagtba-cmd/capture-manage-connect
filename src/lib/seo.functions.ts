@@ -1,52 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-
-const DEFAULT_SITE_URL = "https://capture-manage-connect.lovable.app";
-const DEFAULT_SITE_NAME = "NL Foto e Vídeo";
-const DEFAULT_DESCRIPTION =
-  "Produto com procedência, garantia e atendimento especializado na NL Foto e Vídeo.";
-
-export type ResolvedSeo = {
-  title: string;
-  description: string;
-  image: string | null;
-  imageWidth: number;
-  imageHeight: number;
-  url: string;
-  type: string;
-  siteName: string;
-  twitterCard: string;
-  brandName: string | null;
-};
-
-function firstArrayUrl(v: unknown): string | null {
-  if (!Array.isArray(v)) return null;
-  for (const item of v) {
-    if (typeof item === "string" && item.trim()) return item;
-    if (item && typeof item === "object") {
-      const o = item as Record<string, unknown>;
-      const url = (o.url ?? o.src ?? o.image_url ?? o.file_url) as
-        | string
-        | undefined;
-      if (typeof url === "string" && url.trim()) return url;
-    }
-  }
-  return null;
-}
-
-/** Convert a relative path to an absolute https URL using the public site URL. */
-export function toAbsoluteUrl(
-  value: string | null | undefined,
-  base: string,
-): string | null {
-  if (!value) return null;
-  const v = value.trim();
-  if (!v) return null;
-  if (/^https?:\/\//i.test(v)) return v.replace(/^http:\/\//i, "https://");
-  const cleanBase = base.replace(/\/+$/, "");
-  const path = v.startsWith("/") ? v : `/${v}`;
-  return `${cleanBase}${path}`;
-}
+import {
+  DEFAULT_PRODUCT_DESCRIPTION,
+  DEFAULT_SITE_NAME,
+  DEFAULT_SITE_URL,
+  firstArrayUrl,
+  toAbsoluteUrl,
+  type ResolvedSeo,
+} from "@/lib/seo-meta";
 
 /**
  * Build the canonical SEO/OG payload for a product slug. Runs server-side so
@@ -75,8 +36,9 @@ export const getProductSeo = createServerFn({ method: "GET" })
       .limit(1)
       .maybeSingle();
 
-    let brand: { name: string; hero_image_url: string | null; logo_url: string | null } | null =
-      null;
+    let brand:
+      | { name: string; hero_image_url: string | null; logo_url: string | null }
+      | null = null;
     if (product.brand_id) {
       const { data: b } = await supabaseAdmin
         .from("brands")
@@ -86,8 +48,7 @@ export const getProductSeo = createServerFn({ method: "GET" })
       brand = b ?? null;
     }
 
-    const siteUrl =
-      settings?.public_site_url?.trim() || DEFAULT_SITE_URL;
+    const siteUrl = settings?.public_site_url?.trim() || DEFAULT_SITE_URL;
     const siteName =
       settings?.site_name?.trim() ||
       settings?.company_name?.trim() ||
@@ -102,7 +63,7 @@ export const getProductSeo = createServerFn({ method: "GET" })
       product.seo_description?.trim() ||
       product.og_description?.trim() ||
       product.short_description?.trim() ||
-      DEFAULT_DESCRIPTION;
+      DEFAULT_PRODUCT_DESCRIPTION;
 
     const rawImage =
       product.og_image_url?.trim() ||
@@ -132,7 +93,8 @@ export const getProductSeo = createServerFn({ method: "GET" })
       url,
       type: "product",
       siteName,
-      twitterCard: settings?.default_twitter_card?.trim() || "summary_large_image",
+      twitterCard:
+        settings?.default_twitter_card?.trim() || "summary_large_image",
       brandName: brand?.name ?? null,
     };
   });
