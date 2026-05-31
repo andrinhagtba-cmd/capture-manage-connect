@@ -9,6 +9,8 @@ import { useBrands, useCategories, useProducts } from "@/lib/catalog";
 import { useActiveHero, useBrandPageSettings } from "@/lib/site-content";
 import { track } from "@/lib/analytics";
 import { BRAND_THEME } from "@/lib/site";
+import { getBrandSeo } from "@/lib/seo.functions";
+import { buildSeoHead, DEFAULT_SITE_URL } from "@/lib/seo-meta";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import heroCanon from "@/assets/hero-canon.jpg";
 import heroDji from "@/assets/hero-dji.jpg";
