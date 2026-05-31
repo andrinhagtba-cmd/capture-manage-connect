@@ -76,7 +76,7 @@ function ShowcaseCard({ product, brandLabel }: { product: Product; brandLabel: s
               </Button>
             }
           />
-          <a href={whatsappUrl(waMsg)} target="_blank" rel="noopener noreferrer">
+          <a href={company.whatsappLink(waMsg)} target="_blank" rel="noopener noreferrer">
             <Button
               variant="outline"
               size="sm"
