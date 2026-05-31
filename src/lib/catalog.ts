@@ -94,6 +94,23 @@ export function useProducts(opts?: {
   });
 }
 
+export function useCategoryProducts(categorySlug: string) {
+  return useQuery({
+    queryKey: ["category-products", categorySlug],
+    queryFn: async (): Promise<Product[]> => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*, categories!inner(slug)")
+        .eq("is_active", true)
+        .eq("categories.slug", categorySlug)
+        .order("is_featured", { ascending: false })
+        .order("name");
+      if (error) throw error;
+      return data as unknown as Product[];
+    },
+  });
+}
+
 export function useProduct(slug: string) {
   return useQuery({
     queryKey: ["product", slug],
