@@ -32,6 +32,7 @@ export type RankItem = {
   value: number;
 };
 export type BrandPerf = { id: string; name: string; views: number; quotes: number };
+export type CategoryPerf = { id: string; name: string; views: number; quotes: number };
 export type FunnelStep = { label: string; value: number };
 export type DeviceSlice = { name: string; value: number };
 export type SourceSlice = { name: string; value: number };
@@ -60,6 +61,7 @@ export type DashboardData = {
   topViewed: RankItem[];
   topRequested: RankItem[];
   brands: BrandPerf[];
+  categories: CategoryPerf[];
   funnel: FunnelStep[];
   devices: DeviceSlice[];
   sources: SourceSlice[];
@@ -97,15 +99,16 @@ export async function fetchDashboard(period: DashboardPeriod): Promise<Dashboard
   since.setDate(since.getDate() - days);
   const sinceIso = since.toISOString();
 
-  const [eventsRes, productsRes, brandsRes, quotesRes, leadsRes] = await Promise.all([
+  const [eventsRes, productsRes, brandsRes, categoriesRes, quotesRes, leadsRes] = await Promise.all([
     supabase
       .from("analytics_events")
       .select("event_name, product_id, brand_id, visitor_id, device_type, source, created_at")
       .gte("created_at", sinceIso)
       .order("created_at", { ascending: false })
       .limit(5000),
-    supabase.from("products").select("id, name, main_image_url, brand_id"),
+    supabase.from("products").select("id, name, main_image_url, brand_id, category_id"),
     supabase.from("brands").select("id, name"),
+    supabase.from("categories").select("id, name"),
     supabase
       .from("quote_requests")
       .select("id, product_id, created_at")
@@ -120,15 +123,17 @@ export async function fetchDashboard(period: DashboardPeriod): Promise<Dashboard
   const events = (eventsRes.data ?? []) as EventRow[];
   const products = productsRes.data ?? [];
   const brands = brandsRes.data ?? [];
+  const categories = categoriesRes.data ?? [];
   const quotes = quotesRes.data ?? [];
   const leads = (leadsRes.data ?? []) as LeadRow[];
 
   // No real data → return sample preview.
   if (events.length === 0 && quotes.length === 0) {
-    return buildSampleDashboard(period, products, brands, leads);
+    return buildSampleDashboard(period, products, brands, categories, leads);
   }
 
   const productMap = new Map(products.map((p) => [p.id, p]));
+  const categoryMap = new Map(categories.map((c) => [c.id, c]));
   const brandMap = new Map(brands.map((b) => [b.id, b]));
 
   // KPIs
@@ -190,6 +195,25 @@ export async function fetchDashboard(period: DashboardPeriod): Promise<Dashboard
     .sort((a, b) => b.views + b.quotes - (a.views + a.quotes))
     .slice(0, 6);
 
+  // Category performance
+  const catStats = new Map<string, CategoryPerf>();
+  const ensureCat = (id: string) => {
+    if (!catStats.has(id))
+      catStats.set(id, { id, name: categoryMap.get(id)?.name ?? "—", views: 0, quotes: 0 });
+    return catStats.get(id)!;
+  };
+  for (const e of events) {
+    const cId = e.product_id ? productMap.get(e.product_id)?.category_id ?? null : null;
+    if (cId && e.event_name === "product_view") ensureCat(cId).views += 1;
+  }
+  for (const q of quotes) {
+    const cId = q.product_id ? productMap.get(q.product_id)?.category_id ?? null : null;
+    if (cId) ensureCat(cId).quotes += 1;
+  }
+  const categoryPerf = Array.from(catStats.values())
+    .sort((a, b) => b.views + b.quotes - (a.views + a.quotes))
+    .slice(0, 6);
+
   // Funnel
   const quoteStarted = events.filter((e) => e.event_name === "quote_request_started").length;
   const funnel: FunnelStep[] = [
@@ -236,6 +260,7 @@ export async function fetchDashboard(period: DashboardPeriod): Promise<Dashboard
     topViewed,
     topRequested,
     brands: brandPerf,
+    categories: categoryPerf,
     funnel,
     devices,
     sources,
@@ -269,6 +294,7 @@ function buildSampleDashboard(
   period: DashboardPeriod,
   products: { id: string; name: string; main_image_url: string | null; brand_id: string | null }[],
   brands: { id: string; name: string }[],
+  categories: { id: string; name: string }[],
   leads: LeadRow[],
 ): DashboardData {
   const days = PERIOD_DAYS[period];
@@ -314,6 +340,22 @@ function buildSampleDashboard(
       quotes: Math.round((6 - i) * 6 + Math.random() * 6),
     }));
 
+  const sampleCats: CategoryPerf[] = (categories.length
+    ? categories
+    : ["Câmeras", "Drones", "Lentes", "Estabilizadores", "Acessórios"].map((n, i) => ({
+        id: `c${i}`,
+        name: n,
+      }))
+  )
+    .slice(0, 6)
+    .map((c, i) => ({
+      id: c.id,
+      name: c.name,
+      views: Math.round((6 - i) * 44 + Math.random() * 30),
+      quotes: Math.round((6 - i) * 5 + Math.random() * 5),
+    }));
+
+
   return {
     isSample: true,
     kpis: {
@@ -329,6 +371,7 @@ function buildSampleDashboard(
     topViewed: mkRank(14),
     topRequested: mkRank(4),
     brands: sampleBrands,
+    categories: sampleCats,
     funnel: [
       { label: "Visitas", value: pageViews },
       { label: "Visualizações de produto", value: Math.round(pageViews * 0.4) },
