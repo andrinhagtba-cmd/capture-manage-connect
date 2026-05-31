@@ -136,7 +136,7 @@ function BrandPage() {
               <Link
                 key={line.cat}
                 to="/catalogo"
-                search={{ marca: "gopro", cat: line.cat }}
+                search={{ marca: "gopro" }}
                 className="hover-lift group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
               >
                 <div className="relative aspect-[16/10] overflow-hidden gradient-dark">
