@@ -8,6 +8,7 @@ import {
   INSTAGRAM_URL,
   whatsappUrl,
 } from "@/lib/site";
+import { useSitePage } from "@/lib/site-content";
 import { MapPin, Phone, Instagram, Clock, MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/contato")({
