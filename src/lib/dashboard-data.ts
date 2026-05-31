@@ -99,15 +99,16 @@ export async function fetchDashboard(period: DashboardPeriod): Promise<Dashboard
   since.setDate(since.getDate() - days);
   const sinceIso = since.toISOString();
 
-  const [eventsRes, productsRes, brandsRes, quotesRes, leadsRes] = await Promise.all([
+  const [eventsRes, productsRes, brandsRes, categoriesRes, quotesRes, leadsRes] = await Promise.all([
     supabase
       .from("analytics_events")
       .select("event_name, product_id, brand_id, visitor_id, device_type, source, created_at")
       .gte("created_at", sinceIso)
       .order("created_at", { ascending: false })
       .limit(5000),
-    supabase.from("products").select("id, name, main_image_url, brand_id"),
+    supabase.from("products").select("id, name, main_image_url, brand_id, category_id"),
     supabase.from("brands").select("id, name"),
+    supabase.from("categories").select("id, name"),
     supabase
       .from("quote_requests")
       .select("id, product_id, created_at")
@@ -122,6 +123,7 @@ export async function fetchDashboard(period: DashboardPeriod): Promise<Dashboard
   const events = (eventsRes.data ?? []) as EventRow[];
   const products = productsRes.data ?? [];
   const brands = brandsRes.data ?? [];
+  const categories = categoriesRes.data ?? [];
   const quotes = quotesRes.data ?? [];
   const leads = (leadsRes.data ?? []) as LeadRow[];
 
