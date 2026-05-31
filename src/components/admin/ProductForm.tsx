@@ -170,6 +170,7 @@ export function ProductForm({
   allProducts: AdminProduct[];
 }) {
   const qc = useQueryClient();
+  const { data: company } = useCompanySettings();
   const [form, setForm] = useState<FormState>(emptyForm(defaultBrandId));
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState("basico");
