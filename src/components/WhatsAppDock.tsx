@@ -1,16 +1,12 @@
 import { MessageCircle } from "lucide-react";
-import { whatsappUrl, WHATSAPP_DISPLAY } from "@/lib/site";
-import { useCompanySettings, buildWhatsappUrl } from "@/lib/site-content";
+import { useCompany } from "@/lib/site-content";
 import { track } from "@/lib/analytics";
 
 export function WhatsAppDock() {
-  const { data: company } = useCompanySettings();
-  const msg =
-    "Olá! Vim pelo site da NL Foto e Vídeo e gostaria de mais informações.";
-  const href = company?.whatsapp
-    ? buildWhatsappUrl(company.whatsapp, msg)
-    : whatsappUrl(msg);
-  const display = company?.phone || company?.whatsapp || WHATSAPP_DISPLAY;
+  const company = useCompany();
+  const msg = `Olá! Vim pelo site da ${company.name} e gostaria de mais informações.`;
+  const href = company.whatsappLink(msg);
+  const display = company.whatsappDisplay;
   const onWhatsapp = () => track("whatsapp_click", { metadata: { origin: "dock" } });
   return (
     <>
