@@ -15,6 +15,26 @@ export function whatsappUrl(message?: string) {
   return `${base}?text=${encodeURIComponent(message)}`;
 }
 
+// Normalize a Brazilian phone into wa.me format (with country code 55).
+export function normalizePhone(raw?: string | null) {
+  if (!raw) return "";
+  let digits = raw.replace(/\D/g, "");
+  // Strip leading zeros
+  digits = digits.replace(/^0+/, "");
+  // Add Brazil country code if missing (numbers with 10-11 digits = local)
+  if (digits.length <= 11) digits = `55${digits}`;
+  return digits;
+}
+
+// Build a wa.me link to a specific recipient (e.g. a customer/lead phone).
+export function whatsappTo(phone?: string | null, message?: string) {
+  const number = normalizePhone(phone);
+  if (!number) return whatsappUrl(message);
+  const base = `https://wa.me/${number}`;
+  if (!message) return base;
+  return `${base}?text=${encodeURIComponent(message)}`;
+}
+
 export const BRAND_THEME: Record<
   string,
   { color: string; label: string; blurb: string }
