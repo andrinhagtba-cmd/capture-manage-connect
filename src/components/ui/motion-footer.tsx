@@ -472,7 +472,7 @@ export function CinematicFooter() {
         {/* Bottom bar */}
         <div className="relative z-10 flex flex-col items-center justify-between gap-4 border-t border-[var(--cf-fg)]/10 px-6 py-6 text-center sm:flex-row sm:text-left">
           <p className="text-xs text-[var(--cf-fg)]/50">
-            © {new Date().getFullYear()} {COMPANY_NAME}. Todos os direitos reservados.
+            {copyright}
           </p>
           <MagneticButton
             onClick={scrollToTop}
