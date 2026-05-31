@@ -173,6 +173,29 @@
   }
   .hover-lift:hover {
     transform: translateY(-4px);
+    box-shadow: var(--shadow-elegant);
+  }
+
+  .gradient-primary {
+    background-image: var(--gradient-primary);
+  }
+  .gradient-red {
+    background-image: var(--gradient-red);
+  }
+  .gradient-dark {
+    background-image: var(--gradient-dark);
+  }
+  .gradient-ember {
+    background-image: var(--gradient-ember);
+  }
+  .text-gradient-red {
+    background-image: var(--gradient-ember);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .shadow-elegant {
+    box-shadow: var(--shadow-elegant);
   }
 }
 
