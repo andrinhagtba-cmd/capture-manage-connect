@@ -35,6 +35,19 @@ const STATUS_LABEL: Record<string, string> = {
   perdido: "Perdido",
 };
 
+function quoteWhatsappMessage(q: any) {
+  let msg = `Olá ${q.customer_name}! Sobre seu pedido de orçamento na NL Foto e Vídeo`;
+  if (q.products?.name) {
+    msg += ` para o ${q.products.name}`;
+    if (q.products.slug) {
+      const origin =
+        typeof window !== "undefined" ? window.location.origin : "";
+      msg += `: ${origin}/produto/${q.products.slug}`;
+    }
+  }
+  return `${msg}...`;
+}
+
 function Orcamentos() {
   const qc = useQueryClient();
   const { data } = useQuery({
