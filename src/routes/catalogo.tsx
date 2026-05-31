@@ -47,7 +47,12 @@ function Catalogo() {
   const { data: products } = useProducts();
 
   const setParam = (key: string, value?: string) =>
-    navigate({ search: (prev) => ({ ...prev, [key]: value || undefined }) });
+    navigate({
+      search: (prev: z.infer<typeof searchSchema>) => ({
+        ...prev,
+        [key]: value || undefined,
+      }),
+    });
 
   const brandBySlug = useMemo(
     () => new Map((brands ?? []).map((b) => [b.slug, b])),
