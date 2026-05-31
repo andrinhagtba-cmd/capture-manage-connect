@@ -12,6 +12,7 @@ import {
   type AdminProduct,
 } from "@/lib/products-admin";
 import { AVAILABILITY_LABELS, AVAILABILITY_TONE } from "@/lib/site";
+import { useCompanySettings } from "@/lib/site-content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
