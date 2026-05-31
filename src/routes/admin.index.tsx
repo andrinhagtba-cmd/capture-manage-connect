@@ -17,8 +17,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  PieChart,
-  Pie,
   Cell,
   RadialBarChart,
   RadialBar,
