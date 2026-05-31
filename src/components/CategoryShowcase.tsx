@@ -5,7 +5,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { Heart, Star, Truck, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QuoteDialog } from "@/components/QuoteDialog";
-import { useCategoryProducts, type Product } from "@/lib/catalog";
+import { useCategoryProducts, useCategoriesProducts, type Product } from "@/lib/catalog";
 import { whatsappUrl } from "@/lib/site";
 import placeholder from "@/assets/product-placeholder.jpg";
 
@@ -102,7 +102,9 @@ export type CategoryShowcaseProps = {
   /** Background image (imported asset URL). Used when no videoSrc is set. */
   imageSrc?: string;
   /** Category slug to fetch products from */
-  categorySlug: string;
+  categorySlug?: string;
+  /** Multiple category slugs (union) to fetch products from */
+  categorySlugs?: string[];
   /** Brand label used in quote dialogs (e.g. "DJI") */
   brandLabel?: string;
   /** Brand slug used in the "Mostrar todos" link */
@@ -119,18 +121,21 @@ export function CategoryShowcase({
   videoSrc,
   imageSrc,
   categorySlug,
+  categorySlugs,
   brandLabel = "DJI",
   brandSlug = "dji",
   ctaLabel = "Mostrar Todos",
   ctaTo = "catalog",
 }: CategoryShowcaseProps) {
-  const { data: products } = useCategoryProducts(categorySlug);
+  const single = useCategoryProducts(categorySlug ?? "");
+  const multi = useCategoriesProducts(categorySlugs ?? []);
+  const products = categorySlugs?.length ? multi.data : single.data;
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { align: "start", loop: false, slidesToScroll: 1 },
     [Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })],
   );
 
-  const items = products ?? [];
+  const items: Product[] = products ?? [];
   if (items.length === 0) return null;
 
   return (

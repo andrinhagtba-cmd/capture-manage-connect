@@ -3,6 +3,7 @@ import { PublicLayout } from "@/components/PublicLayout";
 import { ProductCard } from "@/components/ProductCard";
 import { DronesShowcase } from "@/components/DronesShowcase";
 import { CanonShowcase } from "@/components/CanonShowcase";
+import { SonyShowcase } from "@/components/SonyShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { Button } from "@/components/ui/button";
 import { useBrands, useProducts } from "@/lib/catalog";
@@ -124,6 +125,9 @@ function Home() {
 
       {/* Canon premium showcase */}
       <CanonShowcase />
+
+      {/* Sony premium showcase */}
+      <SonyShowcase />
 
 
 
