@@ -302,13 +302,13 @@ function EditMediaDialog({
   const [folder, setFolder] = useState("geral");
   const [saving, setSaving] = useState(false);
 
-  // sync when asset changes
-  if (asset && asset.id !== (window as any).__lastMediaId) {
-    (window as any).__lastMediaId = asset.id;
-    setAlt(asset.alt_text ?? "");
-    setDesc(asset.description ?? "");
-    setFolder(asset.folder ?? "geral");
-  }
+  useEffect(() => {
+    if (asset) {
+      setAlt(asset.alt_text ?? "");
+      setDesc(asset.description ?? "");
+      setFolder(asset.folder ?? "geral");
+    }
+  }, [asset]);
 
   async function save() {
     if (!asset) return;
