@@ -38,15 +38,18 @@ export function SiteHeader() {
         <Link to="/" className="group flex items-center gap-3">
           <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink p-1.5 shadow-elegant transition-transform duration-300 group-hover:scale-105">
             <img
-              src={logoNlLight}
-              alt="NL Foto e Vídeo"
+              src={company?.logo_url || logoNlLight}
+              alt={companyName}
               width={512}
               height={512}
               className="h-full w-full object-contain"
             />
           </span>
           <span className="text-lg font-bold leading-tight tracking-tight text-foreground">
-            NL <span className="text-gradient-red">Foto e Vídeo</span>
+            {companyName.split(" ")[0]}{" "}
+            <span className="text-gradient-red">
+              {companyName.split(" ").slice(1).join(" ")}
+            </span>
           </span>
         </Link>
 
