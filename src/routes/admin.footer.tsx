@@ -47,9 +47,8 @@ function FooterAdmin() {
 
   async function saveSettings() {
     setSaving(true);
-    const payload = { ...form };
-    delete (payload as Record<string, unknown>).updated_at;
-    delete (payload as Record<string, unknown>).settings_json;
+    const { updated_at: _u, settings_json: _s, id: _id, ...rest } = form;
+    const payload = rest;
     let error;
     if (settings?.id) {
       ({ error } = await supabase.from("footer_settings").update(payload).eq("id", settings.id));
