@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PublicLayout } from "@/components/PublicLayout";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { Button } from "@/components/ui/button";
-import { COMPANY_NAME } from "@/lib/site";
+
 import { useSitePage } from "@/lib/site-content";
 import { Award, Users, Camera, Heart } from "lucide-react";
 import heroHome from "@/assets/hero-home.jpg";
