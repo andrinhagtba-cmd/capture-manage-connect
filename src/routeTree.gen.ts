@@ -21,6 +21,7 @@ import { Route as MarcaSlugRouteImport } from './routes/marca.$slug'
 import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
 import { Route as AdminOrcamentosRouteImport } from './routes/admin.orcamentos'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
+import { Route as AdminEmpresaRouteImport } from './routes/admin.empresa'
 
 const SobreRoute = SobreRouteImport.update({
   id: '/sobre',
@@ -82,6 +83,11 @@ const AdminLeadsRoute = AdminLeadsRouteImport.update({
   path: '/leads',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEmpresaRoute = AdminEmpresaRouteImport.update({
+  id: '/empresa',
+  path: '/empresa',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
+  '/admin/empresa': typeof AdminEmpresaRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/produtos': typeof AdminProdutosRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
+  '/admin/empresa': typeof AdminEmpresaRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/produtos': typeof AdminProdutosRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
+  '/admin/empresa': typeof AdminEmpresaRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/produtos': typeof AdminProdutosRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/sobre'
+    | '/admin/empresa'
     | '/admin/leads'
     | '/admin/orcamentos'
     | '/admin/produtos'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/sobre'
+    | '/admin/empresa'
     | '/admin/leads'
     | '/admin/orcamentos'
     | '/admin/produtos'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/sobre'
+    | '/admin/empresa'
     | '/admin/leads'
     | '/admin/orcamentos'
     | '/admin/produtos'
@@ -266,10 +278,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLeadsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/empresa': {
+      id: '/admin/empresa'
+      path: '/empresa'
+      fullPath: '/admin/empresa'
+      preLoaderRoute: typeof AdminEmpresaRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminEmpresaRoute: typeof AdminEmpresaRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminOrcamentosRoute: typeof AdminOrcamentosRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
@@ -277,6 +297,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminEmpresaRoute: AdminEmpresaRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminOrcamentosRoute: AdminOrcamentosRoute,
   AdminProdutosRoute: AdminProdutosRoute,
@@ -298,3 +319,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
