@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from "@tanstack/react-router";
-import { Camera, Instagram, MapPin, Phone, Clock, ArrowUp } from "lucide-react";
+import { Instagram, MapPin, Phone, Clock, ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   COMPANY_NAME,
