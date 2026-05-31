@@ -177,8 +177,15 @@ export function SiteFooter() {
                 <Clock className="h-4 w-4 shrink-0" /> {openingHours}
               </li>
             )}
+            {footer?.show_email !== false && company.email && (
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 shrink-0" />
+                <a href={`mailto:${company.email}`}>{company.email}</a>
+              </li>
+            )}
           </ul>
         </div>
+
       </div>
       <div className="border-t border-background/10 py-5 text-center text-xs text-background/50">
         {footer?.copyright_text ||
