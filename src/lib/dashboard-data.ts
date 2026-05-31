@@ -32,6 +32,7 @@ export type RankItem = {
   value: number;
 };
 export type BrandPerf = { id: string; name: string; views: number; quotes: number };
+export type CategoryPerf = { id: string; name: string; views: number; quotes: number };
 export type FunnelStep = { label: string; value: number };
 export type DeviceSlice = { name: string; value: number };
 export type SourceSlice = { name: string; value: number };
