@@ -224,14 +224,6 @@ function BrandPage() {
             brandLabel="Canon"
             brandSlug="canon"
           />
-          <CategoryShowcase
-            eyebrow="Linha Canon"
-            title="Suprimentos"
-            imageSrc={canonSuprimentos}
-            categorySlug="canon-suprimentos"
-            brandLabel="Canon"
-            brandSlug="canon"
-          />
         </>
       )}
       {slug === "sony" && (
