@@ -346,3 +346,55 @@ export function useBrandPageSettings(slug: string) {
     },
   });
 }
+
+export type SitePage = {
+  id: string;
+  page_key: string;
+  label: string;
+  slug: string | null;
+  eyebrow: string | null;
+  heading: string | null;
+  subheading: string | null;
+  body_json: string[];
+  meta_title: string | null;
+  meta_description: string | null;
+  meta_image_url: string | null;
+  og_title: string | null;
+  og_description: string | null;
+  noindex: boolean;
+  is_published: boolean;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+};
+
+/** All site pages (for admin management). */
+export function useSitePages() {
+  return useQuery({
+    queryKey: ["site_pages"],
+    queryFn: async (): Promise<SitePage[]> => {
+      const { data, error } = await supabase
+        .from("site_pages")
+        .select("*")
+        .order("order_index");
+      if (error) throw error;
+      return (data ?? []) as SitePage[];
+    },
+  });
+}
+
+/** Single site page by key (public-facing). */
+export function useSitePage(pageKey: string) {
+  return useQuery({
+    queryKey: ["site_pages", pageKey],
+    queryFn: async (): Promise<SitePage | null> => {
+      const { data, error } = await supabase
+        .from("site_pages")
+        .select("*")
+        .eq("page_key", pageKey)
+        .maybeSingle();
+      if (error) throw error;
+      return data as SitePage | null;
+    },
+  });
+}
