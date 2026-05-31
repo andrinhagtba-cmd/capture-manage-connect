@@ -111,6 +111,23 @@ export function useCategoryProducts(categorySlug: string) {
   });
 }
 
+export function useCategoriesProducts(categorySlugs: string[]) {
+  return useQuery({
+    queryKey: ["categories-products", ...categorySlugs],
+    queryFn: async (): Promise<Product[]> => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*, categories!inner(slug)")
+        .eq("is_active", true)
+        .in("categories.slug", categorySlugs)
+        .order("is_featured", { ascending: false })
+        .order("name");
+      if (error) throw error;
+      return data as unknown as Product[];
+    },
+  });
+}
+
 export function useProduct(slug: string) {
   return useQuery({
     queryKey: ["product", slug],
