@@ -318,37 +318,41 @@ export function CinematicFooter() {
             <div className="flex items-center gap-3">
               <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 p-2 ring-1 ring-white/10 backdrop-blur">
                 <img
-                  src={logoNlLight}
-                  alt="NL Foto e Vídeo"
+                  src={logoSrc}
+                  alt={companyName}
                   width={512}
                   height={512}
                   className="h-full w-full object-contain"
                 />
               </span>
-              <span className="text-2xl font-extrabold tracking-tight">{COMPANY_NAME}</span>
+              <span className="text-2xl font-extrabold tracking-tight">{companyName}</span>
             </div>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-[var(--cf-fg)]/60 md:text-base">
-              {COMPANY_TAGLINE}
+              {tagline}
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <MagneticButton
-                as="a"
-                href={whatsappUrl("Olá! Gostaria de um orçamento.")}
-                target="_blank"
-                rel="noreferrer"
-                className="footer-glass-pill flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--cf-fg)]"
-              >
-                <Phone className="h-4 w-4" /> Falar no WhatsApp
-              </MagneticButton>
-              <MagneticButton
-                as="a"
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="footer-glass-pill flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--cf-fg)]"
-              >
-                <Instagram className="h-4 w-4" /> @nlfotoevideo
-              </MagneticButton>
+              {footer?.show_whatsapp !== false && (
+                <MagneticButton
+                  as="a"
+                  href={waHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="footer-glass-pill flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--cf-fg)]"
+                >
+                  <Phone className="h-4 w-4" /> Falar no WhatsApp
+                </MagneticButton>
+              )}
+              {footer?.show_social_links !== false && (
+                <MagneticButton
+                  as="a"
+                  href={instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="footer-glass-pill flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--cf-fg)]"
+                >
+                  <Instagram className="h-4 w-4" /> @nlfotoevideo
+                </MagneticButton>
+              )}
             </div>
           </div>
 
