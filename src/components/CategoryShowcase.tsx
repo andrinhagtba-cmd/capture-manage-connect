@@ -21,7 +21,10 @@ function StarRating() {
 
 function ShowcaseCard({ product, brandLabel }: { product: Product; brandLabel: string }) {
   const [fav, setFav] = useState(false);
+  const company = useCompany();
   const waMsg = `Olá! Tenho interesse no ${product.name}. Pode me passar disponibilidade e condições?`;
+
+
 
   return (
     <div className="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card shadow-sm">
