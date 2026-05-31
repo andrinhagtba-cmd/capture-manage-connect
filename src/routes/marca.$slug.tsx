@@ -16,6 +16,9 @@ import canonLentes from "@/assets/canon-lentes.jpg";
 import canonImpressoras from "@/assets/canon-impressoras.jpg";
 import canonSuprimentos from "@/assets/canon-suprimentos.jpg";
 import sonyCameras from "@/assets/sony-cameras.jpg";
+import goproAcao from "@/assets/gopro-acao.jpg";
+import gopro360 from "@/assets/gopro-360.jpg";
+import goproCriadores from "@/assets/gopro-criadores.jpg";
 
 const HEROES: Record<string, string> = {
   canon: heroCanon,
@@ -29,19 +32,19 @@ const GOPRO_LINES: { title: string; desc: string; cat: string; image: string }[]
     title: "Câmeras de Ação",
     desc: "Linha HERO: estabilização, resistência à água e vídeo em alta resolução para qualquer aventura.",
     cat: "gopro-acao",
-    image: heroGopro,
+    image: goproAcao,
   },
   {
     title: "Câmeras 360°",
     desc: "MAX e linha 360: capture tudo ao redor e reenquadre o melhor ângulo depois.",
     cat: "gopro-360",
-    image: heroGopro,
+    image: gopro360,
   },
   {
     title: "Câmeras para Criadores",
     desc: "Soluções pensadas para vlogs e produção de conteúdo com áudio e enquadramento profissionais.",
     cat: "gopro-criadores",
-    image: heroGopro,
+    image: goproCriadores,
   },
 ];
 
