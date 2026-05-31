@@ -185,18 +185,51 @@ function Home() {
 
       {/* CTA */}
       <section className="container-page mt-24">
-        <div className="overflow-hidden rounded-3xl bg-ink px-8 py-16 text-center text-background md:px-16">
-          <h2 className="display-lg text-3xl md:text-4xl">
-            Não encontrou o que procura?
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-background/75">
-            Nossa equipe monta um orçamento personalizado para o seu projeto, com as
-            melhores condições e equipamentos das principais marcas do mundo.
-          </p>
-          <div className="mt-8 flex justify-center">
-            <QuoteDialog
-              trigger={<Button size="lg" variant="secondary">Falar com um especialista</Button>}
-            />
+        <div className="group relative overflow-hidden rounded-[2rem] bg-ink px-8 py-20 text-center text-background md:px-16">
+          {/* Animated glow orbs */}
+          <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-primary/30 blur-3xl animate-pulse" />
+          <div
+            className="pointer-events-none absolute -bottom-28 -right-20 h-80 w-80 rounded-full bg-primary/20 blur-3xl animate-pulse"
+            style={{ animationDuration: "5s", animationDelay: "1s" }}
+          />
+          {/* Animated gradient sheen */}
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(110deg,transparent_30%,hsl(0_0%_100%/0.06)_50%,transparent_70%)] bg-[length:200%_100%] animate-[shimmer_4s_linear_infinite]" />
+          {/* Subtle grid texture */}
+          <div className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:42px_42px]" />
+          {/* Gradient ring on hover */}
+          <div className="pointer-events-none absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-background/10 transition-all duration-700 group-hover:ring-primary/40" />
+
+          <div className="relative z-10">
+            <span className="inline-flex items-center gap-2 rounded-full border border-background/15 bg-background/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-background/70 backdrop-blur-sm animate-fade-in">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+              </span>
+              Atendimento personalizado
+            </span>
+            <h2 className="display-lg mt-6 text-3xl md:text-5xl animate-fade-in">
+              Não encontrou o que procura?
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-background/75 md:text-lg animate-fade-in">
+              Nossa equipe monta um orçamento personalizado para o seu projeto, com as
+              melhores condições e equipamentos das principais marcas do mundo.
+            </p>
+            <div className="mt-10 flex justify-center animate-fade-in">
+              <QuoteDialog
+                trigger={
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    className="group/btn relative overflow-hidden shadow-xl transition-transform duration-300 hover:scale-[1.03]"
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      Falar com um especialista
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                    </span>
+                  </Button>
+                }
+              />
+            </div>
           </div>
         </div>
       </section>
