@@ -27,8 +27,8 @@ const STYLES = `
   -webkit-font-smoothing: antialiased;
   --cf-fg: oklch(0.99 0 0);
   --cf-bg: oklch(0.14 0.005 286);
-  --cf-primary: oklch(0.62 0.18 256);
-  --cf-secondary: oklch(0.55 0.16 300);
+  --cf-primary: oklch(0.6 0.22 27);
+  --cf-secondary: oklch(0.45 0.18 27);
   --cf-accent: oklch(0.58 0.22 27);
 
   --pill-bg-1: color-mix(in oklch, var(--cf-fg) 6%, transparent);
