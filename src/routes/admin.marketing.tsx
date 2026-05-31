@@ -46,12 +46,10 @@ function Marketing() {
     setSaving(true);
     try {
       const { id, ...rest } = form;
-      let err;
-      if (id) {
-        ({ error: err } = await supabase.from("marketing_integrations").update(rest).eq("id", id) as any);
-      } else {
-        ({ error: err } = await supabase.from("marketing_integrations").insert(rest) as any);
-      }
+      const table = supabase.from("marketing_integrations") as any;
+      const { error: err } = id
+        ? await table.update(rest).eq("id", id)
+        : await table.insert(rest);
       if (err) throw err;
 
       // Secrets (separate, staff-only table)
