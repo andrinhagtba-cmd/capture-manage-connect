@@ -160,6 +160,215 @@ export type Database = {
           },
         ]
       }
+      company_settings: {
+        Row: {
+          address: string | null
+          city: string | null
+          cnpj: string | null
+          company_name: string | null
+          directions_url: string | null
+          email: string | null
+          facebook_url: string | null
+          favicon_url: string | null
+          full_description: string | null
+          google_maps_embed: string | null
+          history_text: string | null
+          id: string
+          instagram_url: string | null
+          logo_dark_url: string | null
+          logo_light_url: string | null
+          logo_url: string | null
+          opening_hours: string | null
+          phone: string | null
+          provenance_text: string | null
+          short_description: string | null
+          slogan: string | null
+          state: string | null
+          store_location: string | null
+          testing_text: string | null
+          tiktok_url: string | null
+          updated_at: string
+          warranty_text: string | null
+          whatsapp: string | null
+          youtube_url: string | null
+          zip_code: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          cnpj?: string | null
+          company_name?: string | null
+          directions_url?: string | null
+          email?: string | null
+          facebook_url?: string | null
+          favicon_url?: string | null
+          full_description?: string | null
+          google_maps_embed?: string | null
+          history_text?: string | null
+          id?: string
+          instagram_url?: string | null
+          logo_dark_url?: string | null
+          logo_light_url?: string | null
+          logo_url?: string | null
+          opening_hours?: string | null
+          phone?: string | null
+          provenance_text?: string | null
+          short_description?: string | null
+          slogan?: string | null
+          state?: string | null
+          store_location?: string | null
+          testing_text?: string | null
+          tiktok_url?: string | null
+          updated_at?: string
+          warranty_text?: string | null
+          whatsapp?: string | null
+          youtube_url?: string | null
+          zip_code?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          cnpj?: string | null
+          company_name?: string | null
+          directions_url?: string | null
+          email?: string | null
+          facebook_url?: string | null
+          favicon_url?: string | null
+          full_description?: string | null
+          google_maps_embed?: string | null
+          history_text?: string | null
+          id?: string
+          instagram_url?: string | null
+          logo_dark_url?: string | null
+          logo_light_url?: string | null
+          logo_url?: string | null
+          opening_hours?: string | null
+          phone?: string | null
+          provenance_text?: string | null
+          short_description?: string | null
+          slogan?: string | null
+          state?: string | null
+          store_location?: string | null
+          testing_text?: string | null
+          tiktok_url?: string | null
+          updated_at?: string
+          warranty_text?: string | null
+          whatsapp?: string | null
+          youtube_url?: string | null
+          zip_code?: string | null
+        }
+        Relationships: []
+      }
+      footer_link_groups: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          order_index: number
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          order_index?: number
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          order_index?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      footer_links: {
+        Row: {
+          created_at: string
+          group_id: string | null
+          id: string
+          is_active: boolean
+          label: string
+          order_index: number
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          group_id?: string | null
+          id?: string
+          is_active?: boolean
+          label: string
+          order_index?: number
+          url: string
+        }
+        Update: {
+          created_at?: string
+          group_id?: string | null
+          id?: string
+          is_active?: boolean
+          label?: string
+          order_index?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "footer_links_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "footer_link_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      footer_settings: {
+        Row: {
+          copyright_text: string | null
+          description: string | null
+          id: string
+          logo_url: string | null
+          provenance_badge_text: string | null
+          settings_json: Json
+          show_company_address: boolean
+          show_email: boolean
+          show_opening_hours: boolean
+          show_social_links: boolean
+          show_whatsapp: boolean
+          updated_at: string
+          warranty_badge_text: string | null
+        }
+        Insert: {
+          copyright_text?: string | null
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          provenance_badge_text?: string | null
+          settings_json?: Json
+          show_company_address?: boolean
+          show_email?: boolean
+          show_opening_hours?: boolean
+          show_social_links?: boolean
+          show_whatsapp?: boolean
+          updated_at?: string
+          warranty_badge_text?: string | null
+        }
+        Update: {
+          copyright_text?: string | null
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          provenance_badge_text?: string | null
+          settings_json?: Json
+          show_company_address?: boolean
+          show_email?: boolean
+          show_opening_hours?: boolean
+          show_social_links?: boolean
+          show_whatsapp?: boolean
+          updated_at?: string
+          warranty_badge_text?: string | null
+        }
+        Relationships: []
+      }
       import_batches: {
         Row: {
           created_at: string
@@ -234,6 +443,50 @@ export type Database = {
           status?: string
         }
         Relationships: []
+      }
+      navigation_items: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          label: string
+          menu_area: string
+          opens_new_tab: boolean
+          order_index: number
+          parent_id: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label: string
+          menu_area?: string
+          opens_new_tab?: boolean
+          order_index?: number
+          parent_id?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          menu_area?: string
+          opens_new_tab?: boolean
+          order_index?: number
+          parent_id?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "navigation_items_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "navigation_items"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {
