@@ -36,6 +36,7 @@ function asArray(v: unknown): any[] {
 
 function ProductPage() {
   const { slug } = Route.useParams();
+  const company = useCompany();
   const { data: product, isLoading } = useProduct(slug);
   const { data: brands } = useBrands();
   const brand = brands?.find((b) => b.id === product?.brand_id);
