@@ -1,11 +1,8 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
-  nitro: {
-    preset: "node-server",
-    output: { dir: "dist", serverDir: "dist/server", publicDir: "dist/client" },
-  },
+  nitro: false,
   tanstackStart: {
-    server: { entry: "server" },
+    server: { entry: "server.node" },
   },
 });
