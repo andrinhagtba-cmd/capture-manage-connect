@@ -62,7 +62,7 @@ function Home() {
           <img src={heroHome} alt="" className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/70 to-ink/30" />
         </div>
-        <div className="container-page relative py-28 md:py-40">
+        <div className="container-page relative flex min-h-[78vh] flex-col justify-center py-32 md:min-h-[88vh] md:py-48">
           <div className="max-w-2xl animate-fade-up">
             <p className="eyebrow mb-4 text-background/70">{COMPANY_NAME} · Brasília-DF</p>
             <h1 className="display-hero text-4xl text-background sm:text-5xl md:text-6xl">
