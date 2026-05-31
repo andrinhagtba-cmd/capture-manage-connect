@@ -10,8 +10,8 @@ import {
 } from "@/lib/analytics";
 import { CookieConsent } from "@/components/CookieConsent";
 
-// Re-export a tiny helper that mirrors the private one in analytics.ts
-declare module "@/lib/analytics" {}
+
+
 
 const loaded = new Set<string>();
 
