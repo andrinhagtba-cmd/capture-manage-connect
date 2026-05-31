@@ -76,6 +76,12 @@ function Home() {
               Curadoria oficial das marcas Canon, DJI, Sony e GoPro. Conte com mais de
               20 anos de expertise para escolher o equipamento certo.
             </p>
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 backdrop-blur-md">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-background">
+                Revendedor autorizado de todas as linhas das marcas
+              </span>
+            </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" className="gap-2">
                 <Link to="/catalogo">
