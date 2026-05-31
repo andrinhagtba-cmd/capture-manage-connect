@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useBrands, useCategories } from "@/lib/catalog";
 import { COMPANY_NAME, BRAND_THEME } from "@/lib/site";
 import { QuoteDialog } from "@/components/QuoteDialog";
+import logoNlLight from "@/assets/logo-nl-light.png";
 
 export function SiteHeader() {
   const { data: brands } = useBrands();
