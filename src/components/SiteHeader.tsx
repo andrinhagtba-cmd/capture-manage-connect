@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Camera, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,16 @@ export function SiteHeader() {
   const { data: categories } = useCategories();
   const [openBrand, setOpenBrand] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openMenu = (brandId: string) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpenBrand(brandId);
+  };
+  const scheduleClose = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setOpenBrand(null), 150);
+  };
 
   const catsFor = (brandId: string) =>
     (categories ?? []).filter((c) => c.brand_id === brandId);
@@ -31,7 +41,7 @@ export function SiteHeader() {
         {/* Desktop nav with mega menu */}
         <nav
           className="hidden items-center gap-1 lg:flex"
-          onMouseLeave={() => setOpenBrand(null)}
+          onMouseLeave={scheduleClose}
         >
           <Link
             to="/catalogo"
@@ -43,7 +53,7 @@ export function SiteHeader() {
             <div
               key={brand.id}
               className="static"
-              onMouseEnter={() => setOpenBrand(brand.id)}
+              onMouseEnter={() => openMenu(brand.id)}
             >
               <Link
                 to="/marca/$slug"
@@ -146,8 +156,8 @@ export function SiteHeader() {
       {openBrand && (
         <div
           className="absolute inset-x-0 top-16 hidden border-b border-border bg-background shadow-lg lg:block"
-          onMouseEnter={() => setOpenBrand(openBrand)}
-          onMouseLeave={() => setOpenBrand(null)}
+          onMouseEnter={() => openMenu(openBrand)}
+          onMouseLeave={scheduleClose}
         >
           <div className="container-page grid grid-cols-4 gap-6 py-7">
             {catsFor(openBrand).slice(0, 12).map((cat) => (
