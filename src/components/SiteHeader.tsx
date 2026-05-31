@@ -5,12 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useBrands, useCategories } from "@/lib/catalog";
 import { COMPANY_NAME, BRAND_THEME } from "@/lib/site";
+import { useCompanySettings, useNavigationItems } from "@/lib/site-content";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import logoNlLight from "@/assets/logo-nl-light.png";
 
 export function SiteHeader() {
   const { data: brands } = useBrands();
   const { data: categories } = useCategories();
+  const { data: company } = useCompanySettings();
+  const { data: navItems } = useNavigationItems("header");
+  const companyName = company?.company_name || COMPANY_NAME;
+  const customNav = (navItems ?? []).filter((n) => n.is_active);
   const [openBrand, setOpenBrand] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
