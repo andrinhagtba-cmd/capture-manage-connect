@@ -93,25 +93,47 @@ function Home() {
 
       {/* Brands */}
       <section className="container-page -mt-12 relative z-10">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {(brands ?? []).map((b) => {
             const theme = BRAND_THEME[b.slug];
+            const image = BRAND_IMAGES[b.slug];
             return (
               <Link
                 key={b.id}
                 to="/marca/$slug"
                 params={{ slug: b.slug }}
-                className="hover-lift group rounded-2xl border border-border bg-card p-6 shadow-sm"
+                className="hover-lift group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
               >
-                <span
-                  className="inline-block h-1.5 w-12 rounded-full"
-                  style={{ background: theme?.color ?? "#888" }}
-                />
-                <h3 className="mt-4 text-2xl font-bold tracking-tight">{b.name}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{theme?.blurb}</p>
-                <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                  Explorar <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                </span>
+                {/* Imagem do produto */}
+                <div className="relative aspect-[4/3] overflow-hidden gradient-dark">
+                  {image && (
+                    <img
+                      src={image}
+                      alt={`Produtos ${b.name}`}
+                      loading="lazy"
+                      width={800}
+                      height={600}
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <span className="absolute left-5 top-5 inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-md">
+                    {b.name}
+                  </span>
+                </div>
+
+                {/* Conteúdo */}
+                <div className="flex flex-1 flex-col p-6">
+                  <span
+                    className="inline-block h-1.5 w-12 rounded-full"
+                    style={{ background: theme?.color ?? "#888" }}
+                  />
+                  <h3 className="mt-4 text-2xl font-bold tracking-tight">{b.name}</h3>
+                  <p className="mt-2 flex-1 text-sm text-muted-foreground">{theme?.blurb}</p>
+                  <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+                    Explorar <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </div>
               </Link>
             );
           })}
