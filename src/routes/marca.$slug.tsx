@@ -107,7 +107,47 @@ function BrandPage() {
         </div>
       </section>
 
-      {slug === "dji" && (
+      {slug === "gopro" && (
+        <section className="container-page -mt-12 relative z-10">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {GOPRO_LINES.map((line) => (
+              <Link
+                key={line.cat}
+                to="/catalogo"
+                search={{ marca: "gopro", cat: line.cat }}
+                className="hover-lift group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden gradient-dark">
+                  <img
+                    src={line.image}
+                    alt={line.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                  <span className="absolute left-5 top-5 inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-md">
+                    GoPro
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <span
+                    className="inline-block h-1.5 w-12 rounded-full"
+                    style={{ background: BRAND_THEME["gopro"]?.color ?? "#0096d6" }}
+                  />
+                  <h3 className="mt-4 text-xl font-bold tracking-tight">{line.title}</h3>
+                  <p className="mt-2 flex-1 text-sm text-muted-foreground">{line.desc}</p>
+                  <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+                    Explorar linha{" "}
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+
         <>
           <CategoryShowcase
             title="Drones com Câmera"
