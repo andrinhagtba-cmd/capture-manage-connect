@@ -8,8 +8,8 @@ import { useProduct, useProducts, useBrands } from "@/lib/catalog";
 import {
   AVAILABILITY_LABELS,
   AVAILABILITY_TONE,
-  whatsappUrl,
 } from "@/lib/site";
+import { useCompany } from "@/lib/site-content";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
 import { ExternalLink, MessageCircle, ChevronRight } from "lucide-react";
