@@ -91,6 +91,17 @@ export function SiteHeader() {
           >
             Contato
           </Link>
+          {customNav.map((item) => (
+            <a
+              key={item.id}
+              href={item.url}
+              target={item.opens_new_tab ? "_blank" : undefined}
+              rel={item.opens_new_tab ? "noreferrer" : undefined}
+              className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+            >
+              {item.label}
+            </a>
+          ))}
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
