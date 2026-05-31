@@ -142,15 +142,24 @@ export function CategoryShowcase({
 
       <div className="relative">
         <div className="relative overflow-hidden rounded-[2rem] shadow-xl">
-          <video
-            className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
-            src={videoSrc}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-          />
+          {videoSrc ? (
+            <video
+              className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
+              src={videoSrc}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
+          ) : (
+            <img
+              className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
+              src={imageSrc}
+              alt={title}
+              loading="lazy"
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-r from-ink/40 via-transparent to-transparent" />
           <div className="absolute left-5 top-5 md:left-8 md:top-8">
             <Button
@@ -158,12 +167,19 @@ export function CategoryShowcase({
               size="lg"
               className="rounded-full bg-background px-7 text-foreground shadow-lg hover:bg-background/90"
             >
-              <Link to="/catalogo" search={{ marca: brandSlug }}>
-                {ctaLabel}
-              </Link>
+              {ctaTo === "brand" ? (
+                <Link to="/marca/$slug" params={{ slug: brandSlug }}>
+                  {ctaLabel}
+                </Link>
+              ) : (
+                <Link to="/catalogo" search={{ marca: brandSlug }}>
+                  {ctaLabel}
+                </Link>
+              )}
             </Button>
           </div>
         </div>
+
 
         <div className="relative z-10 -mt-16 px-1 sm:-mt-20 md:px-10">
           <div className="overflow-hidden" ref={emblaRef}>
