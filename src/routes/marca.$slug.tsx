@@ -211,6 +211,7 @@ function BrandPage() {
           <CategoryShowcase
             eyebrow="Linha GoPro"
             title="Câmeras 360°"
+            imageSrc={heroGopro}
             categorySlug="gopro-360"
             brandLabel="GoPro"
             brandSlug="gopro"
@@ -218,6 +219,7 @@ function BrandPage() {
           <CategoryShowcase
             eyebrow="Linha GoPro"
             title="Câmeras para Criadores"
+            imageSrc={heroGopro}
             categorySlug="gopro-criadores"
             brandLabel="GoPro"
             brandSlug="gopro"
