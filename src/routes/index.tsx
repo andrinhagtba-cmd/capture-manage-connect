@@ -10,6 +10,17 @@ import { useBrands, useProducts } from "@/lib/catalog";
 import { BRAND_THEME, COMPANY_NAME } from "@/lib/site";
 import { ShieldCheck, Award, Headphones, Truck, ArrowRight } from "lucide-react";
 import heroHome from "@/assets/hero-home.jpg";
+import brandCanon from "@/assets/brand-canon.jpg";
+import brandDji from "@/assets/brand-dji.jpg";
+import brandSony from "@/assets/brand-sony.jpg";
+import brandGopro from "@/assets/brand-gopro.jpg";
+
+const BRAND_IMAGES: Record<string, string> = {
+  canon: brandCanon,
+  dji: brandDji,
+  sony: brandSony,
+  gopro: brandGopro,
+};
 
 export const Route = createFileRoute("/")({
   head: () => ({
