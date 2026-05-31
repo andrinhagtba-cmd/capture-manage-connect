@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { DronesShowcase } from "@/components/DronesShowcase";
 import { CanonShowcase } from "@/components/CanonShowcase";
 import { SonyShowcase } from "@/components/SonyShowcase";
+import { GoProShowcase } from "@/components/GoProShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { GridGlowBackground } from "@/components/ui/grid-glow-background";
 import { Button } from "@/components/ui/button";
@@ -163,6 +164,9 @@ function Home() {
 
       {/* Sony premium showcase */}
       <SonyShowcase />
+
+      {/* GoPro premium showcase */}
+      <GoProShowcase />
 
 
 
