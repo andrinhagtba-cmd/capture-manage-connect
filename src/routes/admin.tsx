@@ -30,6 +30,9 @@ import {
   Camera,
   Loader2,
   ExternalLink,
+  Building2,
+  PanelBottom,
+  Menu as MenuIcon,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
