@@ -61,6 +61,63 @@ export type Database = {
           },
         ]
       }
+      brand_page_settings: {
+        Row: {
+          brand_slug: string
+          created_at: string
+          id: string
+          intro_eyebrow: string | null
+          intro_text: string | null
+          intro_title: string | null
+          is_published: boolean
+          meta_description: string | null
+          meta_title: string | null
+          primary_button_label: string | null
+          primary_button_url: string | null
+          secondary_button_label: string | null
+          secondary_button_url: string | null
+          show_categories: boolean
+          show_products: boolean
+          updated_at: string
+        }
+        Insert: {
+          brand_slug: string
+          created_at?: string
+          id?: string
+          intro_eyebrow?: string | null
+          intro_text?: string | null
+          intro_title?: string | null
+          is_published?: boolean
+          meta_description?: string | null
+          meta_title?: string | null
+          primary_button_label?: string | null
+          primary_button_url?: string | null
+          secondary_button_label?: string | null
+          secondary_button_url?: string | null
+          show_categories?: boolean
+          show_products?: boolean
+          updated_at?: string
+        }
+        Update: {
+          brand_slug?: string
+          created_at?: string
+          id?: string
+          intro_eyebrow?: string | null
+          intro_text?: string | null
+          intro_title?: string | null
+          is_published?: boolean
+          meta_description?: string | null
+          meta_title?: string | null
+          primary_button_label?: string | null
+          primary_button_url?: string | null
+          secondary_button_label?: string | null
+          secondary_button_url?: string | null
+          show_categories?: boolean
+          show_products?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       brands: {
         Row: {
           created_at: string
