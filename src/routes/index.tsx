@@ -279,15 +279,15 @@ function Home() {
             <div className="mt-8 flex flex-wrap gap-3">
               {primaryLabel && (
                 <Button asChild size="lg" className="gap-2">
-                  <Link to={primaryUrl}>
+                  <a href={primaryUrl}>
                     {primaryLabel} <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  </a>
                 </Button>
               )}
               {secondaryLabel &&
                 (secondaryUrl ? (
                   <Button asChild size="lg" variant="secondary">
-                    <Link to={secondaryUrl}>{secondaryLabel}</Link>
+                    <a href={secondaryUrl}>{secondaryLabel}</a>
                   </Button>
                 ) : (
                   <QuoteDialog
