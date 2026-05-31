@@ -11,6 +11,10 @@ import heroCanon from "@/assets/hero-canon.jpg";
 import heroDji from "@/assets/hero-dji.jpg";
 import heroSony from "@/assets/hero-sony.jpg";
 import heroGopro from "@/assets/hero-gopro.jpg";
+import canonCameras from "@/assets/canon-cameras.jpg";
+import canonLentes from "@/assets/canon-lentes.jpg";
+import canonImpressoras from "@/assets/canon-impressoras.jpg";
+import canonSuprimentos from "@/assets/canon-suprimentos.jpg";
 
 const HEROES: Record<string, string> = {
   canon: heroCanon,
