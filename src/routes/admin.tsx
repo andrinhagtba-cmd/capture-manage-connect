@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { CoreSpinLoader } from "@/components/ui/core-spin-loader";
 import {
   Sidebar,
   SidebarContent,
