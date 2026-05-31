@@ -147,7 +147,7 @@ function BrandPage() {
         </section>
       )}
 
-
+      {slug === "dji" && (
         <>
           <CategoryShowcase
             title="Drones com Câmera"
