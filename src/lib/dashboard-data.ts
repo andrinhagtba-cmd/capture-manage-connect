@@ -294,6 +294,7 @@ function buildSampleDashboard(
   period: DashboardPeriod,
   products: { id: string; name: string; main_image_url: string | null; brand_id: string | null }[],
   brands: { id: string; name: string }[],
+  categories: { id: string; name: string }[],
   leads: LeadRow[],
 ): DashboardData {
   const days = PERIOD_DAYS[period];
