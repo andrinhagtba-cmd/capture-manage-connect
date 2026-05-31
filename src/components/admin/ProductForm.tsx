@@ -63,6 +63,11 @@ type FormState = {
   seo_title: string;
   seo_description: string;
   seo_image_url: string;
+  og_title: string;
+  og_description: string;
+  og_image_url: string;
+  canonical_url: string;
+  use_main_image_as_og: boolean;
   official_product_url: string;
   internal_price: string;
   internal_notes: string;
