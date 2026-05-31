@@ -79,6 +79,17 @@ function BrandProductsAdmin() {
     });
     return m;
   }, [brandProducts]);
+  // Representative image per category: use a product image from that category
+  // so cards never look empty when the category has no own image_url.
+  const catImages = useMemo(() => {
+    const m: Record<string, string> = {};
+    brandProducts.forEach((p) => {
+      if (p.category_id && p.main_image_url && !m[p.category_id]) {
+        m[p.category_id] = p.main_image_url;
+      }
+    });
+    return m;
+  }, [brandProducts]);
   const uncategorized = useMemo(
     () => brandProducts.filter((p) => !p.category_id).length,
     [brandProducts],
@@ -236,6 +247,7 @@ function BrandProductsAdmin() {
                 key={c.id}
                 category={c}
                 count={catCounts[c.id] ?? 0}
+                fallbackImage={catImages[c.id]}
                 onClick={() => {
                   setSearch("");
                   setScope(c.id);
@@ -365,10 +377,12 @@ function Loading() {
 function CategoryCard({
   category,
   count,
+  fallbackImage,
   onClick,
 }: {
   category: AdminCategory;
   count: number;
+  fallbackImage?: string;
   onClick: () => void;
 }) {
   return (
@@ -378,7 +392,7 @@ function CategoryCard({
     >
       <div className="relative aspect-[16/9] overflow-hidden bg-surface">
         <img
-          src={category.image_url || placeholder}
+          src={category.image_url || fallbackImage || placeholder}
           alt={category.name}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
