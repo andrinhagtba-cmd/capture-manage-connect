@@ -33,7 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash2, X, Upload, Loader2, GripVertical, Search } from "lucide-react";
+import { Plus, Trash2, X, Upload, Loader2, GripVertical, Search, MessageCircle, Star } from "lucide-react";
 import { toast } from "sonner";
 import placeholder from "@/assets/product-placeholder.jpg";
 
