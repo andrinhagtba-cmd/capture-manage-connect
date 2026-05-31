@@ -5,6 +5,7 @@ import { CategoryShowcase } from "@/components/CategoryShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { Button } from "@/components/ui/button";
 import { useBrands, useCategories, useProducts } from "@/lib/catalog";
+import { useActiveHero, useBrandPageSettings } from "@/lib/site-content";
 import { BRAND_THEME } from "@/lib/site";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import heroCanon from "@/assets/hero-canon.jpg";
