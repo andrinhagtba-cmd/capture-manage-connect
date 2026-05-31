@@ -263,7 +263,7 @@ export function CinematicFooter() {
       >
         {/* Background image */}
         <div
-          className="pointer-events-none absolute inset-0 bg-cover bg-no-repeat bg-top"
+          className="pointer-events-none absolute inset-0 bg-no-repeat bg-center bg-[length:100%_100%]"
           style={{ backgroundImage: `url(${footerBg})` }}
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[var(--cf-bg)]/30 via-[var(--cf-bg)]/40 to-[var(--cf-bg)]/55" />
