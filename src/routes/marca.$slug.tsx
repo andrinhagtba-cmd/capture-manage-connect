@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { PublicLayout } from "@/components/PublicLayout";
 import { ProductCard } from "@/components/ProductCard";
 import { CategoryShowcase } from "@/components/CategoryShowcase";
@@ -6,6 +7,7 @@ import { QuoteDialog } from "@/components/QuoteDialog";
 import { Button } from "@/components/ui/button";
 import { useBrands, useCategories, useProducts } from "@/lib/catalog";
 import { useActiveHero, useBrandPageSettings } from "@/lib/site-content";
+import { track } from "@/lib/analytics";
 import { BRAND_THEME } from "@/lib/site";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import heroCanon from "@/assets/hero-canon.jpg";
