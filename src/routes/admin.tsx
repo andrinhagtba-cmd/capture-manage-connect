@@ -34,6 +34,8 @@ import {
   PanelBottom,
   Menu as MenuIcon,
   Image as ImageIcon,
+  GalleryHorizontalEnd,
+  Home as HomeIcon,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
