@@ -118,6 +118,11 @@ function Home() {
         </div>
       </section>
 
+      {/* Drones premium showcase */}
+      <DronesShowcase />
+
+
+
       {/* Featured products */}
       <section className="container-page mt-24">
         <div className="mb-8 flex items-end justify-between">
