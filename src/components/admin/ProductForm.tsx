@@ -750,8 +750,26 @@ export function ProductForm({
                 />
               </Field>
             </TabsContent>
-          </div>
-        </Tabs>
+            </div>
+          </Tabs>
+
+          {/* Live preview */}
+          <aside className="hidden w-[300px] shrink-0 overflow-y-auto border-l border-border bg-surface/50 p-5 lg:block">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Pré-visualização
+            </p>
+            <ProductPreview
+              imageUrl={form.main_image_url}
+              name={form.name}
+              brandName={brands.find((b) => b.id === form.brand_id)?.name}
+              categoryName={categories.find((c) => c.id === form.category_id)?.name}
+              availability={form.availability_status}
+              isActive={form.is_active}
+              isFeatured={form.is_featured}
+            />
+          </aside>
+        </div>
+
 
         <DialogFooter className="border-t border-border px-6 py-4">
           {form.is_featured && <Badge variant="secondary">Destaque</Badge>}
