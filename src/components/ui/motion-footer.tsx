@@ -448,9 +448,11 @@ export function CinematicFooter() {
                     </a>
                   </li>
                 )}
-                <li className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 shrink-0 text-[var(--cf-primary)]" /> Seg a Sáb · 9h às 18h
-                </li>
+                {footer?.show_opening_hours !== false && (
+                  <li className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 shrink-0 text-[var(--cf-primary)]" /> {openingHours}
+                  </li>
+                )}
               </ul>
             </div>
           </div>
