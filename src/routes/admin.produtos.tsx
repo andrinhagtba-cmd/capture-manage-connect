@@ -40,7 +40,7 @@ export const Route = createFileRoute("/admin/produtos")({
   component: ProdutosAdmin,
 });
 
-const AVAIL = ["disponivel", "sob_consulta", "encomenda", "esgotado"];
+const AVAIL = ["disponivel", "sob_consulta", "encomenda", "indisponivel"];
 
 const empty = {
   id: "",
