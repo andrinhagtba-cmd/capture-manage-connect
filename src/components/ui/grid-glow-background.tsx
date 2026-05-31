@@ -109,15 +109,57 @@ export const GridGlowBackground: React.FC<GridGlowBackgroundProps> = ({
       frameId = requestAnimationFrame(animate);
     };
 
-    resize();
-    animate();
+    const drawStatic = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawGrid();
+      glows.forEach((g) => g.draw());
+    };
 
-    const observer = new ResizeObserver(resize);
-    observer.observe(parent);
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+    let running = false;
+    const start = () => {
+      if (running || reduceMotion) return;
+      running = true;
+      frameId = requestAnimationFrame(animate);
+    };
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(frameId);
+    };
+
+    resize();
+    if (reduceMotion) {
+      drawStatic();
+    }
+
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(parent);
+
+    // Only animate while the canvas is actually visible on screen — this
+    // prevents the rAF loop from janking the rest of the page (e.g. carousels).
+    const visObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) start();
+        else stop();
+      },
+      { threshold: 0 },
+    );
+    visObserver.observe(canvas);
+
+    const onVisibility = () => {
+      if (document.hidden) stop();
+      else if (!reduceMotion) start();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
-      observer.disconnect();
-      cancelAnimationFrame(frameId);
+      resizeObserver.disconnect();
+      visObserver.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      stop();
     };
   }, [gridColor, gridSize, glowColors, glowCount]);
 
