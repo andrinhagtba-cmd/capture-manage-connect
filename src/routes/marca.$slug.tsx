@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PublicLayout } from "@/components/PublicLayout";
 import { ProductCard } from "@/components/ProductCard";
+import { CategoryShowcase } from "@/components/CategoryShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { Button } from "@/components/ui/button";
 import { useBrands, useCategories, useProducts } from "@/lib/catalog";
@@ -88,6 +89,34 @@ function BrandPage() {
           </div>
         </div>
       </section>
+
+      {slug === "dji" && (
+        <>
+          <CategoryShowcase
+            title="Drones com Câmera"
+            videoSrc="/videos/drones-com-camera.mp4"
+            categorySlug="dji-drones"
+            brandLabel="DJI"
+            brandSlug="dji"
+          />
+          <CategoryShowcase
+            title="Estabilizadores"
+            videoSrc="/videos/estabilizadores.mp4"
+            categorySlug="dji-estabilizadores"
+            brandLabel="DJI"
+            brandSlug="dji"
+          />
+          <CategoryShowcase
+            title="Câmeras e Microfones"
+            videoSrc="/videos/cameras-e-microfones.mp4"
+            categorySlug="dji-cameras"
+            brandLabel="DJI"
+            brandSlug="dji"
+          />
+        </>
+      )}
+
+
 
       {brandCats.length > 0 && (
         <section className="container-page mt-12">
