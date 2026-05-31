@@ -332,7 +332,7 @@ function BrandPage() {
 
 
 
-      {brandCats.length > 0 && (
+      {showCategories && brandCats.length > 0 && (
         <section className="container-page mt-12">
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
             Categorias {brand?.name}
@@ -352,27 +352,29 @@ function BrandPage() {
         </section>
       )}
 
-      <section className="container-page mt-12">
-        <div className="mb-8 flex items-end justify-between">
-          <h2 className="display-lg text-2xl md:text-3xl">Produtos {brand?.name}</h2>
-          <Button asChild variant="outline" className="gap-1">
-            <Link to="/catalogo" search={{ marca: slug }}>
-              Ver no catálogo <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-        {(products ?? []).length === 0 ? (
-          <p className="rounded-xl border border-dashed border-border py-16 text-center text-muted-foreground">
-            Em breve novos produtos {brand?.name}. Fale conosco para encomendas.
-          </p>
-        ) : (
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {(products ?? []).map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
+      {showProducts && (
+        <section className="container-page mt-12">
+          <div className="mb-8 flex items-end justify-between">
+            <h2 className="display-lg text-2xl md:text-3xl">Produtos {brand?.name}</h2>
+            <Button asChild variant="outline" className="gap-1">
+              <Link to="/catalogo" search={{ marca: slug }}>
+                Ver no catálogo <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
           </div>
-        )}
-      </section>
+          {(products ?? []).length === 0 ? (
+            <p className="rounded-xl border border-dashed border-border py-16 text-center text-muted-foreground">
+              Em breve novos produtos {brand?.name}. Fale conosco para encomendas.
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
+              {(products ?? []).map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
     </PublicLayout>
   );
 }
