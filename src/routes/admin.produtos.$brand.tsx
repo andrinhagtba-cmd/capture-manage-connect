@@ -79,6 +79,17 @@ function BrandProductsAdmin() {
     });
     return m;
   }, [brandProducts]);
+  // Representative image per category: use a product image from that category
+  // so cards never look empty when the category has no own image_url.
+  const catImages = useMemo(() => {
+    const m: Record<string, string> = {};
+    brandProducts.forEach((p) => {
+      if (p.category_id && p.main_image_url && !m[p.category_id]) {
+        m[p.category_id] = p.main_image_url;
+      }
+    });
+    return m;
+  }, [brandProducts]);
   const uncategorized = useMemo(
     () => brandProducts.filter((p) => !p.category_id).length,
     [brandProducts],
