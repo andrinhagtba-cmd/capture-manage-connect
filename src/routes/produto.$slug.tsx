@@ -174,6 +174,14 @@ function ProductPage() {
                     )}
                     target="_blank"
                     rel="noreferrer"
+                    onClick={() =>
+                      track("whatsapp_click", {
+                        product_id: product.id,
+                        brand_id: product.brand_id ?? null,
+                        content_name: product.name,
+                        metadata: { origin: "product_page" },
+                      })
+                    }
                   >
                     <MessageCircle className="h-4 w-4" /> WhatsApp
                   </a>
