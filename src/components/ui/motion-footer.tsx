@@ -268,7 +268,6 @@ export function CinematicFooter() {
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[var(--cf-bg)]/30 via-[var(--cf-bg)]/40 to-[var(--cf-bg)]/55" />
         {/* Background layers */}
-        <div className="footer-bg-grid pointer-events-none absolute inset-0" />
         <div className="footer-aurora animate-footer-breathe pointer-events-none absolute left-1/2 top-1/2 h-[80vh] w-[80vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl" />
 
         {/* Marquee */}
