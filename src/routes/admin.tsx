@@ -34,6 +34,8 @@ import {
   PanelBottom,
   Menu as MenuIcon,
   Image as ImageIcon,
+  GalleryHorizontalEnd,
+  Home as HomeIcon,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -49,6 +51,8 @@ export const Route = createFileRoute("/admin")({
 const NAV = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard, exact: true },
   { title: "Produtos", url: "/admin/produtos", icon: Package },
+  { title: "Banners e Heros", url: "/admin/banners", icon: GalleryHorizontalEnd },
+  { title: "Home Page", url: "/admin/home", icon: HomeIcon },
   { title: "Configurações da Empresa", url: "/admin/empresa", icon: Building2 },
   { title: "Footer", url: "/admin/footer", icon: PanelBottom },
   { title: "Menu / Navegação", url: "/admin/menu", icon: MenuIcon },

@@ -23,8 +23,10 @@ import { Route as AdminOrcamentosRouteImport } from './routes/admin.orcamentos'
 import { Route as AdminMidiaRouteImport } from './routes/admin.midia'
 import { Route as AdminMenuRouteImport } from './routes/admin.menu'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
+import { Route as AdminHomeRouteImport } from './routes/admin.home'
 import { Route as AdminFooterRouteImport } from './routes/admin.footer'
 import { Route as AdminEmpresaRouteImport } from './routes/admin.empresa'
+import { Route as AdminBannersRouteImport } from './routes/admin.banners'
 
 const SobreRoute = SobreRouteImport.update({
   id: '/sobre',
@@ -96,6 +98,11 @@ const AdminLeadsRoute = AdminLeadsRouteImport.update({
   path: '/leads',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminHomeRoute = AdminHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminFooterRoute = AdminFooterRouteImport.update({
   id: '/footer',
   path: '/footer',
@@ -106,6 +113,11 @@ const AdminEmpresaRoute = AdminEmpresaRouteImport.update({
   path: '/empresa',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBannersRoute = AdminBannersRouteImport.update({
+  id: '/banners',
+  path: '/banners',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -114,8 +126,10 @@ export interface FileRoutesByFullPath {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
+  '/admin/banners': typeof AdminBannersRoute
   '/admin/empresa': typeof AdminEmpresaRoute
   '/admin/footer': typeof AdminFooterRoute
+  '/admin/home': typeof AdminHomeRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/menu': typeof AdminMenuRoute
   '/admin/midia': typeof AdminMidiaRoute
@@ -131,8 +145,10 @@ export interface FileRoutesByTo {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
+  '/admin/banners': typeof AdminBannersRoute
   '/admin/empresa': typeof AdminEmpresaRoute
   '/admin/footer': typeof AdminFooterRoute
+  '/admin/home': typeof AdminHomeRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/menu': typeof AdminMenuRoute
   '/admin/midia': typeof AdminMidiaRoute
@@ -150,8 +166,10 @@ export interface FileRoutesById {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
+  '/admin/banners': typeof AdminBannersRoute
   '/admin/empresa': typeof AdminEmpresaRoute
   '/admin/footer': typeof AdminFooterRoute
+  '/admin/home': typeof AdminHomeRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/menu': typeof AdminMenuRoute
   '/admin/midia': typeof AdminMidiaRoute
@@ -170,8 +188,10 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/sobre'
+    | '/admin/banners'
     | '/admin/empresa'
     | '/admin/footer'
+    | '/admin/home'
     | '/admin/leads'
     | '/admin/menu'
     | '/admin/midia'
@@ -187,8 +207,10 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/sobre'
+    | '/admin/banners'
     | '/admin/empresa'
     | '/admin/footer'
+    | '/admin/home'
     | '/admin/leads'
     | '/admin/menu'
     | '/admin/midia'
@@ -205,8 +227,10 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/sobre'
+    | '/admin/banners'
     | '/admin/empresa'
     | '/admin/footer'
+    | '/admin/home'
     | '/admin/leads'
     | '/admin/menu'
     | '/admin/midia'
@@ -328,6 +352,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLeadsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/home': {
+      id: '/admin/home'
+      path: '/home'
+      fullPath: '/admin/home'
+      preLoaderRoute: typeof AdminHomeRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/footer': {
       id: '/admin/footer'
       path: '/footer'
@@ -342,12 +373,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEmpresaRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/banners': {
+      id: '/admin/banners'
+      path: '/banners'
+      fullPath: '/admin/banners'
+      preLoaderRoute: typeof AdminBannersRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminBannersRoute: typeof AdminBannersRoute
   AdminEmpresaRoute: typeof AdminEmpresaRoute
   AdminFooterRoute: typeof AdminFooterRoute
+  AdminHomeRoute: typeof AdminHomeRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminMenuRoute: typeof AdminMenuRoute
   AdminMidiaRoute: typeof AdminMidiaRoute
@@ -357,8 +397,10 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBannersRoute: AdminBannersRoute,
   AdminEmpresaRoute: AdminEmpresaRoute,
   AdminFooterRoute: AdminFooterRoute,
+  AdminHomeRoute: AdminHomeRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminMenuRoute: AdminMenuRoute,
   AdminMidiaRoute: AdminMidiaRoute,

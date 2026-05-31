@@ -369,6 +369,120 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_banners: {
+        Row: {
+          badge_text: string | null
+          brand_id: string | null
+          created_at: string
+          desktop_image_url: string | null
+          ends_at: string | null
+          eyebrow: string | null
+          highlight: string | null
+          id: string
+          is_active: boolean
+          location: string
+          media_type: string
+          mobile_image_url: string | null
+          order_index: number
+          overlay_opacity: number
+          primary_button_label: string | null
+          primary_button_url: string | null
+          secondary_button_label: string | null
+          secondary_button_url: string | null
+          starts_at: string | null
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          badge_text?: string | null
+          brand_id?: string | null
+          created_at?: string
+          desktop_image_url?: string | null
+          ends_at?: string | null
+          eyebrow?: string | null
+          highlight?: string | null
+          id?: string
+          is_active?: boolean
+          location?: string
+          media_type?: string
+          mobile_image_url?: string | null
+          order_index?: number
+          overlay_opacity?: number
+          primary_button_label?: string | null
+          primary_button_url?: string | null
+          secondary_button_label?: string | null
+          secondary_button_url?: string | null
+          starts_at?: string | null
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          badge_text?: string | null
+          brand_id?: string | null
+          created_at?: string
+          desktop_image_url?: string | null
+          ends_at?: string | null
+          eyebrow?: string | null
+          highlight?: string | null
+          id?: string
+          is_active?: boolean
+          location?: string
+          media_type?: string
+          mobile_image_url?: string | null
+          order_index?: number
+          overlay_opacity?: number
+          primary_button_label?: string | null
+          primary_button_url?: string | null
+          secondary_button_label?: string | null
+          secondary_button_url?: string | null
+          starts_at?: string | null
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      home_sections: {
+        Row: {
+          created_at: string
+          eyebrow: string | null
+          id: string
+          is_active: boolean
+          order_index: number
+          section_key: string
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          eyebrow?: string | null
+          id?: string
+          is_active?: boolean
+          order_index?: number
+          section_key: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          eyebrow?: string | null
+          id?: string
+          is_active?: boolean
+          order_index?: number
+          section_key?: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       import_batches: {
         Row: {
           created_at: string
