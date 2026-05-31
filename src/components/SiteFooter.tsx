@@ -33,9 +33,9 @@ export function SiteFooter() {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-background text-ink">
-              {footer?.logo_url || company?.logo_url ? (
+              {footer?.logo_url || company.logoUrl ? (
                 <img
-                  src={(footer?.logo_url || company?.logo_url) as string}
+                  src={(footer?.logo_url || company.logoUrl) as string}
                   alt={companyName}
                   className="h-7 w-7 object-contain"
                 />
@@ -47,16 +47,43 @@ export function SiteFooter() {
           </div>
           <p className="max-w-xs text-sm text-background/70">{tagline}</p>
           {footer?.show_social_links !== false && (
-            <a
-              href={instagram}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-background/80 hover:text-background"
-            >
-              <Instagram className="h-4 w-4" /> @nlfotoevideo
-            </a>
+            <div className="flex flex-wrap items-center gap-4">
+              {company.instagramUrl && (
+                <a
+                  href={company.instagramUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-background/80 hover:text-background"
+                >
+                  <Instagram className="h-4 w-4" /> {company.instagramHandle}
+                </a>
+              )}
+              {company.facebookUrl && (
+                <a
+                  href={company.facebookUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Facebook"
+                  className="text-background/80 hover:text-background"
+                >
+                  <Facebook className="h-4 w-4" />
+                </a>
+              )}
+              {company.youtubeUrl && (
+                <a
+                  href={company.youtubeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="YouTube"
+                  className="text-background/80 hover:text-background"
+                >
+                  <Youtube className="h-4 w-4" />
+                </a>
+              )}
+            </div>
           )}
         </div>
+
 
         <div>
           <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-background/60">
