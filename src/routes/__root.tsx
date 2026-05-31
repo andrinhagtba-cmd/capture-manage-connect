@@ -78,14 +78,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "NL Foto e Vídeo - Equipamentos profissionais de foto e vídeo" },
+      { name: "description", content: "NL Foto e Vídeo é referência quando o assunto é Foto e Vídeo profissional" },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "NL Foto e Vídeo - Equipamentos profissionais de foto e vídeo" },
+      { property: "og:description", content: "NL Foto e Vídeo é referência quando o assunto é Foto e Vídeo profissional" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "NL Foto e Vídeo - Equipamentos profissionais de foto e vídeo" },
+      { name: "twitter:description", content: "NL Foto e Vídeo é referência quando o assunto é Foto e Vídeo profissional" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pkmRFtspe0a6ln6dIoop0Cbt2WM2/social-images/social-1780251474128-43dfd885-62d5-4eee-b99e-ec2348dbb482.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/pkmRFtspe0a6ln6dIoop0Cbt2WM2/social-images/social-1780251474128-43dfd885-62d5-4eee-b99e-ec2348dbb482.webp" },
     ],
     links: [
       {
