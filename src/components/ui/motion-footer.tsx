@@ -277,8 +277,14 @@ export function CinematicFooter() {
         <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-16 md:pt-24">
           <div ref={headingRef} className="flex flex-col items-center text-center">
             <div className="flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--cf-fg)] text-[var(--cf-bg)]">
-                <Camera className="h-6 w-6" />
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 p-2 ring-1 ring-white/10 backdrop-blur">
+                <img
+                  src={logoNlLight}
+                  alt="NL Foto e Vídeo"
+                  width={512}
+                  height={512}
+                  className="h-full w-full object-contain"
+                />
               </span>
               <span className="text-2xl font-extrabold tracking-tight">{COMPANY_NAME}</span>
             </div>
