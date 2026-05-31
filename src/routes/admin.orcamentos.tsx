@@ -116,7 +116,8 @@ function Orcamentos() {
                 <TableCell className="text-right">
                   <Button asChild variant="ghost" size="icon">
                     <a
-                      href={whatsappUrl(
+                      href={whatsappTo(
+                        q.customer_phone,
                         `Olá ${q.customer_name}! Sobre seu pedido de orçamento na NL Foto e Vídeo...`,
                       )}
                       target="_blank"
