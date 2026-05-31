@@ -8,8 +8,8 @@ import { useProduct, useProducts, useBrands } from "@/lib/catalog";
 import {
   AVAILABILITY_LABELS,
   AVAILABILITY_TONE,
-  whatsappUrl,
 } from "@/lib/site";
+import { useCompany } from "@/lib/site-content";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
 import { ExternalLink, MessageCircle, ChevronRight } from "lucide-react";
@@ -36,6 +36,7 @@ function asArray(v: unknown): any[] {
 
 function ProductPage() {
   const { slug } = Route.useParams();
+  const company = useCompany();
   const { data: product, isLoading } = useProduct(slug);
   const { data: brands } = useBrands();
   const brand = brands?.find((b) => b.id === product?.brand_id);

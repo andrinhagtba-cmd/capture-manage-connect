@@ -6,7 +6,7 @@ import { Heart, Star, Truck, ChevronLeft, ChevronRight, MessageCircle } from "lu
 import { Button } from "@/components/ui/button";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { useCategoryProducts, useCategoriesProducts, type Product } from "@/lib/catalog";
-import { whatsappUrl } from "@/lib/site";
+import { useCompany } from "@/lib/site-content";
 import placeholder from "@/assets/product-placeholder.jpg";
 
 function StarRating() {
@@ -21,7 +21,10 @@ function StarRating() {
 
 function ShowcaseCard({ product, brandLabel }: { product: Product; brandLabel: string }) {
   const [fav, setFav] = useState(false);
+  const company = useCompany();
   const waMsg = `Olá! Tenho interesse no ${product.name}. Pode me passar disponibilidade e condições?`;
+
+
 
   return (
     <div className="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card shadow-sm">
@@ -73,7 +76,7 @@ function ShowcaseCard({ product, brandLabel }: { product: Product; brandLabel: s
               </Button>
             }
           />
-          <a href={whatsappUrl(waMsg)} target="_blank" rel="noopener noreferrer">
+          <a href={company.whatsappLink(waMsg)} target="_blank" rel="noopener noreferrer">
             <Button
               variant="outline"
               size="sm"

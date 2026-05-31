@@ -179,6 +179,118 @@ export function buildWhatsappUrl(phone: string | null | undefined, message?: str
   return `${base}?text=${encodeURIComponent(message)}`;
 }
 
+/** Derive an "@handle" from a social URL (instagram/tiktok/etc.). */
+export function handleFromUrl(url: string | null | undefined): string {
+  if (!url) return "";
+  try {
+    const path = new URL(url).pathname.replace(/\/+$/, "");
+    const seg = path.split("/").filter(Boolean).pop() ?? "";
+    const clean = seg.replace(/^@/, "");
+    return clean ? `@${clean}` : "";
+  } catch {
+    const seg = url.replace(/\/+$/, "").split("/").filter(Boolean).pop() ?? "";
+    const clean = seg.replace(/^@/, "");
+    return clean ? `@${clean}` : "";
+  }
+}
+
+/** Format a digits-only phone (BR) into a readable display string. */
+function formatPhoneDisplay(raw: string): string {
+  const d = raw.replace(/\D/g, "").replace(/^55/, "");
+  if (d.length === 11) return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  if (d.length === 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  if (d.length === 9) return `${d.slice(0, 5)}-${d.slice(5)}`;
+  if (d.length === 8) return `${d.slice(0, 4)}-${d.slice(4)}`;
+  return raw;
+}
+
+export type ResolvedCompany = {
+  name: string;
+  tagline: string;
+  shortDescription: string;
+  fullDescription: string;
+  historyText: string;
+  cnpj: string;
+  address: string;
+  storeLocation: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  openingHours: string;
+  email: string;
+  whatsappNumber: string; // digits only
+  whatsappDisplay: string; // human readable
+  phone: string;
+  instagramUrl: string;
+  instagramHandle: string;
+  facebookUrl: string;
+  tiktokUrl: string;
+  youtubeUrl: string;
+  googleMapsEmbed: string;
+  directionsUrl: string;
+  warrantyText: string;
+  provenanceText: string;
+  testingText: string;
+  logoUrl: string | null;
+  /** Build a WhatsApp deep link for this company. */
+  whatsappLink: (message?: string) => string;
+  /** True when backed by a real DB row. */
+  loaded: boolean;
+  raw: CompanySettings | null;
+};
+
+/**
+ * Single source of truth for institutional data across the public site.
+ * Merges the `company_settings` row with safe fallbacks so the UI never
+ * looks empty, and exposes derived helpers (display phone, social handle,
+ * WhatsApp link). Always prefer this over hardcoded constants.
+ */
+export function useCompany(): ResolvedCompany {
+  const { data, isLoading } = useCompanySettings();
+  const c = data ?? null;
+
+  const whatsappNumber = (c?.whatsapp || COMPANY_FALLBACK.whatsapp).replace(/\D/g, "");
+  const whatsappDisplay =
+    c?.phone?.trim() ||
+    (c?.whatsapp ? formatPhoneDisplay(c.whatsapp) : "") ||
+    COMPANY_FALLBACK.phone;
+  const instagramUrl = c?.instagram_url || COMPANY_FALLBACK.instagram_url;
+
+  return {
+    name: c?.company_name || COMPANY_FALLBACK.company_name,
+    tagline: c?.short_description || COMPANY_FALLBACK.short_description,
+    shortDescription: c?.short_description || COMPANY_FALLBACK.short_description,
+    fullDescription: c?.full_description || "",
+    historyText: c?.history_text || "",
+    cnpj: c?.cnpj || "",
+    address: c?.address || COMPANY_FALLBACK.address,
+    storeLocation: c?.store_location || "",
+    city: c?.city || "",
+    state: c?.state || "",
+    zipCode: c?.zip_code || "",
+    openingHours: c?.opening_hours || COMPANY_FALLBACK.opening_hours,
+    email: c?.email || "",
+    whatsappNumber,
+    whatsappDisplay,
+    phone: c?.phone || "",
+    instagramUrl,
+    instagramHandle: handleFromUrl(instagramUrl) || "@nlfotoevideo",
+    facebookUrl: c?.facebook_url || "",
+    tiktokUrl: c?.tiktok_url || "",
+    youtubeUrl: c?.youtube_url || "",
+    googleMapsEmbed: c?.google_maps_embed || "",
+    directionsUrl: c?.directions_url || "",
+    warrantyText: c?.warranty_text || "",
+    provenanceText: c?.provenance_text || "",
+    testingText: c?.testing_text || "",
+    logoUrl: c?.logo_url || null,
+    whatsappLink: (message?: string) => buildWhatsappUrl(whatsappNumber, message),
+    loaded: !isLoading && !!c,
+    raw: c,
+  };
+}
+
+
 export type MediaAsset = {
   id: string;
   file_url: string;

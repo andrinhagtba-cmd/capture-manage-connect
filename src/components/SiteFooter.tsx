@@ -1,43 +1,31 @@
 import { Link } from "@tanstack/react-router";
-import { Camera, Instagram, MapPin, Phone, Clock } from "lucide-react";
-import {
-  COMPANY_NAME,
-  COMPANY_TAGLINE,
-  WHATSAPP_DISPLAY,
-  ADDRESS,
-  INSTAGRAM_URL,
-  whatsappUrl,
-} from "@/lib/site";
+import { Camera, Instagram, MapPin, Phone, Clock, Mail, Facebook, Youtube } from "lucide-react";
 import { useBrands } from "@/lib/catalog";
 import {
-  useCompanySettings,
+  useCompany,
   useFooterSettings,
   useFooterGroups,
   useFooterLinks,
-  buildWhatsappUrl,
 } from "@/lib/site-content";
 
 export function SiteFooter() {
   const { data: brands } = useBrands();
-  const { data: company } = useCompanySettings();
+  const company = useCompany();
   const { data: footer } = useFooterSettings();
   const { data: groups } = useFooterGroups();
   const { data: links } = useFooterLinks();
 
-  const companyName = company?.company_name || COMPANY_NAME;
-  const tagline =
-    footer?.description || company?.short_description || COMPANY_TAGLINE;
-  const address = company?.address || ADDRESS;
-  const phone = company?.phone || company?.whatsapp || WHATSAPP_DISPLAY;
-  const instagram = company?.instagram_url || INSTAGRAM_URL;
-  const openingHours = company?.opening_hours || "Seg a Sáb · 9h às 18h";
-  const waHref = company?.whatsapp
-    ? buildWhatsappUrl(company.whatsapp)
-    : whatsappUrl();
+  const companyName = company.name;
+  const tagline = footer?.description || company.tagline;
+  const address = company.address;
+  const phone = company.whatsappDisplay;
+  const openingHours = company.openingHours;
+  const waHref = company.whatsappLink();
 
   const activeGroups = (groups ?? []).filter((g) => g.is_active);
   const linksFor = (groupId: string) =>
     (links ?? []).filter((l) => l.is_active && l.group_id === groupId);
+
 
   return (
     <footer className="mt-24 border-t border-border bg-surface-dark text-background">
@@ -45,9 +33,9 @@ export function SiteFooter() {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-background text-ink">
-              {footer?.logo_url || company?.logo_url ? (
+              {footer?.logo_url || company.logoUrl ? (
                 <img
-                  src={(footer?.logo_url || company?.logo_url) as string}
+                  src={(footer?.logo_url || company.logoUrl) as string}
                   alt={companyName}
                   className="h-7 w-7 object-contain"
                 />
@@ -59,16 +47,43 @@ export function SiteFooter() {
           </div>
           <p className="max-w-xs text-sm text-background/70">{tagline}</p>
           {footer?.show_social_links !== false && (
-            <a
-              href={instagram}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-background/80 hover:text-background"
-            >
-              <Instagram className="h-4 w-4" /> @nlfotoevideo
-            </a>
+            <div className="flex flex-wrap items-center gap-4">
+              {company.instagramUrl && (
+                <a
+                  href={company.instagramUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-background/80 hover:text-background"
+                >
+                  <Instagram className="h-4 w-4" /> {company.instagramHandle}
+                </a>
+              )}
+              {company.facebookUrl && (
+                <a
+                  href={company.facebookUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Facebook"
+                  className="text-background/80 hover:text-background"
+                >
+                  <Facebook className="h-4 w-4" />
+                </a>
+              )}
+              {company.youtubeUrl && (
+                <a
+                  href={company.youtubeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="YouTube"
+                  className="text-background/80 hover:text-background"
+                >
+                  <Youtube className="h-4 w-4" />
+                </a>
+              )}
+            </div>
           )}
         </div>
+
 
         <div>
           <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-background/60">
@@ -162,8 +177,15 @@ export function SiteFooter() {
                 <Clock className="h-4 w-4 shrink-0" /> {openingHours}
               </li>
             )}
+            {footer?.show_email !== false && company.email && (
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 shrink-0" />
+                <a href={`mailto:${company.email}`}>{company.email}</a>
+              </li>
+            )}
           </ul>
         </div>
+
       </div>
       <div className="border-t border-background/10 py-5 text-center text-xs text-background/50">
         {footer?.copyright_text ||

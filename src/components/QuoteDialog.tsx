@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { whatsappUrl } from "@/lib/site";
+import { useCompany } from "@/lib/site-content";
 import { track } from "@/lib/analytics";
 import { MessageCircle } from "lucide-react";
 
@@ -37,6 +37,7 @@ export function QuoteDialog({
   trigger?: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const company = useCompany();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
 
@@ -93,7 +94,7 @@ export function QuoteDialog({
         productName ? ` para o ${productName}` : ""
       }. Meu nome é ${form.name}.`;
       track("whatsapp_click", { product_id: productId ?? null, metadata: { origin: "quote_dialog" } });
-      window.open(whatsappUrl(waMsg), "_blank");
+      window.open(company.whatsappLink(waMsg), "_blank");
       setOpen(false);
       setForm({ name: "", phone: "", email: "", message: "" });
     } catch (err) {
