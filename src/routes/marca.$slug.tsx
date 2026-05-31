@@ -184,17 +184,21 @@ function BrandPage() {
               {primaryLabel &&
                 (primaryUrl ? (
                   <Button asChild size="lg">
-                    <a href={primaryUrl}>{primaryLabel}</a>
+                    <a href={primaryUrl} onClick={onBannerClick}>{primaryLabel}</a>
                   </Button>
                 ) : (
                   <QuoteDialog
                     brandName={brand?.name}
-                    trigger={<Button size="lg">{primaryLabel}</Button>}
+                    trigger={
+                      <Button size="lg" onClick={onBannerClick}>
+                        {primaryLabel}
+                      </Button>
+                    }
                   />
                 ))}
               {secondaryLabel && secondaryUrl && (
                 <Button asChild size="lg" variant="secondary" className="gap-2">
-                  <a href={secondaryUrl} target="_blank" rel="noreferrer">
+                  <a href={secondaryUrl} target="_blank" rel="noreferrer" onClick={onBannerClick}>
                     {secondaryLabel} <ExternalLink className="h-4 w-4" />
                   </a>
                 </Button>
