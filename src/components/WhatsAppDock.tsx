@@ -1,6 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import { whatsappUrl, WHATSAPP_DISPLAY } from "@/lib/site";
 import { useCompanySettings, buildWhatsappUrl } from "@/lib/site-content";
+import { track } from "@/lib/analytics";
 
 export function WhatsAppDock() {
   const { data: company } = useCompanySettings();
