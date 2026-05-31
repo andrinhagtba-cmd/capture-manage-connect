@@ -850,3 +850,68 @@ function ChipEditor({
     </div>
   );
 }
+
+function ProductPreview({
+  imageUrl,
+  name,
+  brandName,
+  categoryName,
+  availability,
+  isActive,
+  isFeatured,
+}: {
+  imageUrl: string;
+  name: string;
+  brandName?: string;
+  categoryName?: string;
+  availability: string;
+  isActive: boolean;
+  isFeatured: boolean;
+}) {
+  return (
+    <div className="sticky top-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <div className="relative aspect-square bg-surface p-4">
+        <img
+          src={imageUrl || placeholder}
+          alt={name || "Produto"}
+          className="h-full w-full object-contain"
+        />
+        <span
+          className={`absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 text-[10px] font-semibold ${
+            AVAILABILITY_TONE[availability] ?? "bg-muted text-muted-foreground"
+          }`}
+        >
+          {AVAILABILITY_LABELS[availability] ?? "Sob consulta"}
+        </span>
+        {isFeatured && (
+          <span className="absolute right-2.5 top-2.5 inline-flex items-center gap-1 rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-semibold text-white">
+            <Star className="h-3 w-3 fill-white" /> Destaque
+          </span>
+        )}
+      </div>
+
+      <div className="space-y-2 border-t border-border p-4">
+        <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+          {brandName ?? "Marca"} · {categoryName ?? "Categoria"}
+        </p>
+        <h3 className="line-clamp-2 min-h-[2.5rem] text-sm font-semibold leading-snug">
+          {name || "Nome do produto"}
+        </h3>
+        <div className="flex items-center gap-2 pt-1">
+          <span
+            className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+              isActive ? "bg-emerald-100 text-emerald-800" : "bg-muted text-muted-foreground"
+            }`}
+          >
+            {isActive ? "Ativo" : "Inativo"}
+          </span>
+          <span className="text-[11px] text-muted-foreground">Consultar preço</span>
+        </div>
+        <Button className="mt-2 w-full gap-2" size="sm" type="button" disabled>
+          <MessageCircle className="h-4 w-4" /> Solicitar orçamento
+        </Button>
+      </div>
+    </div>
+  );
+}
+
