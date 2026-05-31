@@ -39,6 +39,7 @@ import {
   Tag,
   FileText,
   UserCog,
+  Megaphone,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
