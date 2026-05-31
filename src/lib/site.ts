@@ -45,12 +45,12 @@ export const AVAILABILITY_LABELS: Record<string, string> = {
   disponivel: "Disponível",
   sob_consulta: "Sob consulta",
   encomenda: "Sob encomenda",
-  esgotado: "Esgotado",
+  indisponivel: "Indisponível",
 };
 
 export const AVAILABILITY_TONE: Record<string, string> = {
   disponivel: "bg-emerald-100 text-emerald-800",
   sob_consulta: "bg-amber-100 text-amber-800",
   encomenda: "bg-sky-100 text-sky-800",
-  esgotado: "bg-muted text-muted-foreground",
+  indisponivel: "bg-muted text-muted-foreground",
 };
