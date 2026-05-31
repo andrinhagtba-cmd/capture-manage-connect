@@ -9,38 +9,214 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SobreRouteImport } from './routes/sobre'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as CatalogoRouteImport } from './routes/catalogo'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
+import { Route as MarcaSlugRouteImport } from './routes/marca.$slug'
+import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
+import { Route as AdminOrcamentosRouteImport } from './routes/admin.orcamentos'
+import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 
+const SobreRoute = SobreRouteImport.update({
+  id: '/sobre',
+  path: '/sobre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContatoRoute = ContatoRouteImport.update({
+  id: '/contato',
+  path: '/contato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogoRoute = CatalogoRouteImport.update({
+  id: '/catalogo',
+  path: '/catalogo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
+  id: '/produto/$slug',
+  path: '/produto/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarcaSlugRoute = MarcaSlugRouteImport.update({
+  id: '/marca/$slug',
+  path: '/marca/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminProdutosRoute = AdminProdutosRouteImport.update({
+  id: '/produtos',
+  path: '/produtos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOrcamentosRoute = AdminOrcamentosRouteImport.update({
+  id: '/orcamentos',
+  path: '/orcamentos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLeadsRoute = AdminLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/catalogo': typeof CatalogoRoute
+  '/contato': typeof ContatoRoute
+  '/login': typeof LoginRoute
+  '/sobre': typeof SobreRoute
+  '/admin/leads': typeof AdminLeadsRoute
+  '/admin/orcamentos': typeof AdminOrcamentosRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/marca/$slug': typeof MarcaSlugRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/catalogo': typeof CatalogoRoute
+  '/contato': typeof ContatoRoute
+  '/login': typeof LoginRoute
+  '/sobre': typeof SobreRoute
+  '/admin/leads': typeof AdminLeadsRoute
+  '/admin/orcamentos': typeof AdminOrcamentosRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/marca/$slug': typeof MarcaSlugRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/catalogo': typeof CatalogoRoute
+  '/contato': typeof ContatoRoute
+  '/login': typeof LoginRoute
+  '/sobre': typeof SobreRoute
+  '/admin/leads': typeof AdminLeadsRoute
+  '/admin/orcamentos': typeof AdminOrcamentosRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/marca/$slug': typeof MarcaSlugRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/catalogo'
+    | '/contato'
+    | '/login'
+    | '/sobre'
+    | '/admin/leads'
+    | '/admin/orcamentos'
+    | '/admin/produtos'
+    | '/marca/$slug'
+    | '/produto/$slug'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/catalogo'
+    | '/contato'
+    | '/login'
+    | '/sobre'
+    | '/admin/leads'
+    | '/admin/orcamentos'
+    | '/admin/produtos'
+    | '/marca/$slug'
+    | '/produto/$slug'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/catalogo'
+    | '/contato'
+    | '/login'
+    | '/sobre'
+    | '/admin/leads'
+    | '/admin/orcamentos'
+    | '/admin/produtos'
+    | '/marca/$slug'
+    | '/produto/$slug'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  CatalogoRoute: typeof CatalogoRoute
+  ContatoRoute: typeof ContatoRoute
+  LoginRoute: typeof LoginRoute
+  SobreRoute: typeof SobreRoute
+  MarcaSlugRoute: typeof MarcaSlugRoute
+  ProdutoSlugRoute: typeof ProdutoSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sobre': {
+      id: '/sobre'
+      path: '/sobre'
+      fullPath: '/sobre'
+      preLoaderRoute: typeof SobreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contato': {
+      id: '/contato'
+      path: '/contato'
+      fullPath: '/contato'
+      preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogo': {
+      id: '/catalogo'
+      path: '/catalogo'
+      fullPath: '/catalogo'
+      preLoaderRoute: typeof CatalogoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +224,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/produto/$slug': {
+      id: '/produto/$slug'
+      path: '/produto/$slug'
+      fullPath: '/produto/$slug'
+      preLoaderRoute: typeof ProdutoSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marca/$slug': {
+      id: '/marca/$slug'
+      path: '/marca/$slug'
+      fullPath: '/marca/$slug'
+      preLoaderRoute: typeof MarcaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/produtos': {
+      id: '/admin/produtos'
+      path: '/produtos'
+      fullPath: '/admin/produtos'
+      preLoaderRoute: typeof AdminProdutosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/orcamentos': {
+      id: '/admin/orcamentos'
+      path: '/orcamentos'
+      fullPath: '/admin/orcamentos'
+      preLoaderRoute: typeof AdminOrcamentosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/leads': {
+      id: '/admin/leads'
+      path: '/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AdminLeadsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminLeadsRoute: typeof AdminLeadsRoute
+  AdminOrcamentosRoute: typeof AdminOrcamentosRoute
+  AdminProdutosRoute: typeof AdminProdutosRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLeadsRoute: AdminLeadsRoute,
+  AdminOrcamentosRoute: AdminOrcamentosRoute,
+  AdminProdutosRoute: AdminProdutosRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  CatalogoRoute: CatalogoRoute,
+  ContatoRoute: ContatoRoute,
+  LoginRoute: LoginRoute,
+  SobreRoute: SobreRoute,
+  MarcaSlugRoute: MarcaSlugRoute,
+  ProdutoSlugRoute: ProdutoSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
