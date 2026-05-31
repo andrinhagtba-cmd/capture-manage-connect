@@ -1,11 +1,12 @@
 import { useState, useRef } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, Camera, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useBrands, useCategories } from "@/lib/catalog";
 import { COMPANY_NAME, BRAND_THEME } from "@/lib/site";
 import { QuoteDialog } from "@/components/QuoteDialog";
+import logoNlLight from "@/assets/logo-nl-light.png";
 
 export function SiteHeader() {
   const { data: brands } = useBrands();
@@ -29,12 +30,18 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-ink text-background">
-            <Camera className="h-5 w-5" />
+        <Link to="/" className="group flex items-center gap-3">
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink p-1.5 shadow-elegant transition-transform duration-300 group-hover:scale-105">
+            <img
+              src={logoNlLight}
+              alt="NL Foto e Vídeo"
+              width={512}
+              height={512}
+              className="h-full w-full object-contain"
+            />
           </span>
-          <span className="text-lg font-bold tracking-tight text-foreground">
-            NL <span className="text-primary">Foto e Vídeo</span>
+          <span className="text-lg font-bold leading-tight tracking-tight text-foreground">
+            NL <span className="text-gradient-red">Foto e Vídeo</span>
           </span>
         </Link>
 
