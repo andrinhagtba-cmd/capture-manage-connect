@@ -25,6 +25,7 @@ import { Route as AdminMenuRouteImport } from './routes/admin.menu'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminFooterRouteImport } from './routes/admin.footer'
 import { Route as AdminEmpresaRouteImport } from './routes/admin.empresa'
+import { Route as AdminBannersRouteImport } from './routes/admin.banners'
 
 const SobreRoute = SobreRouteImport.update({
   id: '/sobre',
@@ -106,6 +107,11 @@ const AdminEmpresaRoute = AdminEmpresaRouteImport.update({
   path: '/empresa',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBannersRoute = AdminBannersRouteImport.update({
+  id: '/banners',
+  path: '/banners',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
+  '/admin/banners': typeof AdminBannersRoute
   '/admin/empresa': typeof AdminEmpresaRoute
   '/admin/footer': typeof AdminFooterRoute
   '/admin/leads': typeof AdminLeadsRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
+  '/admin/banners': typeof AdminBannersRoute
   '/admin/empresa': typeof AdminEmpresaRoute
   '/admin/footer': typeof AdminFooterRoute
   '/admin/leads': typeof AdminLeadsRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
+  '/admin/banners': typeof AdminBannersRoute
   '/admin/empresa': typeof AdminEmpresaRoute
   '/admin/footer': typeof AdminFooterRoute
   '/admin/leads': typeof AdminLeadsRoute
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/sobre'
+    | '/admin/banners'
     | '/admin/empresa'
     | '/admin/footer'
     | '/admin/leads'
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/sobre'
+    | '/admin/banners'
     | '/admin/empresa'
     | '/admin/footer'
     | '/admin/leads'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/sobre'
+    | '/admin/banners'
     | '/admin/empresa'
     | '/admin/footer'
     | '/admin/leads'
@@ -342,10 +354,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEmpresaRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/banners': {
+      id: '/admin/banners'
+      path: '/banners'
+      fullPath: '/admin/banners'
+      preLoaderRoute: typeof AdminBannersRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminBannersRoute: typeof AdminBannersRoute
   AdminEmpresaRoute: typeof AdminEmpresaRoute
   AdminFooterRoute: typeof AdminFooterRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
@@ -357,6 +377,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBannersRoute: AdminBannersRoute,
   AdminEmpresaRoute: AdminEmpresaRoute,
   AdminFooterRoute: AdminFooterRoute,
   AdminLeadsRoute: AdminLeadsRoute,
@@ -382,3 +403,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
