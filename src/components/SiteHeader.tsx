@@ -41,7 +41,7 @@ export function SiteHeader() {
         {/* Desktop nav with mega menu */}
         <nav
           className="hidden items-center gap-1 lg:flex"
-          onMouseLeave={() => setOpenBrand(null)}
+          onMouseLeave={scheduleClose}
         >
           <Link
             to="/catalogo"
@@ -53,7 +53,7 @@ export function SiteHeader() {
             <div
               key={brand.id}
               className="static"
-              onMouseEnter={() => setOpenBrand(brand.id)}
+              onMouseEnter={() => openMenu(brand.id)}
             >
               <Link
                 to="/marca/$slug"
