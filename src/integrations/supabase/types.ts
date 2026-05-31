@@ -742,7 +742,6 @@ export type Database = {
         Row: {
           cookie_banner_enabled: boolean
           cookie_banner_text: string | null
-          ga4_api_secret: string | null
           ga4_custom_events_enabled: boolean
           ga4_enabled: boolean
           ga4_measurement_id: string | null
@@ -755,7 +754,6 @@ export type Database = {
           gtm_container_id: string | null
           gtm_enabled: boolean
           id: string
-          meta_capi_access_token: string | null
           meta_capi_enabled: boolean
           meta_events_enabled: boolean
           meta_pixel_enabled: boolean
@@ -769,7 +767,6 @@ export type Database = {
         Insert: {
           cookie_banner_enabled?: boolean
           cookie_banner_text?: string | null
-          ga4_api_secret?: string | null
           ga4_custom_events_enabled?: boolean
           ga4_enabled?: boolean
           ga4_measurement_id?: string | null
@@ -782,7 +779,6 @@ export type Database = {
           gtm_container_id?: string | null
           gtm_enabled?: boolean
           id?: string
-          meta_capi_access_token?: string | null
           meta_capi_enabled?: boolean
           meta_events_enabled?: boolean
           meta_pixel_enabled?: boolean
@@ -796,7 +792,6 @@ export type Database = {
         Update: {
           cookie_banner_enabled?: boolean
           cookie_banner_text?: string | null
-          ga4_api_secret?: string | null
           ga4_custom_events_enabled?: boolean
           ga4_enabled?: boolean
           ga4_measurement_id?: string | null
@@ -809,7 +804,6 @@ export type Database = {
           gtm_container_id?: string | null
           gtm_enabled?: boolean
           id?: string
-          meta_capi_access_token?: string | null
           meta_capi_enabled?: boolean
           meta_events_enabled?: boolean
           meta_pixel_enabled?: boolean
@@ -818,6 +812,27 @@ export type Database = {
           privacy_policy_url?: string | null
           require_analytics_consent?: boolean
           require_marketing_consent?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      marketing_secrets: {
+        Row: {
+          ga4_api_secret: string | null
+          id: string
+          meta_capi_access_token: string | null
+          updated_at: string
+        }
+        Insert: {
+          ga4_api_secret?: string | null
+          id?: string
+          meta_capi_access_token?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ga4_api_secret?: string | null
+          id?: string
+          meta_capi_access_token?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -1263,30 +1278,7 @@ export type Database = {
       }
     }
     Views: {
-      public_marketing_config: {
-        Row: {
-          cookie_banner_enabled: boolean | null
-          cookie_banner_text: string | null
-          ga4_custom_events_enabled: boolean | null
-          ga4_enabled: boolean | null
-          ga4_measurement_id: string | null
-          google_ads_conversion_id: string | null
-          google_ads_enabled: boolean | null
-          google_ads_lead_label: string | null
-          google_ads_quote_label: string | null
-          google_ads_remarketing_enabled: boolean | null
-          google_ads_whatsapp_label: string | null
-          gtm_container_id: string | null
-          gtm_enabled: boolean | null
-          meta_events_enabled: boolean | null
-          meta_pixel_enabled: boolean | null
-          meta_pixel_id: string | null
-          privacy_policy_url: string | null
-          require_analytics_consent: boolean | null
-          require_marketing_consent: boolean | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       has_role: {
