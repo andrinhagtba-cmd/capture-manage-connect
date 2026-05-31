@@ -377,10 +377,12 @@ function Loading() {
 function CategoryCard({
   category,
   count,
+  fallbackImage,
   onClick,
 }: {
   category: AdminCategory;
   count: number;
+  fallbackImage?: string;
   onClick: () => void;
 }) {
   return (
@@ -390,7 +392,7 @@ function CategoryCard({
     >
       <div className="relative aspect-[16/9] overflow-hidden bg-surface">
         <img
-          src={category.image_url || placeholder}
+          src={category.image_url || fallbackImage || placeholder}
           alt={category.name}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
