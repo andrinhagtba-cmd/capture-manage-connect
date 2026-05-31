@@ -5,7 +5,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { Heart, Star, Truck, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QuoteDialog } from "@/components/QuoteDialog";
-import { useCategoryProducts, type Product } from "@/lib/catalog";
+import { useCategoryProducts, useCategoriesProducts, type Product } from "@/lib/catalog";
 import { whatsappUrl } from "@/lib/site";
 import placeholder from "@/assets/product-placeholder.jpg";
 
