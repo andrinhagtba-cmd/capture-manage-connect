@@ -24,6 +24,8 @@ export type AdminCategory = {
   slug: string;
   brand_id: string | null;
   parent_category_id: string | null;
+  description: string | null;
+  image_url: string | null;
   is_active: boolean;
   sort_order: number;
 };
