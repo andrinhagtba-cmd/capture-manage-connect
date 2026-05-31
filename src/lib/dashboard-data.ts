@@ -371,6 +371,7 @@ function buildSampleDashboard(
     topViewed: mkRank(14),
     topRequested: mkRank(4),
     brands: sampleBrands,
+    categories: sampleCats,
     funnel: [
       { label: "Visitas", value: pageViews },
       { label: "Visualizações de produto", value: Math.round(pageViews * 0.4) },
