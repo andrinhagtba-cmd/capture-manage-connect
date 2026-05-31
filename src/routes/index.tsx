@@ -91,6 +91,17 @@ function Home() {
   const secondaryLabel = hero?.secondary_button_label ?? "Solicitar orçamento";
   const secondaryUrl = hero?.secondary_button_url ?? "";
 
+  useEffect(() => {
+    if (hero?.id)
+      track("banner_view", { banner_id: hero.id, content_name: hero.title ?? "Hero home" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hero?.id]);
+
+  const onBannerClick = () =>
+    track("banner_click", { banner_id: hero?.id ?? null, content_name: hero?.title ?? "Hero home" });
+
+
+
   const renderSection = (s: { section_key: string; eyebrow: string | null; title: string | null; subtitle: string | null }) => {
     switch (s.section_key) {
       case "brands":
