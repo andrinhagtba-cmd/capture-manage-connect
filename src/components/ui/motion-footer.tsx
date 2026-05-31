@@ -435,15 +435,19 @@ export function CinematicFooter() {
                 Contato
               </h4>
               <ul className="mx-auto inline-flex flex-col gap-3 text-sm text-[var(--cf-fg)]/70 sm:mx-0">
-                <li className="flex items-start gap-2">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cf-primary)]" /> {ADDRESS}
-                </li>
-                <li className="flex items-center gap-2">
-                  <Phone className="h-4 w-4 shrink-0 text-[var(--cf-primary)]" />
-                  <a href={whatsappUrl()} target="_blank" rel="noreferrer" className="hover:text-[var(--cf-fg)]">
-                    {WHATSAPP_DISPLAY}
-                  </a>
-                </li>
+                {footer?.show_company_address !== false && (
+                  <li className="flex items-start gap-2">
+                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cf-primary)]" /> {address}
+                  </li>
+                )}
+                {footer?.show_whatsapp !== false && (
+                  <li className="flex items-center gap-2">
+                    <Phone className="h-4 w-4 shrink-0 text-[var(--cf-primary)]" />
+                    <a href={waPlainHref} target="_blank" rel="noreferrer" className="hover:text-[var(--cf-fg)]">
+                      {phone}
+                    </a>
+                  </li>
+                )}
                 <li className="flex items-center gap-2">
                   <Clock className="h-4 w-4 shrink-0 text-[var(--cf-primary)]" /> Seg a Sáb · 9h às 18h
                 </li>
