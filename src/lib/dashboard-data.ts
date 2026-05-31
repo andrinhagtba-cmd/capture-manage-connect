@@ -129,10 +129,11 @@ export async function fetchDashboard(period: DashboardPeriod): Promise<Dashboard
 
   // No real data → return sample preview.
   if (events.length === 0 && quotes.length === 0) {
-    return buildSampleDashboard(period, products, brands, leads);
+    return buildSampleDashboard(period, products, brands, categories, leads);
   }
 
   const productMap = new Map(products.map((p) => [p.id, p]));
+  const categoryMap = new Map(categories.map((c) => [c.id, c]));
   const brandMap = new Map(brands.map((b) => [b.id, b]));
 
   // KPIs
