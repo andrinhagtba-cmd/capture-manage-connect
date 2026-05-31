@@ -296,3 +296,53 @@ export function useHomeSections() {
     },
   });
 }
+
+export type BrandPageSettings = {
+  id: string;
+  brand_slug: string;
+  intro_eyebrow: string | null;
+  intro_title: string | null;
+  intro_text: string | null;
+  primary_button_label: string | null;
+  primary_button_url: string | null;
+  secondary_button_label: string | null;
+  secondary_button_url: string | null;
+  show_categories: boolean;
+  show_products: boolean;
+  meta_title: string | null;
+  meta_description: string | null;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+/** All brand page settings (for admin management). */
+export function useBrandPageSettingsList() {
+  return useQuery({
+    queryKey: ["brand_page_settings"],
+    queryFn: async (): Promise<BrandPageSettings[]> => {
+      const { data, error } = await supabase
+        .from("brand_page_settings")
+        .select("*")
+        .order("brand_slug");
+      if (error) throw error;
+      return data as BrandPageSettings[];
+    },
+  });
+}
+
+/** Single brand page settings by slug (public-facing). */
+export function useBrandPageSettings(slug: string) {
+  return useQuery({
+    queryKey: ["brand_page_settings", slug],
+    queryFn: async (): Promise<BrandPageSettings | null> => {
+      const { data, error } = await supabase
+        .from("brand_page_settings")
+        .select("*")
+        .eq("brand_slug", slug)
+        .maybeSingle();
+      if (error) throw error;
+      return data as BrandPageSettings | null;
+    },
+  });
+}
