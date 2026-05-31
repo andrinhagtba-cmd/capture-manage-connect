@@ -247,6 +247,7 @@ function BrandProductsAdmin() {
                 key={c.id}
                 category={c}
                 count={catCounts[c.id] ?? 0}
+                fallbackImage={catImages[c.id]}
                 onClick={() => {
                   setSearch("");
                   setScope(c.id);
