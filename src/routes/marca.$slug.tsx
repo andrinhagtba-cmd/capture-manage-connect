@@ -77,6 +77,8 @@ function BrandPage() {
   const { data: brands, isLoading } = useBrands();
   const { data: categories } = useCategories();
   const { data: products } = useProducts({ brandSlug: slug });
+  const { data: hero } = useActiveHero(slug);
+  const { data: pageSettings } = useBrandPageSettings(slug);
 
   const brand = brands?.find((b) => b.slug === slug);
   const theme = BRAND_THEME[slug];
@@ -85,11 +87,41 @@ function BrandPage() {
 
   const brandCats = (categories ?? []).filter((c) => c.brand_id === brand?.id);
 
+  // Hero content: DB hero override → brand page settings → hardcoded fallback.
+  const heroTitle = hero?.title ?? pageSettings?.intro_title ?? brand?.name ?? slug;
+  const heroSubtitle =
+    hero?.subtitle ?? pageSettings?.intro_text ?? brand?.description ?? theme?.blurb ?? "";
+  const heroImage = hero?.desktop_image_url || HEROES[slug];
+  const heroVideo = hero?.media_type === "video" ? hero.video_url : null;
+  const useGoproDefaultVideo = !hero && slug === "gopro";
+  const heroOverlay = hero?.overlay_opacity ?? null;
+
+  const primaryLabel = hero?.primary_button_label ?? pageSettings?.primary_button_label ?? "Solicitar orçamento";
+  const primaryUrl = hero?.primary_button_url ?? pageSettings?.primary_button_url ?? "";
+  const secondaryLabel =
+    hero?.secondary_button_label ?? pageSettings?.secondary_button_label ?? (brand?.official_site_url ? "Site oficial" : "");
+  const secondaryUrl =
+    hero?.secondary_button_url ?? pageSettings?.secondary_button_url ?? brand?.official_site_url ?? "";
+
+  const showCategories = pageSettings?.show_categories ?? true;
+  const showProducts = pageSettings?.show_products ?? true;
+
   return (
     <PublicLayout>
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          {slug === "gopro" ? (
+          {heroVideo ? (
+            <video
+              className="h-full w-full object-cover"
+              src={heroVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              poster={heroImage}
+            />
+          ) : useGoproDefaultVideo ? (
             <video
               className="h-full w-full object-cover"
               src="/videos/gopro-mission1.mp4"
@@ -100,9 +132,12 @@ function BrandPage() {
               preload="auto"
             />
           ) : (
-            <img src={HEROES[slug]} alt="" className="h-full w-full object-cover" />
+            <img src={heroImage} alt="" className="h-full w-full object-cover" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-r from-ink/92 via-ink/75 to-ink/40" />
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-ink/92 via-ink/75 to-ink/40"
+            style={heroOverlay !== null ? { opacity: heroOverlay } : undefined}
+          />
         </div>
         <div className="container-page relative py-24 md:py-32">
           <div className="max-w-2xl animate-fade-up">
@@ -110,21 +145,31 @@ function BrandPage() {
               className="inline-block h-1.5 w-14 rounded-full"
               style={{ background: theme?.color ?? "#fff" }}
             />
-            <h1 className="display-hero mt-5 text-4xl text-background md:text-6xl">
-              {brand?.name ?? slug}
+            {(hero?.eyebrow ?? pageSettings?.intro_eyebrow) && (
+              <p className="eyebrow mt-5 text-background/70">
+                {hero?.eyebrow ?? pageSettings?.intro_eyebrow}
+              </p>
+            )}
+            <h1 className="display-hero mt-3 text-4xl text-background md:text-6xl">
+              {heroTitle}
             </h1>
-            <p className="mt-5 max-w-xl text-lg text-background/80">
-              {brand?.description || theme?.blurb}
-            </p>
+            <p className="mt-5 max-w-xl text-lg text-background/80">{heroSubtitle}</p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <QuoteDialog
-                brandName={brand?.name}
-                trigger={<Button size="lg">Solicitar orçamento</Button>}
-              />
-              {brand?.official_site_url && (
+              {primaryLabel &&
+                (primaryUrl ? (
+                  <Button asChild size="lg">
+                    <a href={primaryUrl}>{primaryLabel}</a>
+                  </Button>
+                ) : (
+                  <QuoteDialog
+                    brandName={brand?.name}
+                    trigger={<Button size="lg">{primaryLabel}</Button>}
+                  />
+                ))}
+              {secondaryLabel && secondaryUrl && (
                 <Button asChild size="lg" variant="secondary" className="gap-2">
-                  <a href={brand.official_site_url} target="_blank" rel="noreferrer">
-                    Site oficial <ExternalLink className="h-4 w-4" />
+                  <a href={secondaryUrl} target="_blank" rel="noreferrer">
+                    {secondaryLabel} <ExternalLink className="h-4 w-4" />
                   </a>
                 </Button>
               )}
