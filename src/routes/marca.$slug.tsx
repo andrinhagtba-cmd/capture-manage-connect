@@ -63,7 +63,19 @@ function BrandPage() {
     <PublicLayout>
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={HEROES[slug]} alt="" className="h-full w-full object-cover" />
+          {slug === "gopro" ? (
+            <video
+              className="h-full w-full object-cover"
+              src="/videos/gopro-cameras.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
+          ) : (
+            <img src={HEROES[slug]} alt="" className="h-full w-full object-cover" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-r from-ink/92 via-ink/75 to-ink/40" />
         </div>
         <div className="container-page relative py-24 md:py-32">
@@ -182,6 +194,35 @@ function BrandPage() {
             categorySlug="sony-apsc"
             brandLabel="Sony"
             brandSlug="sony"
+          />
+        </>
+      )}
+
+      {slug === "gopro" && (
+        <>
+          <CategoryShowcase
+            eyebrow="Linha GoPro"
+            title="Câmeras de Ação"
+            videoSrc="/videos/gopro-cameras.mp4"
+            categorySlug="gopro-acao"
+            brandLabel="GoPro"
+            brandSlug="gopro"
+          />
+          <CategoryShowcase
+            eyebrow="Linha GoPro"
+            title="Câmeras 360°"
+            imageSrc={heroGopro}
+            categorySlug="gopro-360"
+            brandLabel="GoPro"
+            brandSlug="gopro"
+          />
+          <CategoryShowcase
+            eyebrow="Linha GoPro"
+            title="Câmeras para Criadores"
+            imageSrc={heroGopro}
+            categorySlug="gopro-criadores"
+            brandLabel="GoPro"
+            brandSlug="gopro"
           />
         </>
       )}
