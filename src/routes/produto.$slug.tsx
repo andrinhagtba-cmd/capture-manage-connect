@@ -10,25 +10,44 @@ import {
   AVAILABILITY_TONE,
 } from "@/lib/site";
 import { useCompany } from "@/lib/site-content";
+import { getProductSeo } from "@/lib/seo.functions";
+import { buildSeoHead, DEFAULT_SITE_URL } from "@/lib/seo-meta";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
 import { ExternalLink, MessageCircle, ChevronRight } from "lucide-react";
 import placeholder from "@/assets/product-placeholder.jpg";
 
 export const Route = createFileRoute("/produto/$slug")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `Produto — NL Foto e Vídeo` },
-      {
-        name: "description",
-        content: "Detalhes do produto e solicitação de orçamento na NL Foto e Vídeo.",
-      },
-      { property: "og:type", content: "product" },
-    ],
-    links: [{ rel: "canonical", href: `/produto/${params.slug}` }],
-  }),
+  loader: async ({ params }) => {
+    const seo = await getProductSeo({ data: { slug: params.slug } });
+    return { seo };
+  },
+  head: ({ params, loaderData }) => {
+    const seo = loaderData?.seo;
+    if (!seo) {
+      return {
+        meta: [
+          { title: "Produto — NL Foto e Vídeo" },
+          {
+            name: "description",
+            content:
+              "Detalhes do produto e solicitação de orçamento na NL Foto e Vídeo.",
+          },
+          { property: "og:type", content: "product" },
+        ],
+        links: [
+          {
+            rel: "canonical",
+            href: `${DEFAULT_SITE_URL}/produto/${params.slug}`,
+          },
+        ],
+      };
+    }
+    return buildSeoHead(seo);
+  },
   component: ProductPage,
 });
+
 
 function asArray(v: unknown): any[] {
   return Array.isArray(v) ? v : [];

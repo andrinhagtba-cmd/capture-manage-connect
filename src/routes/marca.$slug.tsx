@@ -9,6 +9,8 @@ import { useBrands, useCategories, useProducts } from "@/lib/catalog";
 import { useActiveHero, useBrandPageSettings } from "@/lib/site-content";
 import { track } from "@/lib/analytics";
 import { BRAND_THEME } from "@/lib/site";
+import { getBrandSeo } from "@/lib/seo.functions";
+import { buildSeoHead, DEFAULT_SITE_URL } from "@/lib/seo-meta";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import heroCanon from "@/assets/hero-canon.jpg";
 import heroDji from "@/assets/hero-dji.jpg";
@@ -53,7 +55,13 @@ const GOPRO_LINES: { title: string; desc: string; cat: string; image: string }[]
 
 
 export const Route = createFileRoute("/marca/$slug")({
-  head: ({ params }) => {
+  loader: async ({ params }) => {
+    const seo = await getBrandSeo({ data: { slug: params.slug } });
+    return { seo };
+  },
+  head: ({ params, loaderData }) => {
+    const seo = loaderData?.seo;
+    if (seo) return buildSeoHead(seo);
     const name = params.slug.charAt(0).toUpperCase() + params.slug.slice(1);
     return {
       meta: [
@@ -68,11 +76,12 @@ export const Route = createFileRoute("/marca/$slug")({
           content: `Produtos ${name} com curadoria especializada.`,
         },
       ],
-      links: [{ rel: "canonical", href: `/marca/${params.slug}` }],
+      links: [{ rel: "canonical", href: `${DEFAULT_SITE_URL}/marca/${params.slug}` }],
     };
   },
   component: BrandPage,
 });
+
 
 function BrandPage() {
   const { slug } = Route.useParams();

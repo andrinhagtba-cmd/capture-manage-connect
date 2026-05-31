@@ -313,6 +313,12 @@ export type Database = {
           city: string | null
           cnpj: string | null
           company_name: string | null
+          default_brand_image_url: string | null
+          default_og_description: string | null
+          default_og_image_url: string | null
+          default_og_title: string | null
+          default_product_image_url: string | null
+          default_twitter_card: string | null
           directions_url: string | null
           email: string | null
           facebook_url: string | null
@@ -328,7 +334,9 @@ export type Database = {
           opening_hours: string | null
           phone: string | null
           provenance_text: string | null
+          public_site_url: string | null
           short_description: string | null
+          site_name: string | null
           slogan: string | null
           state: string | null
           store_location: string | null
@@ -345,6 +353,12 @@ export type Database = {
           city?: string | null
           cnpj?: string | null
           company_name?: string | null
+          default_brand_image_url?: string | null
+          default_og_description?: string | null
+          default_og_image_url?: string | null
+          default_og_title?: string | null
+          default_product_image_url?: string | null
+          default_twitter_card?: string | null
           directions_url?: string | null
           email?: string | null
           facebook_url?: string | null
@@ -360,7 +374,9 @@ export type Database = {
           opening_hours?: string | null
           phone?: string | null
           provenance_text?: string | null
+          public_site_url?: string | null
           short_description?: string | null
+          site_name?: string | null
           slogan?: string | null
           state?: string | null
           store_location?: string | null
@@ -377,6 +393,12 @@ export type Database = {
           city?: string | null
           cnpj?: string | null
           company_name?: string | null
+          default_brand_image_url?: string | null
+          default_og_description?: string | null
+          default_og_image_url?: string | null
+          default_og_title?: string | null
+          default_product_image_url?: string | null
+          default_twitter_card?: string | null
           directions_url?: string | null
           email?: string | null
           facebook_url?: string | null
@@ -392,7 +414,9 @@ export type Database = {
           opening_hours?: string | null
           phone?: string | null
           provenance_text?: string | null
+          public_site_url?: string | null
           short_description?: string | null
+          site_name?: string | null
           slogan?: string | null
           state?: string | null
           store_location?: string | null
@@ -978,6 +1002,7 @@ export type Database = {
         Row: {
           availability_status: Database["public"]["Enums"]["availability_status"]
           brand_id: string | null
+          canonical_url: string | null
           category_id: string | null
           created_at: string
           full_description: string | null
@@ -992,6 +1017,9 @@ export type Database = {
           model: string | null
           name: string
           official_product_url: string | null
+          og_description: string | null
+          og_image_url: string | null
+          og_title: string | null
           order_index: number
           public_price_visible: boolean
           seo_description: string | null
@@ -1005,11 +1033,13 @@ export type Database = {
           thumbnail_url: string | null
           updated_at: string
           use_cases_json: Json
+          use_main_image_as_og: boolean
           video_url: string | null
         }
         Insert: {
           availability_status?: Database["public"]["Enums"]["availability_status"]
           brand_id?: string | null
+          canonical_url?: string | null
           category_id?: string | null
           created_at?: string
           full_description?: string | null
@@ -1024,6 +1054,9 @@ export type Database = {
           model?: string | null
           name: string
           official_product_url?: string | null
+          og_description?: string | null
+          og_image_url?: string | null
+          og_title?: string | null
           order_index?: number
           public_price_visible?: boolean
           seo_description?: string | null
@@ -1037,11 +1070,13 @@ export type Database = {
           thumbnail_url?: string | null
           updated_at?: string
           use_cases_json?: Json
+          use_main_image_as_og?: boolean
           video_url?: string | null
         }
         Update: {
           availability_status?: Database["public"]["Enums"]["availability_status"]
           brand_id?: string | null
+          canonical_url?: string | null
           category_id?: string | null
           created_at?: string
           full_description?: string | null
@@ -1056,6 +1091,9 @@ export type Database = {
           model?: string | null
           name?: string
           official_product_url?: string | null
+          og_description?: string | null
+          og_image_url?: string | null
+          og_title?: string | null
           order_index?: number
           public_price_visible?: boolean
           seo_description?: string | null
@@ -1069,6 +1107,7 @@ export type Database = {
           thumbnail_url?: string | null
           updated_at?: string
           use_cases_json?: Json
+          use_main_image_as_og?: boolean
           video_url?: string | null
         }
         Relationships: [
