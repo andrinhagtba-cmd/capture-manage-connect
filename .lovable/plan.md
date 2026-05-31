@@ -58,4 +58,5 @@ Ao aprovar, inicio pela **Fase 1**.
 - ✅ **Fase 1 concluída** — Tabelas `company_settings`, `footer_settings`, `footer_link_groups`, `footer_links`, `navigation_items`. Abas Configurações da Empresa, Footer e Menu/Navegação. Frontend `SiteHeader`, `CinematicFooter` e `WhatsAppDock` lendo do banco com fallback.
 - ✅ **Fase 2 concluída** — Tabela `media_assets` + bucket `media`. Aba Biblioteca de Mídia com upload de imagens/vídeos, pastas, copiar URL, editar alt/descrição/pasta e excluir.
 - ✅ **Fase 3 concluída** — Tabelas `hero_banners` e `home_sections`. Abas Banners e Heros (hero/vídeo, imagens desktop/mobile, overlay, botões, ordem, status, local home/marca) e Home Page (ligar/desligar, reordenar e editar textos das seções). `src/routes/index.tsx` agora monta o hero e as seções dinamicamente a partir do banco com fallback.
-- ⏭️ **Próximo: Fase 4** — Páginas de Marca dinâmicas.
+- ✅ **Fase 4 concluída** — Tabela `brand_page_settings` (introdução, botões, SEO, mostrar/ocultar categorias e produtos, status publicado) com aba Páginas de Marca. O hero por marca vem de `hero_banners` (Local da marca). `marca.$slug.tsx` agora lê hero, texto institucional, botões e visibilidade do banco com fallback ao conteúdo atual.
+- ⏭️ **Próximo: Fase 5** — Páginas do Site + SEO global.
