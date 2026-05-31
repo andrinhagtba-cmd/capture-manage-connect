@@ -35,6 +35,19 @@ const STATUS_LABEL: Record<string, string> = {
   perdido: "Perdido",
 };
 
+function quoteWhatsappMessage(q: any) {
+  let msg = `Olá ${q.customer_name}! Sobre seu pedido de orçamento na NL Foto e Vídeo`;
+  if (q.products?.name) {
+    msg += ` para o ${q.products.name}`;
+    if (q.products.slug) {
+      const origin =
+        typeof window !== "undefined" ? window.location.origin : "";
+      msg += `: ${origin}/produto/${q.products.slug}`;
+    }
+  }
+  return `${msg}...`;
+}
+
 function Orcamentos() {
   const qc = useQueryClient();
   const { data } = useQuery({
@@ -42,7 +55,7 @@ function Orcamentos() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("quote_requests")
-        .select("*, products(name)")
+        .select("*, products(name, slug)")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
@@ -118,7 +131,7 @@ function Orcamentos() {
                     <a
                       href={whatsappTo(
                         q.customer_phone,
-                        `Olá ${q.customer_name}! Sobre seu pedido de orçamento na NL Foto e Vídeo...`,
+                        quoteWhatsappMessage(q),
                       )}
                       target="_blank"
                       rel="noreferrer"
