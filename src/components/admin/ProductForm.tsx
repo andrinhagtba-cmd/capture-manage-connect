@@ -12,6 +12,7 @@ import {
   type AdminProduct,
 } from "@/lib/products-admin";
 import { AVAILABILITY_LABELS, AVAILABILITY_TONE } from "@/lib/site";
+import { useCompanySettings } from "@/lib/site-content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,7 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash2, X, Upload, Loader2, GripVertical, Search, MessageCircle, Star } from "lucide-react";
+import { Plus, Trash2, X, Upload, Loader2, GripVertical, Search, MessageCircle, Star, Copy, Link2 } from "lucide-react";
 import { toast } from "sonner";
 import placeholder from "@/assets/product-placeholder.jpg";
 
@@ -63,6 +64,11 @@ type FormState = {
   seo_title: string;
   seo_description: string;
   seo_image_url: string;
+  og_title: string;
+  og_description: string;
+  og_image_url: string;
+  canonical_url: string;
+  use_main_image_as_og: boolean;
   official_product_url: string;
   internal_price: string;
   internal_notes: string;
@@ -94,6 +100,11 @@ function emptyForm(brandId?: string): FormState {
     seo_title: "",
     seo_description: "",
     seo_image_url: "",
+    og_title: "",
+    og_description: "",
+    og_image_url: "",
+    canonical_url: "",
+    use_main_image_as_og: true,
     official_product_url: "",
     internal_price: "",
     internal_notes: "",
@@ -130,6 +141,11 @@ function fromProduct(p: AdminProduct): FormState {
     seo_title: p.seo_title ?? "",
     seo_description: p.seo_description ?? "",
     seo_image_url: p.seo_image_url ?? "",
+    og_title: p.og_title ?? "",
+    og_description: p.og_description ?? "",
+    og_image_url: p.og_image_url ?? "",
+    canonical_url: p.canonical_url ?? "",
+    use_main_image_as_og: p.use_main_image_as_og ?? true,
     official_product_url: p.official_product_url ?? "",
     internal_price: p.internal_price != null ? String(p.internal_price) : "",
     internal_notes: p.internal_notes ?? "",
@@ -155,6 +171,7 @@ export function ProductForm({
   allProducts: AdminProduct[];
 }) {
   const qc = useQueryClient();
+  const { data: company } = useCompanySettings();
   const [form, setForm] = useState<FormState>(emptyForm(defaultBrandId));
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState("basico");
@@ -265,6 +282,11 @@ export function ProductForm({
       seo_title: form.seo_title || null,
       seo_description: form.seo_description || null,
       seo_image_url: form.seo_image_url || null,
+      og_title: form.og_title || null,
+      og_description: form.og_description || null,
+      og_image_url: form.og_image_url || null,
+      canonical_url: form.canonical_url || null,
+      use_main_image_as_og: form.use_main_image_as_og,
       order_index: Number(form.order_index) || 0,
       is_featured: form.is_featured,
       is_active: form.is_active,
@@ -691,41 +713,186 @@ export function ProductForm({
             </TabsContent>
 
             {/* TAB 6 — SEO */}
-            <TabsContent value="seo" className="mt-0 space-y-4">
-              <Field label="SEO title">
-                <Input
-                  value={form.seo_title}
-                  onChange={(e) => set({ seo_title: e.target.value })}
-                />
-              </Field>
-              <Field label="SEO description">
-                <Textarea
-                  rows={3}
-                  value={form.seo_description}
-                  onChange={(e) => set({ seo_description: e.target.value })}
-                />
-              </Field>
-              <Field label="SEO image (URL)">
-                <Input
-                  value={form.seo_image_url}
-                  onChange={(e) => set({ seo_image_url: e.target.value })}
-                />
-              </Field>
-              <div className="rounded-xl border border-border bg-surface p-4">
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Preview SEO
-                </p>
-                <p className="mt-1 truncate text-sm text-[#1a0dab]">
-                  {form.seo_title || form.name || "Título do produto"}
-                </p>
-                <p className="truncate text-xs text-[#006621]">
-                  /produto/{form.slug || slugify(form.name) || "slug"}
-                </p>
-                <p className="line-clamp-2 text-xs text-muted-foreground">
-                  {form.seo_description || form.short_description || "Descrição do produto."}
-                </p>
-              </div>
+            <TabsContent value="seo" className="mt-0 space-y-5">
+              {(() => {
+                const slug = form.slug || slugify(form.name) || "slug";
+                const siteUrl = (
+                  company?.public_site_url ||
+                  "https://capture-manage-connect.lovable.app"
+                ).replace(/\/+$/, "");
+                const productUrl =
+                  form.canonical_url?.trim() || `${siteUrl}/produto/${slug}`;
+                const shareTitle =
+                  form.og_title || form.seo_title || form.name || "Título do produto";
+                const shareDesc =
+                  form.og_description ||
+                  form.seo_description ||
+                  form.short_description ||
+                  "Descrição do produto.";
+                const shareImage = form.use_main_image_as_og
+                  ? form.main_image_url ||
+                    form.og_image_url ||
+                    form.seo_image_url ||
+                    form.gallery[0] ||
+                    ""
+                  : form.og_image_url ||
+                    form.seo_image_url ||
+                    form.main_image_url ||
+                    form.gallery[0] ||
+                    "";
+                const copyLink = async () => {
+                  try {
+                    await navigator.clipboard.writeText(productUrl);
+                    toast.success("Link do produto copiado!");
+                  } catch {
+                    toast.error("Não foi possível copiar o link.");
+                  }
+                };
+                const host = siteUrl.replace(/^https?:\/\//, "");
+                return (
+                  <>
+                    {/* Copy public link */}
+                    <div className="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                          Link público do produto
+                        </p>
+                        <p className="mt-1 truncate text-sm text-foreground">{productUrl}</p>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="gap-2 shrink-0"
+                        onClick={copyLink}
+                      >
+                        <Copy className="h-4 w-4" /> Copiar link
+                      </Button>
+                    </div>
+
+                    {/* Share / Open Graph preview (WhatsApp, Facebook...) */}
+                    <div>
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Prévia de compartilhamento
+                      </p>
+                      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+                        {shareImage ? (
+                          <img
+                            src={shareImage}
+                            alt={shareTitle}
+                            className="aspect-[1.91/1] w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex aspect-[1.91/1] w-full items-center justify-center bg-surface text-xs text-muted-foreground">
+                            Sem imagem para o preview
+                          </div>
+                        )}
+                        <div className="space-y-1 p-3">
+                          <p className="text-[11px] uppercase text-muted-foreground">{host}</p>
+                          <p className="line-clamp-1 text-sm font-semibold text-foreground">
+                            {shareTitle}
+                          </p>
+                          <p className="line-clamp-2 text-xs text-muted-foreground">
+                            {shareDesc}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        É assim que o link aparece ao ser enviado no WhatsApp, Facebook,
+                        Telegram e outras redes.
+                      </p>
+                    </div>
+
+                    {/* Open Graph fields */}
+                    <div className="flex items-center justify-between rounded-xl border border-border bg-surface p-4">
+                      <div>
+                        <p className="text-sm font-medium">Usar imagem principal no compartilhamento</p>
+                        <p className="text-xs text-muted-foreground">
+                          Recomendado. Desative para definir uma imagem própria abaixo.
+                        </p>
+                      </div>
+                      <Switch
+                        checked={form.use_main_image_as_og}
+                        onCheckedChange={(v) => set({ use_main_image_as_og: v })}
+                      />
+                    </div>
+
+                    <Field label="Título de compartilhamento (Open Graph)">
+                      <Input
+                        placeholder={form.seo_title || form.name}
+                        value={form.og_title}
+                        onChange={(e) => set({ og_title: e.target.value })}
+                      />
+                    </Field>
+                    <Field label="Descrição de compartilhamento (Open Graph)">
+                      <Textarea
+                        rows={2}
+                        placeholder={form.seo_description || form.short_description}
+                        value={form.og_description}
+                        onChange={(e) => set({ og_description: e.target.value })}
+                      />
+                    </Field>
+                    {!form.use_main_image_as_og && (
+                      <Field label="Imagem de compartilhamento (URL)">
+                        <Input
+                          value={form.og_image_url}
+                          onChange={(e) => set({ og_image_url: e.target.value })}
+                        />
+                      </Field>
+                    )}
+                    <Field label="URL canônica (opcional)">
+                      <div className="relative">
+                        <Link2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                          className="pl-9"
+                          placeholder={`${siteUrl}/produto/${slug}`}
+                          value={form.canonical_url}
+                          onChange={(e) => set({ canonical_url: e.target.value })}
+                        />
+                      </div>
+                    </Field>
+
+                    <div className="border-t border-border pt-4">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        SEO (mecanismos de busca)
+                      </p>
+                      <div className="space-y-4">
+                        <Field label="SEO title">
+                          <Input
+                            placeholder={form.name}
+                            value={form.seo_title}
+                            onChange={(e) => set({ seo_title: e.target.value })}
+                          />
+                        </Field>
+                        <Field label="SEO description">
+                          <Textarea
+                            rows={3}
+                            placeholder={form.short_description}
+                            value={form.seo_description}
+                            onChange={(e) => set({ seo_description: e.target.value })}
+                          />
+                        </Field>
+                        <Field label="SEO image (URL)">
+                          <Input
+                            value={form.seo_image_url}
+                            onChange={(e) => set({ seo_image_url: e.target.value })}
+                          />
+                        </Field>
+                        <div className="rounded-xl border border-border bg-surface p-4">
+                          <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                            Preview Google
+                          </p>
+                          <p className="mt-1 truncate text-sm text-[#1a0dab]">{shareTitle}</p>
+                          <p className="truncate text-xs text-[#006621]">{productUrl}</p>
+                          <p className="line-clamp-2 text-xs text-muted-foreground">{shareDesc}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
             </TabsContent>
+
 
             {/* TAB 7 — Links e origem */}
             <TabsContent value="links" className="mt-0 space-y-4">

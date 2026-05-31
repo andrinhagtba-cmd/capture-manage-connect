@@ -39,6 +39,14 @@ export type CompanySettings = {
   logo_light_url: string | null;
   logo_dark_url: string | null;
   favicon_url: string | null;
+  public_site_url: string | null;
+  site_name: string | null;
+  default_og_title: string | null;
+  default_og_description: string | null;
+  default_og_image_url: string | null;
+  default_brand_image_url: string | null;
+  default_product_image_url: string | null;
+  default_twitter_card: string | null;
   updated_at: string;
 };
 

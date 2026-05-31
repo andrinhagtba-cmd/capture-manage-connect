@@ -202,6 +202,28 @@ function EmpresaAdmin() {
         <Field label="Favicon (URL)" value={val("favicon_url")} onChange={set("favicon_url")} />
       </Section>
 
+      <Section title="SEO e compartilhamento (padrões globais)">
+        <Field
+          label="URL pública do site"
+          placeholder="https://capture-manage-connect.lovable.app"
+          value={val("public_site_url")}
+          onChange={set("public_site_url")}
+        />
+        <Field label="Nome do site (og:site_name)" value={val("site_name")} onChange={set("site_name")} />
+        <Field label="Título padrão de compartilhamento" value={val("default_og_title")} onChange={set("default_og_title")} />
+        <Field label="Imagem padrão de compartilhamento (URL)" value={val("default_og_image_url")} onChange={set("default_og_image_url")} />
+        <Field label="Imagem padrão de produtos (URL)" value={val("default_product_image_url")} onChange={set("default_product_image_url")} />
+        <Field label="Imagem padrão de marcas (URL)" value={val("default_brand_image_url")} onChange={set("default_brand_image_url")} />
+        <div className="sm:col-span-2">
+          <AreaField
+            label="Descrição padrão de compartilhamento"
+            value={val("default_og_description")}
+            onChange={set("default_og_description")}
+          />
+        </div>
+      </Section>
+
+
       <div className="flex justify-end">
         <Button onClick={save} disabled={saving} className="gap-2">
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
