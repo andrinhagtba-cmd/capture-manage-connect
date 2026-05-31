@@ -121,12 +121,15 @@ export function CategoryShowcase({
   videoSrc,
   imageSrc,
   categorySlug,
+  categorySlugs,
   brandLabel = "DJI",
   brandSlug = "dji",
   ctaLabel = "Mostrar Todos",
   ctaTo = "catalog",
 }: CategoryShowcaseProps) {
-  const { data: products } = useCategoryProducts(categorySlug);
+  const single = useCategoryProducts(categorySlug ?? "");
+  const multi = useCategoriesProducts(categorySlugs ?? []);
+  const products = categorySlugs?.length ? multi.data : single.data;
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { align: "start", loop: false, slidesToScroll: 1 },
     [Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })],
