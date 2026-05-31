@@ -178,3 +178,36 @@ export function buildWhatsappUrl(phone: string | null | undefined, message?: str
   if (!message) return base;
   return `${base}?text=${encodeURIComponent(message)}`;
 }
+
+export type MediaAsset = {
+  id: string;
+  file_url: string;
+  file_path: string | null;
+  file_name: string;
+  mime_type: string | null;
+  media_type: string;
+  folder: string | null;
+  alt_text: string | null;
+  description: string | null;
+  width: number | null;
+  height: number | null;
+  size_bytes: number | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export function useMediaAssets(folder?: string) {
+  return useQuery({
+    queryKey: ["media_assets", folder ?? "all"],
+    queryFn: async (): Promise<MediaAsset[]> => {
+      let q = supabase
+        .from("media_assets")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (folder && folder !== "all") q = q.eq("folder", folder);
+      const { data, error } = await q;
+      if (error) throw error;
+      return data as MediaAsset[];
+    },
+  });
+}
