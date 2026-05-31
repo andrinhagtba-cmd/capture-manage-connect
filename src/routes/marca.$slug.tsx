@@ -90,6 +90,34 @@ function BrandPage() {
         </div>
       </section>
 
+      {slug === "dji" && (
+        <>
+          <CategoryShowcase
+            title="Drones com Câmera"
+            videoSrc="/videos/drones-com-camera.mp4"
+            categorySlug="dji-drones"
+            brandLabel="DJI"
+            brandSlug="dji"
+          />
+          <CategoryShowcase
+            title="Estabilizadores"
+            videoSrc="/videos/estabilizadores.mp4"
+            categorySlug="dji-estabilizadores"
+            brandLabel="DJI"
+            brandSlug="dji"
+          />
+          <CategoryShowcase
+            title="Câmeras e Microfones"
+            videoSrc="/videos/cameras-e-microfones.mp4"
+            categorySlug="dji-cameras"
+            brandLabel="DJI"
+            brandSlug="dji"
+          />
+        </>
+      )}
+
+
+
       {brandCats.length > 0 && (
         <section className="container-page mt-12">
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
