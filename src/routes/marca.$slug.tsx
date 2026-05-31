@@ -108,6 +108,30 @@ function BrandPage() {
   const showCategories = pageSettings?.show_categories ?? true;
   const showProducts = pageSettings?.show_products ?? true;
 
+  useEffect(() => {
+    if (brand) track("brand_view", { brand_id: brand.id, content_name: brand.name });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [brand?.id]);
+
+  useEffect(() => {
+    if (hero?.id)
+      track("banner_view", {
+        banner_id: hero.id,
+        brand_id: brand?.id ?? null,
+        content_name: hero.title ?? brand?.name ?? slug,
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hero?.id]);
+
+  const onBannerClick = () =>
+    track("banner_click", {
+      banner_id: hero?.id ?? null,
+      brand_id: brand?.id ?? null,
+      content_name: hero?.title ?? brand?.name ?? slug,
+    });
+
+
+
   return (
     <PublicLayout>
       <section className="relative overflow-hidden">
