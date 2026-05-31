@@ -315,25 +315,27 @@ export function ProductForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] gap-0 overflow-hidden p-0 sm:max-w-3xl">
+      <DialogContent className="max-h-[94vh] gap-0 overflow-hidden p-0 sm:max-w-5xl">
         <DialogHeader className="border-b border-border px-6 py-4">
           <DialogTitle>{form.id ? "Editar produto" : "Novo produto"}</DialogTitle>
         </DialogHeader>
 
-        <Tabs value={tab} onValueChange={setTab} className="flex flex-col">
-          <div className="border-b border-border px-4">
-            <TabsList className="h-auto flex-wrap justify-start gap-1 bg-transparent p-2">
-              <TabsTrigger value="basico">Básico</TabsTrigger>
-              <TabsTrigger value="midia">Mídia</TabsTrigger>
-              <TabsTrigger value="descricoes">Descrições</TabsTrigger>
-              <TabsTrigger value="specs">Especificações</TabsTrigger>
-              <TabsTrigger value="comercial">Comercial</TabsTrigger>
-              <TabsTrigger value="seo">SEO</TabsTrigger>
-              <TabsTrigger value="links">Links</TabsTrigger>
-            </TabsList>
-          </div>
+        <div className="flex min-h-0 flex-1">
+          <Tabs value={tab} onValueChange={setTab} className="flex min-w-0 flex-1 flex-col">
+            <div className="border-b border-border px-4">
+              <TabsList className="h-auto flex-wrap justify-start gap-1 bg-transparent p-2">
+                <TabsTrigger value="basico">Básico</TabsTrigger>
+                <TabsTrigger value="midia">Mídia</TabsTrigger>
+                <TabsTrigger value="descricoes">Descrições</TabsTrigger>
+                <TabsTrigger value="specs">Especificações</TabsTrigger>
+                <TabsTrigger value="organizacao">Organização</TabsTrigger>
+                <TabsTrigger value="seo">SEO</TabsTrigger>
+                <TabsTrigger value="links">Links e observações</TabsTrigger>
+              </TabsList>
+            </div>
 
-          <div className="max-h-[62vh] overflow-y-auto px-6 py-5">
+            <div className="max-h-[64vh] overflow-y-auto px-6 py-6">
+
             {/* TAB 1 — Básico */}
             <TabsContent value="basico" className="mt-0 grid gap-4 sm:grid-cols-2">
               <Field label="Nome *" className="sm:col-span-2">
