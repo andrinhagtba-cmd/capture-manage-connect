@@ -94,7 +94,7 @@ export function QuoteDialog({
         productName ? ` para o ${productName}` : ""
       }. Meu nome é ${form.name}.`;
       track("whatsapp_click", { product_id: productId ?? null, metadata: { origin: "quote_dialog" } });
-      window.open(whatsappUrl(waMsg), "_blank");
+      window.open(company.whatsappLink(waMsg), "_blank");
       setOpen(false);
       setForm({ name: "", phone: "", email: "", message: "" });
     } catch (err) {
