@@ -193,6 +193,7 @@ function ProdutosAdmin() {
         continue;
       }
       const payload = {
+      const payload: any = {
         name: row.name,
         slug: row.slug || slugify(row.name),
         brand_id: row.brand_slug ? brandMap.get(row.brand_slug) ?? null : null,
