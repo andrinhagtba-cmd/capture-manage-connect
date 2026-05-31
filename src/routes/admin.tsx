@@ -38,6 +38,7 @@ import {
   Home as HomeIcon,
   Tag,
   FileText,
+  UserCog,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -50,19 +51,28 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
-const NAV = [
-  { title: "Dashboard", url: "/admin", icon: LayoutDashboard, exact: true },
-  { title: "Produtos", url: "/admin/produtos", icon: Package },
-  { title: "Páginas de Marca", url: "/admin/marcas", icon: Tag },
-  { title: "Banners e Heros", url: "/admin/banners", icon: GalleryHorizontalEnd },
-  { title: "Home Page", url: "/admin/home", icon: HomeIcon },
-  { title: "Páginas do Site", url: "/admin/paginas", icon: FileText },
-  { title: "Configurações da Empresa", url: "/admin/empresa", icon: Building2 },
-  { title: "Footer", url: "/admin/footer", icon: PanelBottom },
-  { title: "Menu / Navegação", url: "/admin/menu", icon: MenuIcon },
-  { title: "Biblioteca de Mídia", url: "/admin/midia", icon: ImageIcon },
-  { title: "Orçamentos", url: "/admin/orcamentos", icon: MessageSquareQuote },
-  { title: "Leads / CRM", url: "/admin/leads", icon: Users },
+type RoleGate = "any" | "admin" | "content";
+
+const NAV: {
+  title: string;
+  url: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+  gate: RoleGate;
+}[] = [
+  { title: "Dashboard", url: "/admin", icon: LayoutDashboard, exact: true, gate: "any" },
+  { title: "Produtos", url: "/admin/produtos", icon: Package, gate: "content" },
+  { title: "Páginas de Marca", url: "/admin/marcas", icon: Tag, gate: "content" },
+  { title: "Banners e Heros", url: "/admin/banners", icon: GalleryHorizontalEnd, gate: "content" },
+  { title: "Home Page", url: "/admin/home", icon: HomeIcon, gate: "content" },
+  { title: "Páginas do Site", url: "/admin/paginas", icon: FileText, gate: "content" },
+  { title: "Configurações da Empresa", url: "/admin/empresa", icon: Building2, gate: "content" },
+  { title: "Footer", url: "/admin/footer", icon: PanelBottom, gate: "content" },
+  { title: "Menu / Navegação", url: "/admin/menu", icon: MenuIcon, gate: "content" },
+  { title: "Biblioteca de Mídia", url: "/admin/midia", icon: ImageIcon, gate: "content" },
+  { title: "Orçamentos", url: "/admin/orcamentos", icon: MessageSquareQuote, gate: "any" },
+  { title: "Leads / CRM", url: "/admin/leads", icon: Users, gate: "any" },
+  { title: "Usuários", url: "/admin/usuarios", icon: UserCog, gate: "admin" },
 ];
 
 function AdminLayout() {
@@ -108,8 +118,17 @@ function AdminLayout() {
 function AdminSidebar() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const { isAdmin, hasRole } = useAuth();
   const isActive = (url: string, exact?: boolean) =>
     exact ? path === url : path.startsWith(url);
+
+  // editor/admin manage content; vendedor only sees "any" items
+  const canContent = isAdmin || hasRole("editor");
+  const items = NAV.filter((item) => {
+    if (item.gate === "admin") return isAdmin;
+    if (item.gate === "content") return canContent;
+    return true;
+  });
 
   async function logout() {
     await supabase.auth.signOut();
@@ -129,7 +148,7 @@ function AdminSidebar() {
           <SidebarGroupLabel>Gestão</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {NAV.map((item) => (
+              {items.map((item) => (
                 <SidebarMenuItem key={item.url}>
                   <SidebarMenuButton asChild isActive={isActive(item.url, item.exact)}>
                     <Link to={item.url} className="flex items-center gap-2">
