@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { AVAILABILITY_LABELS, AVAILABILITY_TONE } from "@/lib/site";
 import type { Product } from "@/lib/catalog";
+import { track } from "@/lib/analytics";
 import { ArrowUpRight } from "lucide-react";
 import placeholder from "@/assets/product-placeholder.jpg";
 
@@ -9,6 +10,13 @@ export function ProductCard({ product }: { product: Product }) {
     <Link
       to="/produto/$slug"
       params={{ slug: product.slug }}
+      onClick={() =>
+        track("product_card_click", {
+          product_id: product.id,
+          brand_id: product.brand_id ?? null,
+          content_name: product.name,
+        })
+      }
       className="group hover-lift flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card shadow-sm transition-shadow hover:shadow-lg"
     >
       <div className="relative aspect-square overflow-hidden bg-surface p-3 sm:p-4">
