@@ -211,3 +211,88 @@ export function useMediaAssets(folder?: string) {
     },
   });
 }
+
+export type HeroBanner = {
+  id: string;
+  location: string;
+  brand_id: string | null;
+  eyebrow: string | null;
+  title: string | null;
+  highlight: string | null;
+  subtitle: string | null;
+  badge_text: string | null;
+  media_type: string;
+  desktop_image_url: string | null;
+  mobile_image_url: string | null;
+  video_url: string | null;
+  overlay_opacity: number;
+  primary_button_label: string | null;
+  primary_button_url: string | null;
+  secondary_button_label: string | null;
+  secondary_button_url: string | null;
+  order_index: number;
+  is_active: boolean;
+  starts_at: string | null;
+  ends_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type HomeSection = {
+  id: string;
+  section_key: string;
+  eyebrow: string | null;
+  title: string | null;
+  subtitle: string | null;
+  is_active: boolean;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+};
+
+/** All hero banners (staff view for admin management). */
+export function useHeroBanners(location?: string) {
+  return useQuery({
+    queryKey: ["hero_banners", location ?? "all"],
+    queryFn: async (): Promise<HeroBanner[]> => {
+      let q = supabase.from("hero_banners").select("*").order("order_index");
+      if (location) q = q.eq("location", location);
+      const { data, error } = await q;
+      if (error) throw error;
+      return data as HeroBanner[];
+    },
+  });
+}
+
+/** First active hero for a given location (public-facing). */
+export function useActiveHero(location = "home") {
+  return useQuery({
+    queryKey: ["hero_banners", "active", location],
+    queryFn: async (): Promise<HeroBanner | null> => {
+      const { data, error } = await supabase
+        .from("hero_banners")
+        .select("*")
+        .eq("location", location)
+        .eq("is_active", true)
+        .order("order_index")
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return data as HeroBanner | null;
+    },
+  });
+}
+
+export function useHomeSections() {
+  return useQuery({
+    queryKey: ["home_sections"],
+    queryFn: async (): Promise<HomeSection[]> => {
+      const { data, error } = await supabase
+        .from("home_sections")
+        .select("*")
+        .order("order_index");
+      if (error) throw error;
+      return data as HomeSection[];
+    },
+  });
+}
