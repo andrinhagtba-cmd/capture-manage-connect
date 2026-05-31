@@ -198,6 +198,33 @@ function BrandPage() {
         </>
       )}
 
+      {slug === "gopro" && (
+        <>
+          <CategoryShowcase
+            eyebrow="Linha GoPro"
+            title="Câmeras de Ação"
+            videoSrc="/videos/gopro-cameras.mp4"
+            categorySlug="gopro-acao"
+            brandLabel="GoPro"
+            brandSlug="gopro"
+          />
+          <CategoryShowcase
+            eyebrow="Linha GoPro"
+            title="Câmeras 360°"
+            categorySlug="gopro-360"
+            brandLabel="GoPro"
+            brandSlug="gopro"
+          />
+          <CategoryShowcase
+            eyebrow="Linha GoPro"
+            title="Câmeras para Criadores"
+            categorySlug="gopro-criadores"
+            brandLabel="GoPro"
+            brandSlug="gopro"
+          />
+        </>
+      )}
+
 
 
       {brandCats.length > 0 && (
