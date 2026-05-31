@@ -156,8 +156,8 @@ export function SiteHeader() {
       {openBrand && (
         <div
           className="absolute inset-x-0 top-16 hidden border-b border-border bg-background shadow-lg lg:block"
-          onMouseEnter={() => setOpenBrand(openBrand)}
-          onMouseLeave={() => setOpenBrand(null)}
+          onMouseEnter={() => openMenu(openBrand)}
+          onMouseLeave={scheduleClose}
         >
           <div className="container-page grid grid-cols-4 gap-6 py-7">
             {catsFor(openBrand).slice(0, 12).map((cat) => (
