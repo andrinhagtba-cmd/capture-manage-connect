@@ -97,8 +97,10 @@ export type CategoryShowcaseProps = {
   eyebrow?: string;
   /** Big section title */
   title: string;
-  /** Path to the hero video (in /public) */
-  videoSrc: string;
+  /** Path to the hero video (in /public). Optional when using imageSrc. */
+  videoSrc?: string;
+  /** Background image (imported asset URL). Used when no videoSrc is set. */
+  imageSrc?: string;
   /** Category slug to fetch products from */
   categorySlug: string;
   /** Brand label used in quote dialogs (e.g. "DJI") */
@@ -107,16 +109,20 @@ export type CategoryShowcaseProps = {
   brandSlug?: string;
   /** Label for the floating button */
   ctaLabel?: string;
+  /** Where the floating CTA should lead */
+  ctaTo?: "catalog" | "brand";
 };
 
 export function CategoryShowcase({
   eyebrow = "Vitrine premium",
   title,
   videoSrc,
+  imageSrc,
   categorySlug,
   brandLabel = "DJI",
   brandSlug = "dji",
   ctaLabel = "Mostrar Todos",
+  ctaTo = "catalog",
 }: CategoryShowcaseProps) {
   const { data: products } = useCategoryProducts(categorySlug);
   const [emblaRef, emblaApi] = useEmblaCarousel(
