@@ -30,6 +30,9 @@ import {
   Camera,
   Loader2,
   ExternalLink,
+  Building2,
+  PanelBottom,
+  Menu as MenuIcon,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -45,6 +48,9 @@ export const Route = createFileRoute("/admin")({
 const NAV = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard, exact: true },
   { title: "Produtos", url: "/admin/produtos", icon: Package },
+  { title: "Configurações da Empresa", url: "/admin/empresa", icon: Building2 },
+  { title: "Footer", url: "/admin/footer", icon: PanelBottom },
+  { title: "Menu / Navegação", url: "/admin/menu", icon: MenuIcon },
   { title: "Orçamentos", url: "/admin/orcamentos", icon: MessageSquareQuote },
   { title: "Leads / CRM", url: "/admin/leads", icon: Users },
 ];
