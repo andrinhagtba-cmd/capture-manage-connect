@@ -12,6 +12,16 @@ export function SiteHeader() {
   const { data: categories } = useCategories();
   const [openBrand, setOpenBrand] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openMenu = (brandId: string) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpenBrand(brandId);
+  };
+  const scheduleClose = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setOpenBrand(null), 150);
+  };
 
   const catsFor = (brandId: string) =>
     (categories ?? []).filter((c) => c.brand_id === brandId);
