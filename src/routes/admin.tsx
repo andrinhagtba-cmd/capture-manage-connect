@@ -38,6 +38,7 @@ import {
   Home as HomeIcon,
   Tag,
   FileText,
+  UserCog,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
