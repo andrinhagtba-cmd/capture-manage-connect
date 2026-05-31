@@ -14,7 +14,7 @@ import heroGopro from "@/assets/hero-gopro.jpg";
 import canonCameras from "@/assets/canon-cameras.jpg";
 import canonLentes from "@/assets/canon-lentes.jpg";
 import canonImpressoras from "@/assets/canon-impressoras.jpg";
-import canonSuprimentos from "@/assets/canon-suprimentos.jpg";
+
 import sonyCameras from "@/assets/sony-cameras.jpg";
 import goproAcao from "@/assets/gopro-acao.jpg";
 import gopro360 from "@/assets/gopro-360.jpg";
