@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PublicLayout } from "@/components/PublicLayout";
 import { ProductCard } from "@/components/ProductCard";
+import { DronesShowcase } from "@/components/DronesShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { Button } from "@/components/ui/button";
 import { useBrands, useProducts } from "@/lib/catalog";
