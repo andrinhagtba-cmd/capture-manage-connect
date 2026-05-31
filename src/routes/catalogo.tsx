@@ -84,6 +84,31 @@ function Catalogo() {
 
   const hasFilters = search.marca || search.cat || search.disp || search.q;
 
+  // Internal search (debounced so we log a query, not each keystroke).
+  useEffect(() => {
+    const q = search.q?.trim();
+    if (!q) return;
+    const t = setTimeout(() => {
+      track("search_performed", { search_term: q, results_count: filtered.length });
+    }, 800);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search.q]);
+
+  // Category access (when a category filter is selected).
+  useEffect(() => {
+    if (!search.cat) return;
+    track("category_view", {
+      category_id: search.cat,
+      brand_id: activeBrand?.id ?? null,
+      content_name: brandCats.find((c) => c.id === search.cat)?.name ?? null,
+      content_category: activeBrand?.name ?? null,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search.cat]);
+
+
+
   return (
     <PublicLayout>
       <section className="border-b border-border bg-surface">
