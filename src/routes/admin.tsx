@@ -36,6 +36,7 @@ import {
   Image as ImageIcon,
   GalleryHorizontalEnd,
   Home as HomeIcon,
+  Tag,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
