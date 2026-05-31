@@ -192,7 +192,6 @@ function ProdutosAdmin() {
         report.push({ row, error: "Sem nome" });
         continue;
       }
-      const payload = {
       const payload: any = {
         name: row.name,
         slug: row.slug || slugify(row.name),
