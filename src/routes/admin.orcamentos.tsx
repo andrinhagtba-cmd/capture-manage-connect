@@ -118,7 +118,7 @@ function Orcamentos() {
                     <a
                       href={whatsappTo(
                         q.customer_phone,
-                        `Olá ${q.customer_name}! Sobre seu pedido de orçamento na NL Foto e Vídeo...`,
+                        quoteWhatsappMessage(q),
                       )}
                       target="_blank"
                       rel="noreferrer"
