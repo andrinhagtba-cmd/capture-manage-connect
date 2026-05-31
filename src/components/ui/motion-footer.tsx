@@ -15,6 +15,7 @@ import {
 } from "@/lib/site";
 import { useBrands } from "@/lib/catalog";
 import logoNlLight from "@/assets/logo-nl-light.png";
+import footerBg from "@/assets/footer-bg.jpg";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -260,6 +261,12 @@ export function CinematicFooter() {
         ref={wrapperRef}
         className="cinematic-footer-wrapper relative overflow-hidden bg-[var(--cf-bg)] text-[var(--cf-fg)]"
       >
+        {/* Background image */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${footerBg})` }}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-[var(--cf-bg)]/70" />
         {/* Background layers */}
         <div className="footer-bg-grid pointer-events-none absolute inset-0" />
         <div className="footer-aurora animate-footer-breathe pointer-events-none absolute left-1/2 top-1/2 h-[80vh] w-[80vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl" />
