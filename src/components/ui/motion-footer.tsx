@@ -14,6 +14,13 @@ import {
   whatsappUrl,
 } from "@/lib/site";
 import { useBrands } from "@/lib/catalog";
+import {
+  useCompanySettings,
+  useFooterSettings,
+  useFooterGroups,
+  useFooterLinks,
+  buildWhatsappUrl,
+} from "@/lib/site-content";
 import logoNlLight from "@/assets/logo-nl-light.png";
 import footerBg from "@/assets/footer-bg.jpg";
 
