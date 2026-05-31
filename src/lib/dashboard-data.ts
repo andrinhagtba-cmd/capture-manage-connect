@@ -260,6 +260,7 @@ export async function fetchDashboard(period: DashboardPeriod): Promise<Dashboard
     topViewed,
     topRequested,
     brands: brandPerf,
+    categories: categoryPerf,
     funnel,
     devices,
     sources,
