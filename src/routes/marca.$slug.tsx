@@ -120,6 +120,45 @@ function BrandPage() {
         </>
       )}
 
+      {slug === "canon" && (
+        <>
+          <CategoryShowcase
+            eyebrow="Linha Canon"
+            title="Câmeras"
+            imageSrc={canonCameras}
+            categorySlug="canon-cameras"
+            brandLabel="Canon"
+            brandSlug="canon"
+          />
+          <CategoryShowcase
+            eyebrow="Linha Canon"
+            title="Lentes e outros"
+            imageSrc={canonLentes}
+            categorySlug="canon-lentes-outros"
+            brandLabel="Canon"
+            brandSlug="canon"
+          />
+          <CategoryShowcase
+            eyebrow="Linha Canon"
+            title="Impressoras e Multifuncionais"
+            imageSrc={canonImpressoras}
+            categorySlug="canon-impressoras"
+            brandLabel="Canon"
+            brandSlug="canon"
+          />
+          <CategoryShowcase
+            eyebrow="Linha Canon"
+            title="Suprimentos"
+            imageSrc={canonSuprimentos}
+            categorySlug="canon-suprimentos"
+            brandLabel="Canon"
+            brandSlug="canon"
+          />
+        </>
+      )}
+
+
+
 
 
       {brandCats.length > 0 && (
