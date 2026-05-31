@@ -6,7 +6,7 @@ import { Heart, Star, Truck, ChevronLeft, ChevronRight, MessageCircle } from "lu
 import { Button } from "@/components/ui/button";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { useCategoryProducts, useCategoriesProducts, type Product } from "@/lib/catalog";
-import { whatsappUrl } from "@/lib/site";
+import { useCompany } from "@/lib/site-content";
 import placeholder from "@/assets/product-placeholder.jpg";
 
 function StarRating() {
