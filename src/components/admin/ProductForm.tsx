@@ -605,7 +605,7 @@ export function ProductForm({
             </TabsContent>
 
             {/* TAB 5 — Comercial */}
-            <TabsContent value="comercial" className="mt-0 space-y-5">
+            <TabsContent value="organizacao" className="mt-0 space-y-5">
               <ChipEditor
                 label="Tags"
                 items={form.tags}
