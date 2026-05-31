@@ -102,7 +102,9 @@ export type CategoryShowcaseProps = {
   /** Background image (imported asset URL). Used when no videoSrc is set. */
   imageSrc?: string;
   /** Category slug to fetch products from */
-  categorySlug: string;
+  categorySlug?: string;
+  /** Multiple category slugs (union) to fetch products from */
+  categorySlugs?: string[];
   /** Brand label used in quote dialogs (e.g. "DJI") */
   brandLabel?: string;
   /** Brand slug used in the "Mostrar todos" link */
