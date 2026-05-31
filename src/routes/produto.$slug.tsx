@@ -170,7 +170,7 @@ function ProductPage() {
                 />
                 <Button asChild size="lg" variant="outline" className="gap-2">
                   <a
-                    href={whatsappUrl(
+                    href={company.whatsappLink(
                       `Olá! Tenho interesse no ${product.name}. Pode me passar mais informações?`,
                     )}
                     target="_blank"
