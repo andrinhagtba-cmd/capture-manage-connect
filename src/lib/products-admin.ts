@@ -54,6 +54,11 @@ export type AdminProduct = {
   seo_title: string | null;
   seo_description: string | null;
   seo_image_url: string | null;
+  og_title: string | null;
+  og_description: string | null;
+  og_image_url: string | null;
+  canonical_url: string | null;
+  use_main_image_as_og: boolean;
   order_index: number | null;
   is_featured: boolean;
   is_active: boolean;
