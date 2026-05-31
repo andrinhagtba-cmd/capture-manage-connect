@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PublicLayout } from "@/components/PublicLayout";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { Button } from "@/components/ui/button";
-import { COMPANY_NAME } from "@/lib/site";
+
+import { useSitePage } from "@/lib/site-content";
 import { Award, Users, Camera, Heart } from "lucide-react";
 import heroHome from "@/assets/hero-home.jpg";
 
@@ -30,39 +31,48 @@ const STATS = [
   { icon: Heart, value: "100%", label: "Foco no cliente" },
 ];
 
+const FALLBACK_BODY = [
+  "A NL Foto e Vídeo nasceu na tradicional Feira dos Importados de Brasília e se tornou referência para fotógrafos, videomakers e criadores de conteúdo de todo o Distrito Federal.",
+  "Trabalhamos com curadoria das principais marcas do mundo — Canon, DJI, Sony e GoPro — oferecendo equipamentos oficiais, atendimento especializado e as melhores condições do mercado.",
+  "Nossa missão é simples: entregar o equipamento certo para cada projeto, com a confiança de quem entende do assunto há mais de duas décadas.",
+];
+
 function Sobre() {
+  const { data: page } = useSitePage("sobre");
+  const eyebrow = page?.eyebrow ?? "Nossa história";
+  const heading = page?.heading ?? "Paixão por imagem há mais de 20 anos";
+  const body =
+    page?.body_json && page.body_json.length > 0 ? page.body_json : FALLBACK_BODY;
+
   return (
     <PublicLayout>
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroHome} alt="" className="h-full w-full object-cover" />
+          <img
+            src={page?.meta_image_url || heroHome}
+            alt=""
+            className="h-full w-full object-cover"
+          />
           <div className="absolute inset-0 bg-ink/80" />
         </div>
         <div className="container-page relative py-24 text-center md:py-32">
-          <p className="eyebrow text-background/70">Nossa história</p>
+          <p className="eyebrow text-background/70">{eyebrow}</p>
           <h1 className="display-hero mx-auto mt-4 max-w-3xl text-4xl text-background md:text-5xl">
-            Paixão por imagem há mais de 20 anos
+            {heading}
           </h1>
+          {page?.subheading && (
+            <p className="mx-auto mt-5 max-w-2xl text-lg text-background/80">
+              {page.subheading}
+            </p>
+          )}
         </div>
       </section>
 
       <section className="container-page py-16">
         <div className="mx-auto max-w-3xl space-y-6 text-lg leading-relaxed text-muted-foreground">
-          <p>
-            A <strong className="text-foreground">{COMPANY_NAME}</strong> nasceu na
-            tradicional Feira dos Importados de Brasília e se tornou referência para
-            fotógrafos, videomakers e criadores de conteúdo de todo o Distrito Federal.
-          </p>
-          <p>
-            Trabalhamos com curadoria das principais marcas do mundo —{" "}
-            <strong className="text-foreground">Canon, DJI, Sony e GoPro</strong> —
-            oferecendo equipamentos oficiais, atendimento especializado e as melhores
-            condições do mercado.
-          </p>
-          <p>
-            Nossa missão é simples: entregar o equipamento certo para cada projeto, com a
-            confiança de quem entende do assunto há mais de duas décadas.
-          </p>
+          {body.map((paragraph, i) => (
+            <p key={i}>{paragraph}</p>
+          ))}
         </div>
 
         <div className="mt-16 grid grid-cols-2 gap-6 lg:grid-cols-4">

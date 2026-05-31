@@ -37,6 +37,7 @@ import {
   GalleryHorizontalEnd,
   Home as HomeIcon,
   Tag,
+  FileText,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -55,6 +56,7 @@ const NAV = [
   { title: "Páginas de Marca", url: "/admin/marcas", icon: Tag },
   { title: "Banners e Heros", url: "/admin/banners", icon: GalleryHorizontalEnd },
   { title: "Home Page", url: "/admin/home", icon: HomeIcon },
+  { title: "Páginas do Site", url: "/admin/paginas", icon: FileText },
   { title: "Configurações da Empresa", url: "/admin/empresa", icon: Building2 },
   { title: "Footer", url: "/admin/footer", icon: PanelBottom },
   { title: "Menu / Navegação", url: "/admin/menu", icon: MenuIcon },

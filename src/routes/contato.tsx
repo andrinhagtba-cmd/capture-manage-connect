@@ -8,6 +8,7 @@ import {
   INSTAGRAM_URL,
   whatsappUrl,
 } from "@/lib/site";
+import { useSitePage } from "@/lib/site-content";
 import { MapPin, Phone, Instagram, Clock, MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/contato")({
@@ -28,18 +29,22 @@ export const Route = createFileRoute("/contato")({
 });
 
 function Contato() {
+  const { data: page } = useSitePage("contato");
   return (
     <PublicLayout>
       <section className="border-b border-border bg-surface">
         <div className="container-page py-14">
-          <p className="eyebrow text-primary">Contato</p>
-          <h1 className="display-lg mt-2 text-3xl md:text-4xl">Fale com a gente</h1>
+          <p className="eyebrow text-primary">{page?.eyebrow ?? "Contato"}</p>
+          <h1 className="display-lg mt-2 text-3xl md:text-4xl">
+            {page?.heading ?? "Fale com a gente"}
+          </h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            Tire dúvidas, peça um orçamento ou agende uma visita à nossa loja na Feira
-            dos Importados de Brasília.
+            {page?.subheading ??
+              "Tire dúvidas, peça um orçamento ou agende uma visita à nossa loja na Feira dos Importados de Brasília."}
           </p>
         </div>
       </section>
+
 
       <div className="container-page grid gap-10 py-14 lg:grid-cols-2">
         <div className="space-y-5">

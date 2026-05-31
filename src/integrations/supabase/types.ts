@@ -871,6 +871,69 @@ export type Database = {
           },
         ]
       }
+      site_pages: {
+        Row: {
+          body_json: Json
+          created_at: string
+          eyebrow: string | null
+          heading: string | null
+          id: string
+          is_published: boolean
+          label: string
+          meta_description: string | null
+          meta_image_url: string | null
+          meta_title: string | null
+          noindex: boolean
+          og_description: string | null
+          og_title: string | null
+          order_index: number
+          page_key: string
+          slug: string | null
+          subheading: string | null
+          updated_at: string
+        }
+        Insert: {
+          body_json?: Json
+          created_at?: string
+          eyebrow?: string | null
+          heading?: string | null
+          id?: string
+          is_published?: boolean
+          label: string
+          meta_description?: string | null
+          meta_image_url?: string | null
+          meta_title?: string | null
+          noindex?: boolean
+          og_description?: string | null
+          og_title?: string | null
+          order_index?: number
+          page_key: string
+          slug?: string | null
+          subheading?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body_json?: Json
+          created_at?: string
+          eyebrow?: string | null
+          heading?: string | null
+          id?: string
+          is_published?: boolean
+          label?: string
+          meta_description?: string | null
+          meta_image_url?: string | null
+          meta_title?: string | null
+          noindex?: boolean
+          og_description?: string | null
+          og_title?: string | null
+          order_index?: number
+          page_key?: string
+          slug?: string | null
+          subheading?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       store_settings: {
         Row: {
           about_text: string | null
