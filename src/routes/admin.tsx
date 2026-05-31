@@ -118,8 +118,17 @@ function AdminLayout() {
 function AdminSidebar() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const { isAdmin, hasRole } = useAuth();
   const isActive = (url: string, exact?: boolean) =>
     exact ? path === url : path.startsWith(url);
+
+  // editor/admin manage content; vendedor only sees "any" items
+  const canContent = isAdmin || hasRole("editor");
+  const items = NAV.filter((item) => {
+    if (item.gate === "admin") return isAdmin;
+    if (item.gate === "content") return canContent;
+    return true;
+  });
 
   async function logout() {
     await supabase.auth.signOut();
@@ -139,7 +148,7 @@ function AdminSidebar() {
           <SidebarGroupLabel>Gestão</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {NAV.map((item) => (
+              {items.map((item) => (
                 <SidebarMenuItem key={item.url}>
                   <SidebarMenuButton asChild isActive={isActive(item.url, item.exact)}>
                     <Link to={item.url} className="flex items-center gap-2">
