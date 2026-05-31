@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { track } from "@/lib/analytics";
 import { PublicLayout } from "@/components/PublicLayout";
 import { ProductCard } from "@/components/ProductCard";
 import { DronesShowcase } from "@/components/DronesShowcase";
@@ -88,6 +90,17 @@ function Home() {
   const primaryUrl = hero?.primary_button_url ?? "/catalogo";
   const secondaryLabel = hero?.secondary_button_label ?? "Solicitar orçamento";
   const secondaryUrl = hero?.secondary_button_url ?? "";
+
+  useEffect(() => {
+    if (hero?.id)
+      track("banner_view", { banner_id: hero.id, content_name: hero.title ?? "Hero home" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hero?.id]);
+
+  const onBannerClick = () =>
+    track("banner_click", { banner_id: hero?.id ?? null, content_name: hero?.title ?? "Hero home" });
+
+
 
   const renderSection = (s: { section_key: string; eyebrow: string | null; title: string | null; subtitle: string | null }) => {
     switch (s.section_key) {
@@ -279,7 +292,7 @@ function Home() {
             <div className="mt-8 flex flex-wrap gap-3">
               {primaryLabel && (
                 <Button asChild size="lg" className="gap-2">
-                  <a href={primaryUrl}>
+                  <a href={primaryUrl} onClick={onBannerClick}>
                     {primaryLabel} <ArrowRight className="h-4 w-4" />
                   </a>
                 </Button>
@@ -287,7 +300,7 @@ function Home() {
               {secondaryLabel &&
                 (secondaryUrl ? (
                   <Button asChild size="lg" variant="secondary">
-                    <a href={secondaryUrl}>{secondaryLabel}</a>
+                    <a href={secondaryUrl} onClick={onBannerClick}>{secondaryLabel}</a>
                   </Button>
                 ) : (
                   <QuoteDialog

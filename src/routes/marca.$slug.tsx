@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { PublicLayout } from "@/components/PublicLayout";
 import { ProductCard } from "@/components/ProductCard";
 import { CategoryShowcase } from "@/components/CategoryShowcase";
@@ -6,6 +7,7 @@ import { QuoteDialog } from "@/components/QuoteDialog";
 import { Button } from "@/components/ui/button";
 import { useBrands, useCategories, useProducts } from "@/lib/catalog";
 import { useActiveHero, useBrandPageSettings } from "@/lib/site-content";
+import { track } from "@/lib/analytics";
 import { BRAND_THEME } from "@/lib/site";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import heroCanon from "@/assets/hero-canon.jpg";
@@ -106,6 +108,30 @@ function BrandPage() {
   const showCategories = pageSettings?.show_categories ?? true;
   const showProducts = pageSettings?.show_products ?? true;
 
+  useEffect(() => {
+    if (brand) track("brand_view", { brand_id: brand.id, content_name: brand.name });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [brand?.id]);
+
+  useEffect(() => {
+    if (hero?.id)
+      track("banner_view", {
+        banner_id: hero.id,
+        brand_id: brand?.id ?? null,
+        content_name: hero.title ?? brand?.name ?? slug,
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hero?.id]);
+
+  const onBannerClick = () =>
+    track("banner_click", {
+      banner_id: hero?.id ?? null,
+      brand_id: brand?.id ?? null,
+      content_name: hero?.title ?? brand?.name ?? slug,
+    });
+
+
+
   return (
     <PublicLayout>
       <section className="relative overflow-hidden">
@@ -158,17 +184,21 @@ function BrandPage() {
               {primaryLabel &&
                 (primaryUrl ? (
                   <Button asChild size="lg">
-                    <a href={primaryUrl}>{primaryLabel}</a>
+                    <a href={primaryUrl} onClick={onBannerClick}>{primaryLabel}</a>
                   </Button>
                 ) : (
                   <QuoteDialog
                     brandName={brand?.name}
-                    trigger={<Button size="lg">{primaryLabel}</Button>}
+                    trigger={
+                      <Button size="lg" onClick={onBannerClick}>
+                        {primaryLabel}
+                      </Button>
+                    }
                   />
                 ))}
               {secondaryLabel && secondaryUrl && (
                 <Button asChild size="lg" variant="secondary" className="gap-2">
-                  <a href={secondaryUrl} target="_blank" rel="noreferrer">
+                  <a href={secondaryUrl} target="_blank" rel="noreferrer" onClick={onBannerClick}>
                     {secondaryLabel} <ExternalLink className="h-4 w-4" />
                   </a>
                 </Button>

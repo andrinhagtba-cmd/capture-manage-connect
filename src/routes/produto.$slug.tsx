@@ -10,7 +10,8 @@ import {
   AVAILABILITY_TONE,
   whatsappUrl,
 } from "@/lib/site";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { track } from "@/lib/analytics";
 import { ExternalLink, MessageCircle, ChevronRight } from "lucide-react";
 import placeholder from "@/assets/product-placeholder.jpg";
 
@@ -43,6 +44,20 @@ function ProductPage() {
   const gallery = product ? asArray(product.gallery_json) : [];
   const images = [product?.main_image_url, ...gallery].filter(Boolean) as string[];
   const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (!product) return;
+    track("product_view", {
+      product_id: product.id,
+      brand_id: product.brand_id ?? null,
+      category_id: product.category_id ?? null,
+      content_name: product.name,
+      content_category: brand?.name ?? null,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id, brand?.name]);
+
+
 
   if (isLoading) {
     return (
@@ -159,6 +174,14 @@ function ProductPage() {
                     )}
                     target="_blank"
                     rel="noreferrer"
+                    onClick={() =>
+                      track("whatsapp_click", {
+                        product_id: product.id,
+                        brand_id: product.brand_id ?? null,
+                        content_name: product.name,
+                        metadata: { origin: "product_page" },
+                      })
+                    }
                   >
                     <MessageCircle className="h-4 w-4" /> WhatsApp
                   </a>

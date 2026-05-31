@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { whatsappUrl } from "@/lib/site";
+import { track } from "@/lib/analytics";
 import { MessageCircle } from "lucide-react";
 
 const schema = z.object({
@@ -39,6 +40,17 @@ export function QuoteDialog({
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
 
+  function onOpenChange(next: boolean) {
+    setOpen(next);
+    if (next) {
+      track("quote_request_started", {
+        product_id: productId ?? null,
+        content_name: productName ?? null,
+        content_category: brandName ?? null,
+      });
+    }
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const parsed = schema.safeParse(form);
@@ -48,14 +60,18 @@ export function QuoteDialog({
     }
     setLoading(true);
     try {
-      const { error } = await supabase.from("quote_requests").insert({
-        product_id: productId ?? null,
-        customer_name: form.name,
-        customer_phone: form.phone,
-        customer_email: form.email || null,
-        message: form.message || null,
-        preferred_contact_method: "whatsapp",
-      });
+      const { data: quote, error } = await supabase
+        .from("quote_requests")
+        .insert({
+          product_id: productId ?? null,
+          customer_name: form.name,
+          customer_phone: form.phone,
+          customer_email: form.email || null,
+          message: form.message || null,
+          preferred_contact_method: "whatsapp",
+        })
+        .select("id")
+        .maybeSingle();
       if (error) throw error;
       // Also register a lead for the CRM
       await supabase.from("leads").insert({
@@ -66,10 +82,17 @@ export function QuoteDialog({
         interest_brand: brandName ?? null,
         message: productName ? `Orçamento: ${productName}` : form.message || null,
       });
+      track("quote_request_submitted", {
+        product_id: productId ?? null,
+        quote_request_id: quote?.id ?? null,
+        content_name: productName ?? null,
+        content_category: brandName ?? null,
+      });
       toast.success("Solicitação enviada! Em breve entraremos em contato.");
       const waMsg = `Olá! Gostaria de um orçamento${
         productName ? ` para o ${productName}` : ""
       }. Meu nome é ${form.name}.`;
+      track("whatsapp_click", { product_id: productId ?? null, metadata: { origin: "quote_dialog" } });
       window.open(whatsappUrl(waMsg), "_blank");
       setOpen(false);
       setForm({ name: "", phone: "", email: "", message: "" });
@@ -82,7 +105,7 @@ export function QuoteDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         {trigger ?? (
           <Button size="lg" className="gap-2">
