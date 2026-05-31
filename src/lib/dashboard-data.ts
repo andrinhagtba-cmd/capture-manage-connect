@@ -61,6 +61,7 @@ export type DashboardData = {
   topViewed: RankItem[];
   topRequested: RankItem[];
   brands: BrandPerf[];
+  categories: CategoryPerf[];
   funnel: FunnelStep[];
   devices: DeviceSlice[];
   sources: SourceSlice[];
