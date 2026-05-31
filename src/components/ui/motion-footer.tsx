@@ -211,6 +211,31 @@ const MarqueeRow = () => (
 // -------------------------------------------------------------------------
 export function CinematicFooter() {
   const { data: brands } = useBrands();
+  const { data: company } = useCompanySettings();
+  const { data: footer } = useFooterSettings();
+  const { data: groups } = useFooterGroups();
+  const { data: links } = useFooterLinks();
+
+  const companyName = company?.company_name || COMPANY_NAME;
+  const tagline =
+    footer?.description || company?.short_description || COMPANY_TAGLINE;
+  const address = company?.address || ADDRESS;
+  const phone = company?.phone || company?.whatsapp || WHATSAPP_DISPLAY;
+  const instagram = company?.instagram_url || INSTAGRAM_URL;
+  const openingHours = company?.opening_hours || "Seg a Sáb · 9h às 18h";
+  const logoSrc = footer?.logo_url || company?.logo_url || logoNlLight;
+  const copyright =
+    footer?.copyright_text ||
+    `© ${new Date().getFullYear()} ${companyName}. Todos os direitos reservados.`;
+  const waHref = company?.whatsapp
+    ? buildWhatsappUrl(company.whatsapp, "Olá! Gostaria de um orçamento.")
+    : whatsappUrl("Olá! Gostaria de um orçamento.");
+  const waPlainHref = company?.whatsapp
+    ? buildWhatsappUrl(company.whatsapp)
+    : whatsappUrl();
+  const activeGroups = (groups ?? []).filter((g) => g.is_active);
+  const linksFor = (groupId: string) =>
+    (links ?? []).filter((l) => l.is_active && l.group_id === groupId);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const giantTextRef = useRef<HTMLDivElement | null>(null);
   const headingRef = useRef<HTMLDivElement | null>(null);
