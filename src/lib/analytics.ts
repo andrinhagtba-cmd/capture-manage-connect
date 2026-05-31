@@ -93,6 +93,13 @@ function marketingAllowed(): boolean {
   return getConsent().marketing;
 }
 
+// Public helper used by the script loader to decide if marketing scripts
+// may be injected for a given config.
+export function marketingConfigAllowed(cfg: PublicMarketingConfig): boolean {
+  if (cfg.require_marketing_consent === false) return true;
+  return getConsent().marketing;
+}
+
 // ----------------------------------------------------------- Identity utils --
 function uuid(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
