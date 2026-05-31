@@ -14,6 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          banner_id: string | null
+          brand_id: string | null
+          browser: string | null
+          campaign: string | null
+          category_id: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          device_type: string | null
+          event_name: string
+          id: string
+          lead_id: string | null
+          medium: string | null
+          metadata_json: Json
+          os: string | null
+          page_title: string | null
+          page_url: string | null
+          product_id: string | null
+          quote_request_id: string | null
+          referrer: string | null
+          results_count: number | null
+          search_term: string | null
+          session_id: string | null
+          source: string | null
+          state: string | null
+          user_agent: string | null
+          visitor_id: string | null
+        }
+        Insert: {
+          banner_id?: string | null
+          brand_id?: string | null
+          browser?: string | null
+          campaign?: string | null
+          category_id?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          event_name: string
+          id?: string
+          lead_id?: string | null
+          medium?: string | null
+          metadata_json?: Json
+          os?: string | null
+          page_title?: string | null
+          page_url?: string | null
+          product_id?: string | null
+          quote_request_id?: string | null
+          referrer?: string | null
+          results_count?: number | null
+          search_term?: string | null
+          session_id?: string | null
+          source?: string | null
+          state?: string | null
+          user_agent?: string | null
+          visitor_id?: string | null
+        }
+        Update: {
+          banner_id?: string | null
+          brand_id?: string | null
+          browser?: string | null
+          campaign?: string | null
+          category_id?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          event_name?: string
+          id?: string
+          lead_id?: string | null
+          medium?: string | null
+          metadata_json?: Json
+          os?: string | null
+          page_title?: string | null
+          page_url?: string | null
+          product_id?: string | null
+          quote_request_id?: string | null
+          referrer?: string | null
+          results_count?: number | null
+          search_term?: string | null
+          session_id?: string | null
+          source?: string | null
+          state?: string | null
+          user_agent?: string | null
+          visitor_id?: string | null
+        }
+        Relationships: []
+      }
       banners: {
         Row: {
           brand_id: string | null
@@ -612,6 +702,138 @@ export type Database = {
           phone?: string | null
           source?: string | null
           status?: string
+        }
+        Relationships: []
+      }
+      marketing_event_logs: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          event_name: string
+          id: string
+          payload_json: Json
+          provider: string
+          response_json: Json
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          event_name: string
+          id?: string
+          payload_json?: Json
+          provider: string
+          response_json?: Json
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          event_name?: string
+          id?: string
+          payload_json?: Json
+          provider?: string
+          response_json?: Json
+          status?: string
+        }
+        Relationships: []
+      }
+      marketing_integrations: {
+        Row: {
+          cookie_banner_enabled: boolean
+          cookie_banner_text: string | null
+          ga4_custom_events_enabled: boolean
+          ga4_enabled: boolean
+          ga4_measurement_id: string | null
+          google_ads_conversion_id: string | null
+          google_ads_enabled: boolean
+          google_ads_lead_label: string | null
+          google_ads_quote_label: string | null
+          google_ads_remarketing_enabled: boolean
+          google_ads_whatsapp_label: string | null
+          gtm_container_id: string | null
+          gtm_enabled: boolean
+          id: string
+          meta_capi_enabled: boolean
+          meta_events_enabled: boolean
+          meta_pixel_enabled: boolean
+          meta_pixel_id: string | null
+          meta_test_event_code: string | null
+          privacy_policy_url: string | null
+          require_analytics_consent: boolean
+          require_marketing_consent: boolean
+          updated_at: string
+        }
+        Insert: {
+          cookie_banner_enabled?: boolean
+          cookie_banner_text?: string | null
+          ga4_custom_events_enabled?: boolean
+          ga4_enabled?: boolean
+          ga4_measurement_id?: string | null
+          google_ads_conversion_id?: string | null
+          google_ads_enabled?: boolean
+          google_ads_lead_label?: string | null
+          google_ads_quote_label?: string | null
+          google_ads_remarketing_enabled?: boolean
+          google_ads_whatsapp_label?: string | null
+          gtm_container_id?: string | null
+          gtm_enabled?: boolean
+          id?: string
+          meta_capi_enabled?: boolean
+          meta_events_enabled?: boolean
+          meta_pixel_enabled?: boolean
+          meta_pixel_id?: string | null
+          meta_test_event_code?: string | null
+          privacy_policy_url?: string | null
+          require_analytics_consent?: boolean
+          require_marketing_consent?: boolean
+          updated_at?: string
+        }
+        Update: {
+          cookie_banner_enabled?: boolean
+          cookie_banner_text?: string | null
+          ga4_custom_events_enabled?: boolean
+          ga4_enabled?: boolean
+          ga4_measurement_id?: string | null
+          google_ads_conversion_id?: string | null
+          google_ads_enabled?: boolean
+          google_ads_lead_label?: string | null
+          google_ads_quote_label?: string | null
+          google_ads_remarketing_enabled?: boolean
+          google_ads_whatsapp_label?: string | null
+          gtm_container_id?: string | null
+          gtm_enabled?: boolean
+          id?: string
+          meta_capi_enabled?: boolean
+          meta_events_enabled?: boolean
+          meta_pixel_enabled?: boolean
+          meta_pixel_id?: string | null
+          meta_test_event_code?: string | null
+          privacy_policy_url?: string | null
+          require_analytics_consent?: boolean
+          require_marketing_consent?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      marketing_secrets: {
+        Row: {
+          ga4_api_secret: string | null
+          id: string
+          meta_capi_access_token: string | null
+          updated_at: string
+        }
+        Insert: {
+          ga4_api_secret?: string | null
+          id?: string
+          meta_capi_access_token?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ga4_api_secret?: string | null
+          id?: string
+          meta_capi_access_token?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
