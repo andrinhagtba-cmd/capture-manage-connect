@@ -24,6 +24,7 @@ import { Route as AdminPaginasRouteImport } from './routes/admin.paginas'
 import { Route as AdminOrcamentosRouteImport } from './routes/admin.orcamentos'
 import { Route as AdminMidiaRouteImport } from './routes/admin.midia'
 import { Route as AdminMenuRouteImport } from './routes/admin.menu'
+import { Route as AdminMarketingRouteImport } from './routes/admin.marketing'
 import { Route as AdminMarcasRouteImport } from './routes/admin.marcas'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminHomeRouteImport } from './routes/admin.home'
@@ -108,6 +109,11 @@ const AdminMenuRoute = AdminMenuRouteImport.update({
   path: '/menu',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminMarketingRoute = AdminMarketingRouteImport.update({
+  id: '/marketing',
+  path: '/marketing',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminMarcasRoute = AdminMarcasRouteImport.update({
   id: '/marcas',
   path: '/marcas',
@@ -162,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/admin/home': typeof AdminHomeRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/marcas': typeof AdminMarcasRoute
+  '/admin/marketing': typeof AdminMarketingRoute
   '/admin/menu': typeof AdminMenuRoute
   '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/admin/home': typeof AdminHomeRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/marcas': typeof AdminMarcasRoute
+  '/admin/marketing': typeof AdminMarketingRoute
   '/admin/menu': typeof AdminMenuRoute
   '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
@@ -211,6 +219,7 @@ export interface FileRoutesById {
   '/admin/home': typeof AdminHomeRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/marcas': typeof AdminMarcasRoute
+  '/admin/marketing': typeof AdminMarketingRoute
   '/admin/menu': typeof AdminMenuRoute
   '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
@@ -238,6 +247,7 @@ export interface FileRouteTypes {
     | '/admin/home'
     | '/admin/leads'
     | '/admin/marcas'
+    | '/admin/marketing'
     | '/admin/menu'
     | '/admin/midia'
     | '/admin/orcamentos'
@@ -262,6 +272,7 @@ export interface FileRouteTypes {
     | '/admin/home'
     | '/admin/leads'
     | '/admin/marcas'
+    | '/admin/marketing'
     | '/admin/menu'
     | '/admin/midia'
     | '/admin/orcamentos'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/admin/home'
     | '/admin/leads'
     | '/admin/marcas'
+    | '/admin/marketing'
     | '/admin/menu'
     | '/admin/midia'
     | '/admin/orcamentos'
@@ -417,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMenuRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/marketing': {
+      id: '/admin/marketing'
+      path: '/marketing'
+      fullPath: '/admin/marketing'
+      preLoaderRoute: typeof AdminMarketingRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/marcas': {
       id: '/admin/marcas'
       path: '/marcas'
@@ -497,6 +516,7 @@ interface AdminRouteChildren {
   AdminHomeRoute: typeof AdminHomeRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminMarcasRoute: typeof AdminMarcasRoute
+  AdminMarketingRoute: typeof AdminMarketingRoute
   AdminMenuRoute: typeof AdminMenuRoute
   AdminMidiaRoute: typeof AdminMidiaRoute
   AdminOrcamentosRoute: typeof AdminOrcamentosRoute
@@ -513,6 +533,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminHomeRoute: AdminHomeRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminMarcasRoute: AdminMarcasRoute,
+  AdminMarketingRoute: AdminMarketingRoute,
   AdminMenuRoute: AdminMenuRoute,
   AdminMidiaRoute: AdminMidiaRoute,
   AdminOrcamentosRoute: AdminOrcamentosRoute,
