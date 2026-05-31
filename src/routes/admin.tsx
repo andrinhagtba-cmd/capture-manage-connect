@@ -73,6 +73,7 @@ const NAV: {
   { title: "Biblioteca de Mídia", url: "/admin/midia", icon: ImageIcon, gate: "content" },
   { title: "Orçamentos", url: "/admin/orcamentos", icon: MessageSquareQuote, gate: "any" },
   { title: "Leads / CRM", url: "/admin/leads", icon: Users, gate: "any" },
+  { title: "Marketing e Pixels", url: "/admin/marketing", icon: Megaphone, gate: "admin" },
   { title: "Usuários", url: "/admin/usuarios", icon: UserCog, gate: "admin" },
 ];
 
