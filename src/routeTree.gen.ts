@@ -30,6 +30,7 @@ import { Route as AdminHomeRouteImport } from './routes/admin.home'
 import { Route as AdminFooterRouteImport } from './routes/admin.footer'
 import { Route as AdminEmpresaRouteImport } from './routes/admin.empresa'
 import { Route as AdminBannersRouteImport } from './routes/admin.banners'
+import { Route as AdminProdutosBrandRouteImport } from './routes/admin.produtos.$brand'
 
 const SobreRoute = SobreRouteImport.update({
   id: '/sobre',
@@ -136,6 +137,11 @@ const AdminBannersRoute = AdminBannersRouteImport.update({
   path: '/banners',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminProdutosBrandRoute = AdminProdutosBrandRouteImport.update({
+  id: '/$brand',
+  path: '/$brand',
+  getParentRoute: () => AdminProdutosRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -154,11 +160,12 @@ export interface FileRoutesByFullPath {
   '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/paginas': typeof AdminPaginasRoute
-  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/produtos': typeof AdminProdutosRouteWithChildren
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/marca/$slug': typeof MarcaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/produtos/$brand': typeof AdminProdutosBrandRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -176,11 +183,12 @@ export interface FileRoutesByTo {
   '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/paginas': typeof AdminPaginasRoute
-  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/produtos': typeof AdminProdutosRouteWithChildren
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/marca/$slug': typeof MarcaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/produtos/$brand': typeof AdminProdutosBrandRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -200,11 +208,12 @@ export interface FileRoutesById {
   '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/paginas': typeof AdminPaginasRoute
-  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/produtos': typeof AdminProdutosRouteWithChildren
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/marca/$slug': typeof MarcaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/produtos/$brand': typeof AdminProdutosBrandRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -230,6 +239,7 @@ export interface FileRouteTypes {
     | '/marca/$slug'
     | '/produto/$slug'
     | '/admin/'
+    | '/admin/produtos/$brand'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/marca/$slug'
     | '/produto/$slug'
     | '/admin'
+    | '/admin/produtos/$brand'
   id:
     | '__root__'
     | '/'
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/marca/$slug'
     | '/produto/$slug'
     | '/admin/'
+    | '/admin/produtos/$brand'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -437,8 +449,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBannersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/produtos/$brand': {
+      id: '/admin/produtos/$brand'
+      path: '/$brand'
+      fullPath: '/admin/produtos/$brand'
+      preLoaderRoute: typeof AdminProdutosBrandRouteImport
+      parentRoute: typeof AdminProdutosRoute
+    }
   }
 }
+
+interface AdminProdutosRouteChildren {
+  AdminProdutosBrandRoute: typeof AdminProdutosBrandRoute
+}
+
+const AdminProdutosRouteChildren: AdminProdutosRouteChildren = {
+  AdminProdutosBrandRoute: AdminProdutosBrandRoute,
+}
+
+const AdminProdutosRouteWithChildren = AdminProdutosRoute._addFileChildren(
+  AdminProdutosRouteChildren,
+)
 
 interface AdminRouteChildren {
   AdminBannersRoute: typeof AdminBannersRoute
@@ -451,7 +482,7 @@ interface AdminRouteChildren {
   AdminMidiaRoute: typeof AdminMidiaRoute
   AdminOrcamentosRoute: typeof AdminOrcamentosRoute
   AdminPaginasRoute: typeof AdminPaginasRoute
-  AdminProdutosRoute: typeof AdminProdutosRoute
+  AdminProdutosRoute: typeof AdminProdutosRouteWithChildren
   AdminUsuariosRoute: typeof AdminUsuariosRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -467,7 +498,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMidiaRoute: AdminMidiaRoute,
   AdminOrcamentosRoute: AdminOrcamentosRoute,
   AdminPaginasRoute: AdminPaginasRoute,
-  AdminProdutosRoute: AdminProdutosRoute,
+  AdminProdutosRoute: AdminProdutosRouteWithChildren,
   AdminUsuariosRoute: AdminUsuariosRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
