@@ -10,7 +10,8 @@ import {
   AVAILABILITY_TONE,
   whatsappUrl,
 } from "@/lib/site";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { track } from "@/lib/analytics";
 import { ExternalLink, MessageCircle, ChevronRight } from "lucide-react";
 import placeholder from "@/assets/product-placeholder.jpg";
 
