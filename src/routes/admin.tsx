@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { CoreSpinLoader } from "@/components/ui/core-spin-loader";
 import {
   Sidebar,
   SidebarContent,
@@ -28,7 +29,7 @@ import {
   Users,
   LogOut,
   Camera,
-  Loader2,
+  
   ExternalLink,
   Building2,
   PanelBottom,
@@ -88,11 +89,7 @@ function AdminLayout() {
   }, [loading, session, isStaff, navigate]);
 
   if (loading || !session || !isStaff) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-primary" />
-      </div>
-    );
+    return <CoreSpinLoader text="Carregando painel..." />;
   }
 
   return (
