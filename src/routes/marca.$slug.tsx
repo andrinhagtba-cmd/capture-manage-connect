@@ -24,6 +24,28 @@ const HEROES: Record<string, string> = {
   gopro: heroGopro,
 };
 
+const GOPRO_LINES: { title: string; desc: string; cat: string; image: string }[] = [
+  {
+    title: "Câmeras de Ação",
+    desc: "Linha HERO: estabilização, resistência à água e vídeo em alta resolução para qualquer aventura.",
+    cat: "gopro-acao",
+    image: heroGopro,
+  },
+  {
+    title: "Câmeras 360°",
+    desc: "MAX e linha 360: capture tudo ao redor e reenquadre o melhor ângulo depois.",
+    cat: "gopro-360",
+    image: heroGopro,
+  },
+  {
+    title: "Câmeras para Criadores",
+    desc: "Soluções pensadas para vlogs e produção de conteúdo com áudio e enquadramento profissionais.",
+    cat: "gopro-criadores",
+    image: heroGopro,
+  },
+];
+
+
 export const Route = createFileRoute("/marca/$slug")({
   head: ({ params }) => {
     const name = params.slug.charAt(0).toUpperCase() + params.slug.slice(1);
