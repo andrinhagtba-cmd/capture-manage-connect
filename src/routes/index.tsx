@@ -5,6 +5,7 @@ import { DronesShowcase } from "@/components/DronesShowcase";
 import { CanonShowcase } from "@/components/CanonShowcase";
 import { SonyShowcase } from "@/components/SonyShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
+import { GridGlowBackground } from "@/components/ui/grid-glow-background";
 import { Button } from "@/components/ui/button";
 import { useBrands, useProducts } from "@/lib/catalog";
 import { BRAND_THEME, COMPANY_NAME } from "@/lib/site";
@@ -57,10 +58,11 @@ function Home() {
   return (
     <PublicLayout>
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden bg-ink">
         <div className="absolute inset-0">
           <img src={heroHome} alt="" className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/70 to-ink/30" />
+          <GridGlowBackground className="pointer-events-none absolute inset-0 h-full w-full mix-blend-screen opacity-70" />
         </div>
         <div className="container-page relative flex min-h-[78vh] flex-col justify-center py-32 md:min-h-[88vh] md:py-48">
           <div className="max-w-2xl animate-fade-up">
