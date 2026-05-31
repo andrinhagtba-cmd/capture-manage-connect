@@ -49,6 +49,7 @@ function FooterAdmin() {
     setSaving(true);
     const payload = { ...form };
     delete (payload as Record<string, unknown>).updated_at;
+    delete (payload as Record<string, unknown>).settings_json;
     let error;
     if (settings?.id) {
       ({ error } = await supabase.from("footer_settings").update(payload).eq("id", settings.id));
