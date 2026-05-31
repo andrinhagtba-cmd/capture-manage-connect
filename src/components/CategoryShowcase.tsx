@@ -97,8 +97,10 @@ export type CategoryShowcaseProps = {
   eyebrow?: string;
   /** Big section title */
   title: string;
-  /** Path to the hero video (in /public) */
-  videoSrc: string;
+  /** Path to the hero video (in /public). Optional when using imageSrc. */
+  videoSrc?: string;
+  /** Background image (imported asset URL). Used when no videoSrc is set. */
+  imageSrc?: string;
   /** Category slug to fetch products from */
   categorySlug: string;
   /** Brand label used in quote dialogs (e.g. "DJI") */
@@ -107,16 +109,20 @@ export type CategoryShowcaseProps = {
   brandSlug?: string;
   /** Label for the floating button */
   ctaLabel?: string;
+  /** Where the floating CTA should lead */
+  ctaTo?: "catalog" | "brand";
 };
 
 export function CategoryShowcase({
   eyebrow = "Vitrine premium",
   title,
   videoSrc,
+  imageSrc,
   categorySlug,
   brandLabel = "DJI",
   brandSlug = "dji",
   ctaLabel = "Mostrar Todos",
+  ctaTo = "catalog",
 }: CategoryShowcaseProps) {
   const { data: products } = useCategoryProducts(categorySlug);
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -136,15 +142,24 @@ export function CategoryShowcase({
 
       <div className="relative">
         <div className="relative overflow-hidden rounded-[2rem] shadow-xl">
-          <video
-            className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
-            src={videoSrc}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-          />
+          {videoSrc ? (
+            <video
+              className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
+              src={videoSrc}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
+          ) : (
+            <img
+              className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
+              src={imageSrc}
+              alt={title}
+              loading="lazy"
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-r from-ink/40 via-transparent to-transparent" />
           <div className="absolute left-5 top-5 md:left-8 md:top-8">
             <Button
@@ -152,12 +167,19 @@ export function CategoryShowcase({
               size="lg"
               className="rounded-full bg-background px-7 text-foreground shadow-lg hover:bg-background/90"
             >
-              <Link to="/catalogo" search={{ marca: brandSlug }}>
-                {ctaLabel}
-              </Link>
+              {ctaTo === "brand" ? (
+                <Link to="/marca/$slug" params={{ slug: brandSlug }}>
+                  {ctaLabel}
+                </Link>
+              ) : (
+                <Link to="/catalogo" search={{ marca: brandSlug }}>
+                  {ctaLabel}
+                </Link>
+              )}
             </Button>
           </div>
         </div>
+
 
         <div className="relative z-10 -mt-16 px-1 sm:-mt-20 md:px-10">
           <div className="overflow-hidden" ref={emblaRef}>

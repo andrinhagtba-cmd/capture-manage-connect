@@ -11,6 +11,10 @@ import heroCanon from "@/assets/hero-canon.jpg";
 import heroDji from "@/assets/hero-dji.jpg";
 import heroSony from "@/assets/hero-sony.jpg";
 import heroGopro from "@/assets/hero-gopro.jpg";
+import canonCameras from "@/assets/canon-cameras.jpg";
+import canonLentes from "@/assets/canon-lentes.jpg";
+import canonImpressoras from "@/assets/canon-impressoras.jpg";
+import canonSuprimentos from "@/assets/canon-suprimentos.jpg";
 
 const HEROES: Record<string, string> = {
   canon: heroCanon,
@@ -115,6 +119,45 @@ function BrandPage() {
           />
         </>
       )}
+
+      {slug === "canon" && (
+        <>
+          <CategoryShowcase
+            eyebrow="Linha Canon"
+            title="Câmeras"
+            imageSrc={canonCameras}
+            categorySlug="canon-cameras"
+            brandLabel="Canon"
+            brandSlug="canon"
+          />
+          <CategoryShowcase
+            eyebrow="Linha Canon"
+            title="Lentes e outros"
+            imageSrc={canonLentes}
+            categorySlug="canon-lentes-outros"
+            brandLabel="Canon"
+            brandSlug="canon"
+          />
+          <CategoryShowcase
+            eyebrow="Linha Canon"
+            title="Impressoras e Multifuncionais"
+            imageSrc={canonImpressoras}
+            categorySlug="canon-impressoras"
+            brandLabel="Canon"
+            brandSlug="canon"
+          />
+          <CategoryShowcase
+            eyebrow="Linha Canon"
+            title="Suprimentos"
+            imageSrc={canonSuprimentos}
+            categorySlug="canon-suprimentos"
+            brandLabel="Canon"
+            brandSlug="canon"
+          />
+        </>
+      )}
+
+
 
 
 
