@@ -120,7 +120,7 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[88vw] max-w-sm overflow-y-auto p-0">
               <div className="flex items-center justify-between border-b border-border px-5 py-4">
-                <span className="font-bold">{COMPANY_NAME}</span>
+                <span className="font-bold">{companyName}</span>
                 <Button
                   variant="ghost"
                   size="icon"
