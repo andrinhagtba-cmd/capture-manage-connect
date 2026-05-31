@@ -14,6 +14,7 @@ import {
   whatsappUrl,
 } from "@/lib/site";
 import { useBrands } from "@/lib/catalog";
+import logoNlLight from "@/assets/logo-nl-light.png";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
