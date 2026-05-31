@@ -45,6 +45,20 @@ function ProductPage() {
   const images = [product?.main_image_url, ...gallery].filter(Boolean) as string[];
   const [active, setActive] = useState(0);
 
+  useEffect(() => {
+    if (!product) return;
+    track("product_view", {
+      product_id: product.id,
+      brand_id: product.brand_id ?? null,
+      category_id: product.category_id ?? null,
+      content_name: product.name,
+      content_category: brand?.name ?? null,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id, brand?.name]);
+
+
+
   if (isLoading) {
     return (
       <PublicLayout>
