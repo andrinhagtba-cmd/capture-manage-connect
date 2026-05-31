@@ -66,7 +66,7 @@ function BrandPage() {
           {slug === "gopro" ? (
             <video
               className="h-full w-full object-cover"
-              src="/videos/gopro-cameras.mp4"
+              src="/videos/gopro-mission1.mp4"
               autoPlay
               muted
               loop
