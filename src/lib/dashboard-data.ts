@@ -195,6 +195,25 @@ export async function fetchDashboard(period: DashboardPeriod): Promise<Dashboard
     .sort((a, b) => b.views + b.quotes - (a.views + a.quotes))
     .slice(0, 6);
 
+  // Category performance
+  const catStats = new Map<string, CategoryPerf>();
+  const ensureCat = (id: string) => {
+    if (!catStats.has(id))
+      catStats.set(id, { id, name: categoryMap.get(id)?.name ?? "—", views: 0, quotes: 0 });
+    return catStats.get(id)!;
+  };
+  for (const e of events) {
+    const cId = e.product_id ? productMap.get(e.product_id)?.category_id ?? null : null;
+    if (cId && e.event_name === "product_view") ensureCat(cId).views += 1;
+  }
+  for (const q of quotes) {
+    const cId = q.product_id ? productMap.get(q.product_id)?.category_id ?? null : null;
+    if (cId) ensureCat(cId).quotes += 1;
+  }
+  const categoryPerf = Array.from(catStats.values())
+    .sort((a, b) => b.views + b.quotes - (a.views + a.quotes))
+    .slice(0, 6);
+
   // Funnel
   const quoteStarted = events.filter((e) => e.event_name === "quote_request_started").length;
   const funnel: FunnelStep[] = [
