@@ -1,12 +1,11 @@
 import { CategoryShowcase } from "@/components/CategoryShowcase";
-import goproPremium from "@/assets/gopro-premium.jpg";
 
 export function GoProShowcase() {
   return (
     <CategoryShowcase
       eyebrow="Linha GoPro"
       title="Câmeras de Ação GoPro"
-      imageSrc={goproPremium}
+      videoSrc="/videos/gopro-hero13.mp4"
       categorySlug="gopro-acao"
       brandLabel="GoPro"
       brandSlug="gopro"
