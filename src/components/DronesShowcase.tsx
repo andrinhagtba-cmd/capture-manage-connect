@@ -1,0 +1,180 @@
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import { Heart, Star, Truck, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { QuoteDialog } from "@/components/QuoteDialog";
+import { useCategoryProducts, type Product } from "@/lib/catalog";
+import { whatsappUrl } from "@/lib/site";
+import placeholder from "@/assets/product-placeholder.jpg";
+
+const DRONE_VIDEO = "/videos/drones-com-camera.mp4";
+const DRONE_CATEGORY_SLUG = "dji-drones";
+
+function StarRating() {
+  return (
+    <div className="flex items-center gap-0.5 text-primary">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star key={i} className="h-3.5 w-3.5 fill-current" />
+      ))}
+    </div>
+  );
+}
+
+function DroneCard({ product }: { product: Product }) {
+  const [fav, setFav] = useState(false);
+  const waMsg = `Olá! Tenho interesse no ${product.name}. Pode me passar disponibilidade e condições?`;
+
+  return (
+    <div className="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card shadow-sm">
+      {/* Image area */}
+      <div className="relative">
+        <button
+          type="button"
+          aria-label="Favoritar"
+          onClick={() => setFav((v) => !v)}
+          className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full border border-border bg-background/90 text-muted-foreground backdrop-blur transition-colors hover:text-primary"
+        >
+          <Heart className={`h-4 w-4 ${fav ? "fill-primary text-primary" : ""}`} />
+        </button>
+        <Link
+          to="/produto/$slug"
+          params={{ slug: product.slug }}
+          className="block aspect-square overflow-hidden bg-surface p-5"
+        >
+          <img
+            src={product.main_image_url || placeholder}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-contain transition-transform duration-500 hover:scale-105"
+          />
+        </Link>
+        <div className="px-4 pb-4">
+          <Button asChild variant="outline" className="w-full rounded-full">
+            <Link to="/produto/$slug" params={{ slug: product.slug }}>
+              Ver detalhes
+            </Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Info area */}
+      <div className="flex flex-1 flex-col gap-2 border-t border-border/70 p-4">
+        <StarRating />
+        <h3 className="line-clamp-2 min-h-[2.5rem] text-sm font-semibold leading-snug text-foreground">
+          {product.name}
+        </h3>
+        <p className="text-sm font-semibold text-foreground">Consulte disponibilidade</p>
+
+        <div className="mt-1 flex flex-col gap-2">
+          <QuoteDialog
+            productId={product.id}
+            productName={product.name}
+            brandName="DJI"
+            trigger={
+              <Button className="w-full rounded-full" size="sm">
+                Solicitar orçamento
+              </Button>
+            }
+          />
+          <a href={whatsappUrl(waMsg)} target="_blank" rel="noopener noreferrer">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full gap-2 rounded-full border-emerald-500/40 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+            >
+              <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
+            </Button>
+          </a>
+        </div>
+
+        <div className="mt-1 flex items-center gap-1.5 text-xs font-medium text-emerald-600">
+          <Truck className="h-4 w-4" /> Frete Grátis
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function DronesShowcase() {
+  const { data: products } = useCategoryProducts(DRONE_CATEGORY_SLUG);
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { align: "start", loop: false, slidesToScroll: 1 },
+    [Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })],
+  );
+
+  const items = products ?? [];
+
+  return (
+    <section className="container-page mt-24">
+      {/* Title */}
+      <div className="mb-6">
+        <p className="eyebrow text-primary">Vitrine premium</p>
+        <h2 className="display-lg mt-1 text-3xl md:text-4xl">Drones com Câmera</h2>
+      </div>
+
+      <div className="relative">
+        {/* Hero video block */}
+        <div className="relative overflow-hidden rounded-[2rem] shadow-xl">
+          <video
+            className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
+            src={DRONE_VIDEO}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-ink/40 via-transparent to-transparent" />
+          {/* Floating button */}
+          <div className="absolute left-5 top-5 md:left-8 md:top-8">
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full bg-background px-7 text-foreground shadow-lg hover:bg-background/90"
+            >
+              <Link to="/catalogo" search={{ marca: "dji" }}>
+                Mostrar Todos
+              </Link>
+            </Button>
+          </div>
+        </div>
+
+        {/* Overlapping carousel */}
+        <div className="relative z-10 -mt-16 px-1 sm:-mt-20 md:px-10">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex gap-4">
+              {items.map((p) => (
+                <div
+                  key={p.id}
+                  className="min-w-0 shrink-0 grow-0 basis-[80%] sm:basis-[48%] lg:basis-[calc(25%-12px)]"
+                >
+                  <DroneCard product={p} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Arrows */}
+          <button
+            type="button"
+            aria-label="Anterior"
+            onClick={() => emblaApi?.scrollPrev()}
+            className="absolute -left-1 top-[42%] z-20 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-background text-foreground shadow-md transition-colors hover:bg-surface md:-left-5"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            aria-label="Próximo"
+            onClick={() => emblaApi?.scrollNext()}
+            className="absolute -right-1 top-[42%] z-20 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-background text-foreground shadow-md transition-colors hover:bg-surface md:-right-5"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
