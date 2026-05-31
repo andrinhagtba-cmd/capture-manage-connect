@@ -135,7 +135,7 @@ export function CategoryShowcase({
     [Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })],
   );
 
-  const items = products ?? [];
+  const items: Product[] = products ?? [];
   if (items.length === 0) return null;
 
   return (
