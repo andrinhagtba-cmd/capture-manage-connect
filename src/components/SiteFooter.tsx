@@ -1,43 +1,31 @@
 import { Link } from "@tanstack/react-router";
-import { Camera, Instagram, MapPin, Phone, Clock } from "lucide-react";
-import {
-  COMPANY_NAME,
-  COMPANY_TAGLINE,
-  WHATSAPP_DISPLAY,
-  ADDRESS,
-  INSTAGRAM_URL,
-  whatsappUrl,
-} from "@/lib/site";
+import { Camera, Instagram, MapPin, Phone, Clock, Mail, Facebook, Youtube } from "lucide-react";
 import { useBrands } from "@/lib/catalog";
 import {
-  useCompanySettings,
+  useCompany,
   useFooterSettings,
   useFooterGroups,
   useFooterLinks,
-  buildWhatsappUrl,
 } from "@/lib/site-content";
 
 export function SiteFooter() {
   const { data: brands } = useBrands();
-  const { data: company } = useCompanySettings();
+  const company = useCompany();
   const { data: footer } = useFooterSettings();
   const { data: groups } = useFooterGroups();
   const { data: links } = useFooterLinks();
 
-  const companyName = company?.company_name || COMPANY_NAME;
-  const tagline =
-    footer?.description || company?.short_description || COMPANY_TAGLINE;
-  const address = company?.address || ADDRESS;
-  const phone = company?.phone || company?.whatsapp || WHATSAPP_DISPLAY;
-  const instagram = company?.instagram_url || INSTAGRAM_URL;
-  const openingHours = company?.opening_hours || "Seg a Sáb · 9h às 18h";
-  const waHref = company?.whatsapp
-    ? buildWhatsappUrl(company.whatsapp)
-    : whatsappUrl();
+  const companyName = company.name;
+  const tagline = footer?.description || company.tagline;
+  const address = company.address;
+  const phone = company.whatsappDisplay;
+  const openingHours = company.openingHours;
+  const waHref = company.whatsappLink();
 
   const activeGroups = (groups ?? []).filter((g) => g.is_active);
   const linksFor = (groupId: string) =>
     (links ?? []).filter((l) => l.is_active && l.group_id === groupId);
+
 
   return (
     <footer className="mt-24 border-t border-border bg-surface-dark text-background">
