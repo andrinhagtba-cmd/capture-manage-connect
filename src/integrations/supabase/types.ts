@@ -710,6 +710,48 @@ export type Database = {
           },
         ]
       }
+      product_related: {
+        Row: {
+          created_at: string
+          id: string
+          order_index: number
+          product_id: string
+          related_product_id: string
+          relation_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_index?: number
+          product_id: string
+          related_product_id: string
+          relation_type?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_index?: number
+          product_id?: string
+          related_product_id?: string
+          relation_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_related_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_related_related_product_id_fkey"
+            columns: ["related_product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           availability_status: Database["public"]["Enums"]["availability_status"]
@@ -720,6 +762,7 @@ export type Database = {
           gallery_json: Json
           id: string
           internal_cost: number | null
+          internal_notes: string | null
           internal_price: number | null
           is_active: boolean
           is_featured: boolean
@@ -727,14 +770,20 @@ export type Database = {
           model: string | null
           name: string
           official_product_url: string | null
+          order_index: number
           public_price_visible: boolean
+          seo_description: string | null
+          seo_image_url: string | null
+          seo_title: string | null
           short_description: string | null
           sku: string | null
           slug: string
           specifications_json: Json
           tags_json: Json
+          thumbnail_url: string | null
           updated_at: string
           use_cases_json: Json
+          video_url: string | null
         }
         Insert: {
           availability_status?: Database["public"]["Enums"]["availability_status"]
@@ -745,6 +794,7 @@ export type Database = {
           gallery_json?: Json
           id?: string
           internal_cost?: number | null
+          internal_notes?: string | null
           internal_price?: number | null
           is_active?: boolean
           is_featured?: boolean
@@ -752,14 +802,20 @@ export type Database = {
           model?: string | null
           name: string
           official_product_url?: string | null
+          order_index?: number
           public_price_visible?: boolean
+          seo_description?: string | null
+          seo_image_url?: string | null
+          seo_title?: string | null
           short_description?: string | null
           sku?: string | null
           slug: string
           specifications_json?: Json
           tags_json?: Json
+          thumbnail_url?: string | null
           updated_at?: string
           use_cases_json?: Json
+          video_url?: string | null
         }
         Update: {
           availability_status?: Database["public"]["Enums"]["availability_status"]
@@ -770,6 +826,7 @@ export type Database = {
           gallery_json?: Json
           id?: string
           internal_cost?: number | null
+          internal_notes?: string | null
           internal_price?: number | null
           is_active?: boolean
           is_featured?: boolean
@@ -777,14 +834,20 @@ export type Database = {
           model?: string | null
           name?: string
           official_product_url?: string | null
+          order_index?: number
           public_price_visible?: boolean
+          seo_description?: string | null
+          seo_image_url?: string | null
+          seo_title?: string | null
           short_description?: string | null
           sku?: string | null
           slug?: string
           specifications_json?: Json
           tags_json?: Json
+          thumbnail_url?: string | null
           updated_at?: string
           use_cases_json?: Json
+          video_url?: string | null
         }
         Relationships: [
           {
