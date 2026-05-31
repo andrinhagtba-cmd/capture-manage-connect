@@ -11,7 +11,7 @@ import {
   type AdminCategory,
   type AdminProduct,
 } from "@/lib/products-admin";
-import { AVAILABILITY_LABELS } from "@/lib/site";
+import { AVAILABILITY_LABELS, AVAILABILITY_TONE } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,7 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash2, X, Upload, Loader2, GripVertical, Search } from "lucide-react";
+import { Plus, Trash2, X, Upload, Loader2, GripVertical, Search, MessageCircle, Star } from "lucide-react";
 import { toast } from "sonner";
 import placeholder from "@/assets/product-placeholder.jpg";
 
@@ -315,25 +315,27 @@ export function ProductForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] gap-0 overflow-hidden p-0 sm:max-w-3xl">
+      <DialogContent className="max-h-[94vh] gap-0 overflow-hidden p-0 sm:max-w-5xl">
         <DialogHeader className="border-b border-border px-6 py-4">
           <DialogTitle>{form.id ? "Editar produto" : "Novo produto"}</DialogTitle>
         </DialogHeader>
 
-        <Tabs value={tab} onValueChange={setTab} className="flex flex-col">
-          <div className="border-b border-border px-4">
-            <TabsList className="h-auto flex-wrap justify-start gap-1 bg-transparent p-2">
-              <TabsTrigger value="basico">Básico</TabsTrigger>
-              <TabsTrigger value="midia">Mídia</TabsTrigger>
-              <TabsTrigger value="descricoes">Descrições</TabsTrigger>
-              <TabsTrigger value="specs">Especificações</TabsTrigger>
-              <TabsTrigger value="comercial">Comercial</TabsTrigger>
-              <TabsTrigger value="seo">SEO</TabsTrigger>
-              <TabsTrigger value="links">Links</TabsTrigger>
-            </TabsList>
-          </div>
+        <div className="flex min-h-0 flex-1">
+          <Tabs value={tab} onValueChange={setTab} className="flex min-w-0 flex-1 flex-col">
+            <div className="border-b border-border px-4">
+              <TabsList className="h-auto flex-wrap justify-start gap-1 bg-transparent p-2">
+                <TabsTrigger value="basico">Básico</TabsTrigger>
+                <TabsTrigger value="midia">Mídia</TabsTrigger>
+                <TabsTrigger value="descricoes">Descrições</TabsTrigger>
+                <TabsTrigger value="specs">Especificações</TabsTrigger>
+                <TabsTrigger value="organizacao">Organização</TabsTrigger>
+                <TabsTrigger value="seo">SEO</TabsTrigger>
+                <TabsTrigger value="links">Links e observações</TabsTrigger>
+              </TabsList>
+            </div>
 
-          <div className="max-h-[62vh] overflow-y-auto px-6 py-5">
+            <div className="max-h-[64vh] overflow-y-auto px-6 py-6">
+
             {/* TAB 1 — Básico */}
             <TabsContent value="basico" className="mt-0 grid gap-4 sm:grid-cols-2">
               <Field label="Nome *" className="sm:col-span-2">
@@ -603,7 +605,7 @@ export function ProductForm({
             </TabsContent>
 
             {/* TAB 5 — Comercial */}
-            <TabsContent value="comercial" className="mt-0 space-y-5">
+            <TabsContent value="organizacao" className="mt-0 space-y-5">
               <ChipEditor
                 label="Tags"
                 items={form.tags}
@@ -748,8 +750,26 @@ export function ProductForm({
                 />
               </Field>
             </TabsContent>
-          </div>
-        </Tabs>
+            </div>
+          </Tabs>
+
+          {/* Live preview */}
+          <aside className="hidden w-[300px] shrink-0 overflow-y-auto border-l border-border bg-surface/50 p-5 lg:block">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Pré-visualização
+            </p>
+            <ProductPreview
+              imageUrl={form.main_image_url}
+              name={form.name}
+              brandName={brands.find((b) => b.id === form.brand_id)?.name}
+              categoryName={categories.find((c) => c.id === form.category_id)?.name}
+              availability={form.availability_status}
+              isActive={form.is_active}
+              isFeatured={form.is_featured}
+            />
+          </aside>
+        </div>
+
 
         <DialogFooter className="border-t border-border px-6 py-4">
           {form.is_featured && <Badge variant="secondary">Destaque</Badge>}
@@ -830,3 +850,68 @@ function ChipEditor({
     </div>
   );
 }
+
+function ProductPreview({
+  imageUrl,
+  name,
+  brandName,
+  categoryName,
+  availability,
+  isActive,
+  isFeatured,
+}: {
+  imageUrl: string;
+  name: string;
+  brandName?: string;
+  categoryName?: string;
+  availability: string;
+  isActive: boolean;
+  isFeatured: boolean;
+}) {
+  return (
+    <div className="sticky top-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <div className="relative aspect-square bg-surface p-4">
+        <img
+          src={imageUrl || placeholder}
+          alt={name || "Produto"}
+          className="h-full w-full object-contain"
+        />
+        <span
+          className={`absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 text-[10px] font-semibold ${
+            AVAILABILITY_TONE[availability] ?? "bg-muted text-muted-foreground"
+          }`}
+        >
+          {AVAILABILITY_LABELS[availability] ?? "Sob consulta"}
+        </span>
+        {isFeatured && (
+          <span className="absolute right-2.5 top-2.5 inline-flex items-center gap-1 rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-semibold text-white">
+            <Star className="h-3 w-3 fill-white" /> Destaque
+          </span>
+        )}
+      </div>
+
+      <div className="space-y-2 border-t border-border p-4">
+        <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+          {brandName ?? "Marca"} · {categoryName ?? "Categoria"}
+        </p>
+        <h3 className="line-clamp-2 min-h-[2.5rem] text-sm font-semibold leading-snug">
+          {name || "Nome do produto"}
+        </h3>
+        <div className="flex items-center gap-2 pt-1">
+          <span
+            className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+              isActive ? "bg-emerald-100 text-emerald-800" : "bg-muted text-muted-foreground"
+            }`}
+          >
+            {isActive ? "Ativo" : "Inativo"}
+          </span>
+          <span className="text-[11px] text-muted-foreground">Consultar preço</span>
+        </div>
+        <Button className="mt-2 w-full gap-2" size="sm" type="button" disabled>
+          <MessageCircle className="h-4 w-4" /> Solicitar orçamento
+        </Button>
+      </div>
+    </div>
+  );
+}
+
