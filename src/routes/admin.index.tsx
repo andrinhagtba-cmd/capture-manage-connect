@@ -83,7 +83,7 @@ function SectionHeading({
   icon: LucideIcon;
   title: string;
   subtitle?: string;
-  action?: React.ReactNode;
+  action?: ReactNode;
 }) {
   return (
     <div className="mb-5 flex items-start justify-between gap-3">
