@@ -33,6 +33,7 @@ import {
   Building2,
   PanelBottom,
   Menu as MenuIcon,
+  Image as ImageIcon,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
