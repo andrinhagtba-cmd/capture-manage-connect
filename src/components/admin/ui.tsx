@@ -1,7 +1,21 @@
 import { Link } from "@tanstack/react-router";
-import { type ReactNode } from "react";
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { useRef, useState, type ReactNode } from "react";
+import {
+  ChevronRight,
+  ImageIcon,
+  LayoutGrid,
+  Loader2,
+  Table as TableIcon,
+  Trash2,
+  Upload,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { uploadToMedia } from "@/lib/products-admin";
+import { toast } from "sonner";
 
 /* ----------------------------------------------------------------- Page Hero */
 
