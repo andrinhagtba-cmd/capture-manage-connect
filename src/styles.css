@@ -197,58 +197,6 @@
   .shadow-elegant {
     box-shadow: var(--shadow-elegant);
   }
-
-  /* Premium animated glow + shine for primary CTAs */
-  .btn-glow {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    animation: btnGlowPulse 2.8s ease-in-out infinite;
-  }
-  .btn-glow::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: linear-gradient(
-      110deg,
-      transparent 25%,
-      color-mix(in oklab, white 55%, transparent) 50%,
-      transparent 75%
-    );
-    background-size: 220% 100%;
-    background-position: 200% 0;
-    animation: btnGlowShine 2.8s ease-in-out infinite;
-    pointer-events: none;
-  }
-  .btn-glow > * {
-    position: relative;
-    z-index: 2;
-  }
-}
-
-@keyframes btnGlowPulse {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 0 color-mix(in oklab, var(--primary) 55%, transparent),
-      0 4px 16px -4px color-mix(in oklab, var(--primary) 40%, transparent);
-  }
-  50% {
-    box-shadow:
-      0 0 22px 4px color-mix(in oklab, var(--primary) 60%, transparent),
-      0 6px 22px -2px color-mix(in oklab, var(--primary) 55%, transparent);
-  }
-}
-
-@keyframes btnGlowShine {
-  0% {
-    background-position: 200% 0;
-  }
-  60%,
-  100% {
-    background-position: -120% 0;
-  }
 }
 
 @keyframes fade-up {
