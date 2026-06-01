@@ -143,12 +143,13 @@ function Login() {
 
         <div className="w-full max-w-md animate-fade-up">
           {/* mobile brand */}
-          <Link to="/" className="mb-8 flex items-center justify-center gap-2 lg:hidden">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-ink text-background">
-              <Camera className="h-5 w-5" />
+          <Link to="/" className="mb-8 flex items-center justify-center gap-2.5 lg:hidden">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink p-1.5">
+              <img src={logoSrc} alt={companyName} className="h-full w-full object-contain" />
             </span>
             <span className="text-xl font-bold">
-              NL <span className="text-primary">Foto e Vídeo</span>
+              {companyName.split(" ")[0]}{" "}
+              <span className="text-primary">{companyName.split(" ").slice(1).join(" ")}</span>
             </span>
           </Link>
 
