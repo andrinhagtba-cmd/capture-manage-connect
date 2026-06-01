@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, Plus, Trash2, ArrowUp, ArrowDown, GalleryHorizontalEnd, Eye, Film } from "lucide-react";
-import { AdminPageHero } from "@/components/admin/ui";
+import { AdminPageHero, MediaUploadField, EmptyStatePremium } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/banners")({
