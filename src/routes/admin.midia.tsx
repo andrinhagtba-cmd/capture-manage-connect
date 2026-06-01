@@ -30,6 +30,7 @@ import {
   Pencil,
 } from "lucide-react";
 import { toast } from "sonner";
+import { AdminPageHero } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/midia")({
   component: MidiaAdmin,
