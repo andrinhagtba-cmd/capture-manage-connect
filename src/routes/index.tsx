@@ -269,29 +269,30 @@ function Home() {
           ) : (
             <img src={heroImage} alt="" className="h-full w-full object-cover" />
           )}
+          {/* Vertical gradient on mobile for legibility, horizontal on desktop */}
           <div
-            className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/30"
+            className="absolute inset-0 bg-gradient-to-t from-ink via-ink/80 to-ink/40 md:bg-gradient-to-r md:from-ink md:via-ink/70 md:to-ink/30"
             style={{ opacity: heroOverlay }}
           />
           <GridGlowBackground className="pointer-events-none absolute inset-0 h-full w-full mix-blend-screen opacity-70" />
         </div>
-        <div className="container-page relative flex min-h-[78vh] flex-col justify-center py-32 md:min-h-[88vh] md:py-48">
+        <div className="container-page relative flex min-h-[88vh] flex-col justify-center py-24 sm:py-32 md:py-48">
           <div className="max-w-2xl animate-fade-up">
-            <p className="eyebrow mb-4 text-background/70">{heroEyebrow}</p>
-            <h1 className="display-hero text-4xl text-background sm:text-5xl md:text-6xl">
+            <p className="eyebrow mb-3 text-background/70 sm:mb-4">{heroEyebrow}</p>
+            <h1 className="display-hero text-[2.5rem] leading-[1.05] text-background sm:text-5xl md:text-6xl">
               {heroTitle}{" "}
               {heroHighlight && <span className="text-primary">{heroHighlight}</span>}
             </h1>
-            <p className="mt-6 max-w-xl text-lg text-background/80">{heroSubtitle}</p>
+            <p className="mt-5 max-w-xl text-base text-background/80 sm:mt-6 sm:text-lg">{heroSubtitle}</p>
             {heroBadge && (
-              <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 backdrop-blur-md">
-                <ShieldCheck className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold text-background">{heroBadge}</span>
+              <div className="mt-5 inline-flex items-start gap-2 rounded-2xl border border-primary/40 bg-primary/10 px-4 py-2.5 backdrop-blur-md sm:mt-6 sm:items-center sm:rounded-full">
+                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary sm:mt-0" />
+                <span className="text-sm font-semibold leading-snug text-background">{heroBadge}</span>
               </div>
             )}
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
               {primaryLabel && (
-                <Button asChild size="lg" className="gap-2">
+                <Button asChild size="lg" className="w-full gap-2 sm:w-auto">
                   <a href={primaryUrl} onClick={onBannerClick}>
                     {primaryLabel} <ArrowRight className="h-4 w-4" />
                   </a>
@@ -299,13 +300,13 @@ function Home() {
               )}
               {secondaryLabel &&
                 (secondaryUrl ? (
-                  <Button asChild size="lg" variant="secondary">
+                  <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
                     <a href={secondaryUrl} onClick={onBannerClick}>{secondaryLabel}</a>
                   </Button>
                 ) : (
                   <QuoteDialog
                     trigger={
-                      <Button size="lg" variant="secondary">
+                      <Button size="lg" variant="secondary" className="w-full sm:w-auto">
                         {secondaryLabel}
                       </Button>
                     }
