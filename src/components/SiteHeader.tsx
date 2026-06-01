@@ -166,7 +166,7 @@ export function SiteHeader() {
                 <div className="px-3 pt-4">
                   <QuoteDialog
                     trigger={
-                      <Button size="lg" className="w-full">
+                      <Button size="lg" className="btn-glow w-full">
                         Solicitar orçamento
                       </Button>
                     }
