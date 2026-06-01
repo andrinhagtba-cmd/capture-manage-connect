@@ -167,9 +167,9 @@ export function SiteHeader() {
                 <div className="px-3 pt-4">
                   <QuoteDialog
                     trigger={
-                      <Button size="lg" className="w-full">
+                      <LiquidMetalButton className="h-12 w-full text-base">
                         Solicitar orçamento
-                      </Button>
+                      </LiquidMetalButton>
                     }
                   />
                 </div>
