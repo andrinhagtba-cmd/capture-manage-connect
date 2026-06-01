@@ -7,7 +7,7 @@ import { useBrands, useCategories } from "@/lib/catalog";
 import { COMPANY_NAME, BRAND_THEME } from "@/lib/site";
 import { useCompanySettings, useNavigationItems } from "@/lib/site-content";
 import { QuoteDialog } from "@/components/QuoteDialog";
-import logoNlLight from "@/assets/logo-nl-light.png";
+import logoNlFull from "@/assets/logo-nl-full.png";
 
 export function SiteHeader() {
   const { data: brands } = useBrands();
