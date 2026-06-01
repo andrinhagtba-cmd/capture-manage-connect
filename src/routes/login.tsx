@@ -5,8 +5,11 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Camera, Loader2, ArrowLeft, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { Loader2, ArrowLeft, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
+import { useCompanySettings } from "@/lib/site-content";
+import { COMPANY_NAME } from "@/lib/site";
+import logoNlLight from "@/assets/logo-nl-light.png";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
