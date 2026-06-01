@@ -71,7 +71,7 @@ function ShowcaseCard({ product, brandLabel }: { product: Product; brandLabel: s
             productName={product.name}
             brandName={brandLabel}
             trigger={
-              <Button className="w-full rounded-full" size="sm">
+              <Button className="btn-glow w-full rounded-full" size="sm">
                 Solicitar orçamento
               </Button>
             }
