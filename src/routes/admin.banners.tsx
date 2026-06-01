@@ -197,15 +197,19 @@ function BannersAdmin() {
               </Field>
             </div>
 
-            {b.desktop_image_url && (
-              <img src={b.desktop_image_url} alt="" className="mt-4 h-32 w-full rounded-lg object-cover" />
-            )}
           </div>
         ))}
         {(banners ?? []).length === 0 && (
-          <p className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-            Nenhum banner ainda. Clique em "Banner" para criar.
-          </p>
+          <EmptyStatePremium
+            icon={GalleryHorizontalEnd}
+            title="Nenhum banner ainda"
+            description="Crie o primeiro banner para destacar campanhas, marcas e vídeos no topo do site."
+            action={
+              <Button onClick={add} className="gap-2 rounded-xl">
+                <Plus className="h-4 w-4" /> Novo banner
+              </Button>
+            }
+          />
         )}
       </div>
     </div>
