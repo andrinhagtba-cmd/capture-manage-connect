@@ -8,6 +8,7 @@ import { COMPANY_NAME, BRAND_THEME } from "@/lib/site";
 import { useCompanySettings, useNavigationItems } from "@/lib/site-content";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import logoNlFull from "@/assets/logo-nl-full.png";
+import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
 import menuEquipment from "@/assets/menu-equipment.jpg";
 
 export function SiteHeader() {
