@@ -66,10 +66,19 @@ export function buildSeoHead(seo: ResolvedSeo) {
     meta.push(
       { property: "og:image", content: seo.image },
       { property: "og:image:secure_url", content: seo.image },
-      { property: "og:image:width", content: String(seo.imageWidth) },
-      { property: "og:image:height", content: String(seo.imageHeight) },
+      { property: "og:image:alt", content: seo.title },
       { name: "twitter:image", content: seo.image },
     );
+    // Only declare explicit dimensions when they are real (> 0). Sending
+    // fixed 1200x630 for square/portrait product photos makes WhatsApp and
+    // Facebook drop the preview image because the declared size doesn't match
+    // the actual file. Omitting them lets the crawler read the real size.
+    if (seo.imageWidth > 0 && seo.imageHeight > 0) {
+      meta.push(
+        { property: "og:image:width", content: String(seo.imageWidth) },
+        { property: "og:image:height", content: String(seo.imageHeight) },
+      );
+    }
   }
 
   return {
