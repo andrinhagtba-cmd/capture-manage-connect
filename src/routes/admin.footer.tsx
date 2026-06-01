@@ -113,13 +113,17 @@ function FooterAdmin() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Footer</h1>
-        <p className="text-sm text-muted-foreground">
-          Dados da empresa (endereço, contato, redes) vêm de Configurações da Empresa. Aqui você
-          controla o que aparece e os links.
-        </p>
-      </div>
+      <AdminPageHero
+        eyebrow="Conteúdo do Site"
+        title="Footer"
+        subtitle="Configure o rodapé global sincronizado com os dados da empresa."
+        icon={PanelBottom}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Footer" }]}
+        metrics={[
+          { label: "Grupos de links", value: groups?.length ?? 0, icon: PanelBottom },
+          { label: "Links", value: links?.length ?? 0, icon: LinkIcon, tone: "info" },
+        ]}
+      />
 
       <div className="rounded-xl border border-border bg-background p-5 space-y-4">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
