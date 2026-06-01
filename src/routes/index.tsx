@@ -229,16 +229,10 @@ function Home() {
                 <div className="mt-10 flex justify-center animate-fade-in">
                   <QuoteDialog
                     trigger={
-                      <Button
-                        size="lg"
-                        variant="secondary"
-                        className="group/btn relative overflow-hidden shadow-xl transition-transform duration-300 hover:scale-[1.03]"
-                      >
-                        <span className="relative z-10 flex items-center gap-2">
-                          Falar com um especialista
-                          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                        </span>
-                      </Button>
+                      <LiquidMetalButton className="group/btn h-12 px-8 text-base shadow-xl">
+                        Falar com um especialista
+                        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                      </LiquidMetalButton>
                     }
                   />
                 </div>
