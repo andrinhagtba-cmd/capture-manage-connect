@@ -38,8 +38,10 @@ import {
   Layers,
   ArrowUpRight,
   Inbox,
+  LayoutDashboard,
   type LucideIcon,
 } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/")({
   component: Dashboard,
