@@ -169,11 +169,11 @@ export function CategoryShowcase({
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-r from-ink/40 via-transparent to-transparent" />
-          <div className="absolute left-5 top-5 md:left-8 md:top-8">
+          <div className="absolute left-4 top-4 md:left-8 md:top-8">
             <Button
               asChild
-              size="lg"
-              className="rounded-full bg-background px-7 text-foreground shadow-lg hover:bg-background/90"
+              size="sm"
+              className="rounded-full bg-background px-4 text-xs text-foreground shadow-lg hover:bg-background/90 sm:px-6 sm:text-sm md:h-11 md:px-7 md:text-base"
             >
               {ctaTo === "brand" ? (
                 <Link to="/marca/$slug" params={{ slug: brandSlug }}>
