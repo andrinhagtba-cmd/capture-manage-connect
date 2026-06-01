@@ -37,7 +37,7 @@ export function SiteHeader() {
       <div className="container-page flex h-16 items-center justify-between gap-4">
         <Link to="/" className="group flex items-center">
           <img
-            src={company?.logo_url || logoNlFull}
+            src={logoNlFull}
             alt={companyName}
             width={1000}
             height={215}
