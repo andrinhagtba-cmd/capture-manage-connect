@@ -35,22 +35,14 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link to="/" className="group flex items-center gap-3">
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink p-1.5 shadow-elegant transition-transform duration-300 group-hover:scale-105">
-            <img
-              src={company?.logo_url || logoNlLight}
-              alt={companyName}
-              width={512}
-              height={512}
-              className="h-full w-full object-contain"
-            />
-          </span>
-          <span className="text-lg font-bold leading-tight tracking-tight text-foreground">
-            {companyName.split(" ")[0]}{" "}
-            <span className="text-gradient-red">
-              {companyName.split(" ").slice(1).join(" ")}
-            </span>
-          </span>
+        <Link to="/" className="group flex items-center">
+          <img
+            src={company?.logo_url || logoNlFull}
+            alt={companyName}
+            width={1000}
+            height={215}
+            className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] sm:h-10"
+          />
         </Link>
 
         {/* Desktop nav with mega menu */}
