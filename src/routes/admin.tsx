@@ -65,6 +65,9 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
+import logoNlFull from "@/assets/logo-nl-full.png";
+import logoNlEmblem from "@/assets/logo-nl-emblem.png";
+
 type RoleGate = "any" | "admin" | "content";
 
 type NavItem = {
