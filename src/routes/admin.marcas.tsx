@@ -53,7 +53,7 @@ function MarcasAdmin() {
         breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Páginas de Marca" }]}
         metrics={[
           { label: "Marcas", value: pages?.length ?? 0, icon: Tag },
-          { label: "Ativas", value: (pages ?? []).filter((p) => p.is_active).length, icon: Eye, tone: "success" },
+          { label: "Publicadas", value: (pages ?? []).filter((p) => p.is_published).length, icon: Eye, tone: "success" },
         ]}
       />
 
