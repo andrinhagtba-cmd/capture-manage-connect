@@ -76,7 +76,7 @@ function BannersAdmin() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
+    <div className="space-y-6">
       <AdminPageHero
         eyebrow="Conteúdo do Site"
         title="Banners e Heros"
@@ -95,84 +95,63 @@ function BannersAdmin() {
         }
       />
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         {(banners ?? []).map((b, idx) => (
-          <div key={b.id} className="rounded-xl border border-border bg-background p-5">
-            <div className="mb-4 flex items-center justify-between">
+          <div
+            key={b.id}
+            className="animate-fade-up overflow-hidden rounded-[24px] border border-border/70 bg-card shadow-sm"
+          >
+            {/* card header bar */}
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 bg-surface/60 px-5 py-3.5 md:px-6">
               <div className="flex items-center gap-3">
-                <Switch checked={b.is_active} onCheckedChange={(v) => update(b.id, { is_active: v })} />
-                <Label className="text-sm">{b.is_active ? "Ativo" : "Inativo"}</Label>
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  {b.media_type === "video" ? <Film className="h-[18px] w-[18px]" /> : <GalleryHorizontalEnd className="h-[18px] w-[18px]" />}
+                </span>
+                <div>
+                  <p className="text-sm font-semibold tracking-tight">
+                    {b.title?.trim() || "Banner sem título"}
+                  </p>
+                  <p className="text-xs capitalize text-muted-foreground">
+                    {b.location} · {b.media_type === "video" ? "vídeo" : "imagem"}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Button size="icon" variant="ghost" disabled={idx === 0} onClick={() => move(b, -1)}>
-                  <ArrowUp className="h-4 w-4" />
-                </Button>
-                <Button size="icon" variant="ghost" disabled={idx === (banners?.length ?? 0) - 1} onClick={() => move(b, 1)}>
-                  <ArrowDown className="h-4 w-4" />
-                </Button>
-                <Button size="icon" variant="ghost" onClick={() => remove(b.id)}>
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                </Button>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 rounded-full border border-border/70 bg-background px-3 py-1.5">
+                  <Switch checked={b.is_active} onCheckedChange={(v) => update(b.id, { is_active: v })} />
+                  <Label className="text-xs font-medium">{b.is_active ? "Ativo" : "Inativo"}</Label>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Button size="icon" variant="ghost" disabled={idx === 0} onClick={() => move(b, -1)}>
+                    <ArrowUp className="h-4 w-4" />
+                  </Button>
+                  <Button size="icon" variant="ghost" disabled={idx === (banners?.length ?? 0) - 1} onClick={() => move(b, 1)}>
+                    <ArrowDown className="h-4 w-4" />
+                  </Button>
+                  <Button size="icon" variant="ghost" onClick={() => remove(b.id)}>
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </div>
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Field label="Local">
-                <Select value={b.location} onValueChange={(v) => update(b.id, { location: v })}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="home">Home</SelectItem>
-                    <SelectItem value="canon">Marca: Canon</SelectItem>
-                    <SelectItem value="dji">Marca: DJI</SelectItem>
-                    <SelectItem value="sony">Marca: Sony</SelectItem>
-                    <SelectItem value="gopro">Marca: GoPro</SelectItem>
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field label="Tipo de mídia">
-                <Select value={b.media_type} onValueChange={(v) => update(b.id, { media_type: v })}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="image">Imagem</SelectItem>
-                    <SelectItem value="video">Vídeo</SelectItem>
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field label="Chapéu (eyebrow)">
-                <Input defaultValue={b.eyebrow ?? ""} onBlur={(e) => e.target.value !== (b.eyebrow ?? "") && update(b.id, { eyebrow: e.target.value })} />
-              </Field>
-              <Field label="Selo / badge">
-                <Input defaultValue={b.badge_text ?? ""} onBlur={(e) => e.target.value !== (b.badge_text ?? "") && update(b.id, { badge_text: e.target.value })} />
-              </Field>
-              <Field label="Título">
-                <Input defaultValue={b.title ?? ""} onBlur={(e) => e.target.value !== (b.title ?? "") && update(b.id, { title: e.target.value })} />
-              </Field>
-              <Field label="Destaque (em cor)">
-                <Input defaultValue={b.highlight ?? ""} onBlur={(e) => e.target.value !== (b.highlight ?? "") && update(b.id, { highlight: e.target.value })} />
-              </Field>
-              <div className="sm:col-span-2">
-                <Field label="Subtítulo">
-                  <Textarea defaultValue={b.subtitle ?? ""} rows={2} onBlur={(e) => e.target.value !== (b.subtitle ?? "") && update(b.id, { subtitle: e.target.value })} />
-                </Field>
-              </div>
-              <MediaUploadField
-                label="Imagem desktop"
-                value={b.desktop_image_url}
-                folder="banners"
-                onChange={(url) => update(b.id, { desktop_image_url: url })}
-              />
-              <MediaUploadField
-                label="Imagem mobile"
-                value={b.mobile_image_url}
-                folder="banners"
-                onChange={(url) => update(b.id, { mobile_image_url: url })}
-              />
-              {b.media_type === "video" && (
-                <div className="sm:col-span-2">
+            {/* distributed columns: media | content */}
+            <div className="grid gap-6 p-5 md:p-6 lg:grid-cols-[minmax(280px,0.85fr)_1.15fr]">
+              {/* left column — media */}
+              <div className="space-y-4">
+                <MediaUploadField
+                  label="Imagem desktop"
+                  value={b.desktop_image_url}
+                  folder="banners"
+                  onChange={(url) => update(b.id, { desktop_image_url: url })}
+                />
+                <MediaUploadField
+                  label="Imagem mobile"
+                  value={b.mobile_image_url}
+                  folder="banners"
+                  onChange={(url) => update(b.id, { mobile_image_url: url })}
+                />
+                {b.media_type === "video" && (
                   <MediaUploadField
                     label="Vídeo do banner"
                     value={b.video_url}
@@ -181,22 +160,76 @@ function BannersAdmin() {
                     accept="video/*"
                     onChange={(url) => update(b.id, { video_url: url })}
                   />
-                </div>
-              )}
-              <Field label="Botão principal — texto">
-                <Input defaultValue={b.primary_button_label ?? ""} onBlur={(e) => e.target.value !== (b.primary_button_label ?? "") && update(b.id, { primary_button_label: e.target.value })} />
-              </Field>
-              <Field label="Botão principal — link">
-                <Input defaultValue={b.primary_button_url ?? ""} onBlur={(e) => e.target.value !== (b.primary_button_url ?? "") && update(b.id, { primary_button_url: e.target.value })} />
-              </Field>
-              <Field label="Botão secundário — texto">
-                <Input defaultValue={b.secondary_button_label ?? ""} onBlur={(e) => e.target.value !== (b.secondary_button_label ?? "") && update(b.id, { secondary_button_label: e.target.value })} />
-              </Field>
-              <Field label="Botão secundário — link (vazio = orçamento)">
-                <Input defaultValue={b.secondary_button_url ?? ""} onBlur={(e) => e.target.value !== (b.secondary_button_url ?? "") && update(b.id, { secondary_button_url: e.target.value })} />
-              </Field>
-            </div>
+                )}
+              </div>
 
+              {/* right column — content */}
+              <div className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Local">
+                    <Select value={b.location} onValueChange={(v) => update(b.id, { location: v })}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="home">Home</SelectItem>
+                        <SelectItem value="canon">Marca: Canon</SelectItem>
+                        <SelectItem value="dji">Marca: DJI</SelectItem>
+                        <SelectItem value="sony">Marca: Sony</SelectItem>
+                        <SelectItem value="gopro">Marca: GoPro</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                  <Field label="Tipo de mídia">
+                    <Select value={b.media_type} onValueChange={(v) => update(b.id, { media_type: v })}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="image">Imagem</SelectItem>
+                        <SelectItem value="video">Vídeo</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                  <Field label="Chapéu (eyebrow)">
+                    <Input defaultValue={b.eyebrow ?? ""} onBlur={(e) => e.target.value !== (b.eyebrow ?? "") && update(b.id, { eyebrow: e.target.value })} />
+                  </Field>
+                  <Field label="Selo / badge">
+                    <Input defaultValue={b.badge_text ?? ""} onBlur={(e) => e.target.value !== (b.badge_text ?? "") && update(b.id, { badge_text: e.target.value })} />
+                  </Field>
+                  <Field label="Título">
+                    <Input defaultValue={b.title ?? ""} onBlur={(e) => e.target.value !== (b.title ?? "") && update(b.id, { title: e.target.value })} />
+                  </Field>
+                  <Field label="Destaque (em cor)">
+                    <Input defaultValue={b.highlight ?? ""} onBlur={(e) => e.target.value !== (b.highlight ?? "") && update(b.id, { highlight: e.target.value })} />
+                  </Field>
+                </div>
+
+                <Field label="Subtítulo">
+                  <Textarea defaultValue={b.subtitle ?? ""} rows={2} onBlur={(e) => e.target.value !== (b.subtitle ?? "") && update(b.id, { subtitle: e.target.value })} />
+                </Field>
+
+                <div className="rounded-2xl border border-border/60 bg-surface/50 p-4">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Botões de ação
+                  </p>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field label="Botão principal — texto">
+                      <Input defaultValue={b.primary_button_label ?? ""} onBlur={(e) => e.target.value !== (b.primary_button_label ?? "") && update(b.id, { primary_button_label: e.target.value })} />
+                    </Field>
+                    <Field label="Botão principal — link">
+                      <Input defaultValue={b.primary_button_url ?? ""} onBlur={(e) => e.target.value !== (b.primary_button_url ?? "") && update(b.id, { primary_button_url: e.target.value })} />
+                    </Field>
+                    <Field label="Botão secundário — texto">
+                      <Input defaultValue={b.secondary_button_label ?? ""} onBlur={(e) => e.target.value !== (b.secondary_button_label ?? "") && update(b.id, { secondary_button_label: e.target.value })} />
+                    </Field>
+                    <Field label="Botão secundário — link (vazio = orçamento)">
+                      <Input defaultValue={b.secondary_button_url ?? ""} onBlur={(e) => e.target.value !== (b.secondary_button_url ?? "") && update(b.id, { secondary_button_url: e.target.value })} />
+                    </Field>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         ))}
         {(banners ?? []).length === 0 && (
