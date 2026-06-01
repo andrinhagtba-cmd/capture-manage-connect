@@ -16,6 +16,7 @@ import {
 export const getProductSeo = createServerFn({ method: "GET" })
   .inputValidator((data: { slug: string }) => data)
   .handler(async ({ data }): Promise<ResolvedSeo | null> => {
+   try {
     const { data: product } = await supabaseAdmin
       .from("products")
       .select(
@@ -97,6 +98,10 @@ export const getProductSeo = createServerFn({ method: "GET" })
         settings?.default_twitter_card?.trim() || "summary_large_image",
       brandName: brand?.name ?? null,
     };
+   } catch (error) {
+     console.error("[getProductSeo] failed, falling back to default head", error);
+     return null;
+   }
   });
 
 async function loadSiteSettings() {
@@ -115,6 +120,7 @@ async function loadSiteSettings() {
 export const getBrandSeo = createServerFn({ method: "GET" })
   .inputValidator((data: { slug: string }) => data)
   .handler(async ({ data }): Promise<ResolvedSeo | null> => {
+   try {
     const { data: brand } = await supabaseAdmin
       .from("brands")
       .select("name, slug, description, hero_image_url, logo_url")
@@ -154,6 +160,10 @@ export const getBrandSeo = createServerFn({ method: "GET" })
         settings?.default_twitter_card?.trim() || "summary_large_image",
       brandName: brand.name,
     };
+   } catch (error) {
+     console.error("[getBrandSeo] failed, falling back to default head", error);
+     return null;
+   }
   });
 
 /** SEO/OG payload for a static site page (home/sobre/contato/etc.). */
