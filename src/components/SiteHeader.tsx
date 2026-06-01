@@ -8,6 +8,7 @@ import { COMPANY_NAME, BRAND_THEME } from "@/lib/site";
 import { useCompanySettings, useNavigationItems } from "@/lib/site-content";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import logoNlFull from "@/assets/logo-nl-full.png";
+import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
 import menuEquipment from "@/assets/menu-equipment.jpg";
 
 export function SiteHeader() {
@@ -99,7 +100,7 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-2 lg:flex">
           <QuoteDialog
-            trigger={<Button size="sm">Solicitar orçamento</Button>}
+            trigger={<LiquidMetalButton className="h-10 px-5 text-sm">Solicitar orçamento</LiquidMetalButton>}
           />
         </div>
 
@@ -166,9 +167,9 @@ export function SiteHeader() {
                 <div className="px-3 pt-4">
                   <QuoteDialog
                     trigger={
-                      <Button size="lg" className="w-full">
+                      <LiquidMetalButton className="h-12 w-full text-base">
                         Solicitar orçamento
-                      </Button>
+                      </LiquidMetalButton>
                     }
                   />
                 </div>
