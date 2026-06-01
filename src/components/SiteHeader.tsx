@@ -8,6 +8,7 @@ import { COMPANY_NAME, BRAND_THEME } from "@/lib/site";
 import { useCompanySettings, useNavigationItems } from "@/lib/site-content";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import logoNlFull from "@/assets/logo-nl-full.png";
+import menuEquipment from "@/assets/menu-equipment.jpg";
 
 export function SiteHeader() {
   const { data: brands } = useBrands();
@@ -121,6 +122,21 @@ export function SiteHeader() {
                 >
                   <X className="h-5 w-5" />
                 </Button>
+              </div>
+              <div className="relative aspect-video w-full overflow-hidden">
+                <img
+                  src={menuEquipment}
+                  alt="Equipamentos profissionais Canon, Sony, DJI e GoPro"
+                  loading="lazy"
+                  width={1280}
+                  height={720}
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+                <div className="absolute bottom-3 left-4 right-4">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">Linha completa</p>
+                  <p className="text-sm font-bold text-foreground">Canon · Sony · DJI · GoPro</p>
+                </div>
               </div>
               <div className="flex flex-col p-3">
                 <MobileLink to="/catalogo" onNav={() => setMobileOpen(false)}>
