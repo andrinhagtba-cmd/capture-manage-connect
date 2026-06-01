@@ -10,7 +10,6 @@ import { GoProShowcase } from "@/components/GoProShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { GridGlowBackground } from "@/components/ui/grid-glow-background";
 import { Button } from "@/components/ui/button";
-import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
 import { useBrands, useProducts } from "@/lib/catalog";
 import { useActiveHero, useHomeSections, type HomeSection } from "@/lib/site-content";
 import { BRAND_THEME, COMPANY_NAME } from "@/lib/site";
@@ -230,10 +229,16 @@ function Home() {
                 <div className="mt-10 flex justify-center animate-fade-in">
                   <QuoteDialog
                     trigger={
-                      <LiquidMetalButton className="group/btn h-12 px-8 text-base shadow-xl">
-                        Falar com um especialista
-                        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                      </LiquidMetalButton>
+                      <Button
+                        size="lg"
+                        variant="secondary"
+                        className="group/btn relative overflow-hidden shadow-xl transition-transform duration-300 hover:scale-[1.03]"
+                      >
+                        <span className="relative z-10 flex items-center gap-2">
+                          Falar com um especialista
+                          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                        </span>
+                      </Button>
                     }
                   />
                 </div>
