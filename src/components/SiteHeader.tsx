@@ -99,7 +99,7 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-2 lg:flex">
           <QuoteDialog
-            trigger={<Button size="sm" className="btn-glow">Solicitar orçamento</Button>}
+            trigger={<Button size="sm">Solicitar orçamento</Button>}
           />
         </div>
 
