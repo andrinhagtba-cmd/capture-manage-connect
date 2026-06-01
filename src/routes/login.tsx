@@ -24,6 +24,9 @@ export const Route = createFileRoute("/login")({
 function Login() {
   const navigate = useNavigate();
   const { session, isStaff, loading } = useAuth();
+  const { data: company } = useCompanySettings();
+  const companyName = company?.company_name || COMPANY_NAME;
+  const logoSrc = company?.logo_url || logoNlLight;
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
