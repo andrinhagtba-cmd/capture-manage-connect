@@ -59,17 +59,22 @@ function MenuAdmin() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Menu / Navegação</h1>
-          <p className="text-sm text-muted-foreground">
-            Links do menu principal (header). As marcas continuam no mega menu automático.
-          </p>
-        </div>
-        <Button onClick={add} className="gap-2">
-          <Plus className="h-4 w-4" /> Link
-        </Button>
-      </div>
+      <AdminPageHero
+        eyebrow="Conteúdo do Site"
+        title="Menu e Navegação"
+        subtitle="Controle links, mega menu, marcas e ações principais do cabeçalho."
+        icon={MenuIcon}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Menu / Navegação" }]}
+        metrics={[
+          { label: "Links", value: items?.length ?? 0, icon: MenuIcon },
+          { label: "Ativos", value: (items ?? []).filter((i) => i.is_active).length, icon: Eye, tone: "success" },
+        ]}
+        actions={
+          <Button onClick={add} className="gap-2 rounded-xl">
+            <Plus className="h-4 w-4" /> Novo link
+          </Button>
+        }
+      />
 
       <div className="space-y-3">
         {(items ?? []).map((item, idx) => (
