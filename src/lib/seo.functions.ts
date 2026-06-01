@@ -98,6 +98,10 @@ export const getProductSeo = createServerFn({ method: "GET" })
         settings?.default_twitter_card?.trim() || "summary_large_image",
       brandName: brand?.name ?? null,
     };
+   } catch (error) {
+     console.error("[getProductSeo] failed, falling back to default head", error);
+     return null;
+   }
   });
 
 async function loadSiteSettings() {
