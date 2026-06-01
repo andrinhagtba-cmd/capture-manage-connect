@@ -222,3 +222,24 @@
     background-position: -200% 0;
   }
 }
+
+/* Heavy condensed display font for CTAs / headlines (reference: GoPro hero) */
+.font-cta {
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@keyframes slow-zoom {
+  from {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1.18);
+  }
+}
+
+.animate-slow-zoom {
+  animation: slow-zoom 18s ease-in-out infinite alternate;
+}
