@@ -34,14 +34,14 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="container-page flex h-16 items-center justify-between gap-4">
+      <div className="container-page flex h-20 items-center justify-between gap-4 sm:h-24">
         <Link to="/" className="group flex items-center">
           <img
             src={logoNlFull}
             alt={companyName}
             width={1000}
             height={276}
-            className="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] sm:h-12"
+            className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] sm:h-16 lg:h-20"
           />
         </Link>
 
