@@ -40,8 +40,8 @@ export function SiteHeader() {
             src={logoNlFull}
             alt={companyName}
             width={1000}
-            height={215}
-            className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] sm:h-10"
+            height={276}
+            className="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] sm:h-12"
           />
         </Link>
 
