@@ -10,6 +10,7 @@ import { GoProShowcase } from "@/components/GoProShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { GridGlowBackground } from "@/components/ui/grid-glow-background";
 import { Button } from "@/components/ui/button";
+import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
 import { useBrands, useProducts } from "@/lib/catalog";
 import { useActiveHero, useHomeSections, type HomeSection } from "@/lib/site-content";
 import { BRAND_THEME, COMPANY_NAME } from "@/lib/site";
