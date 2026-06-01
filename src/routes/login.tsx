@@ -132,16 +132,53 @@ function Login() {
       </aside>
 
       {/* ===== Right: form ===== */}
-      <main className="relative flex items-center justify-center bg-background px-5 py-10 sm:px-8">
+      <main className="relative flex flex-col bg-background lg:items-center lg:justify-center lg:px-8 lg:py-10">
+        {/* mobile video hero */}
+        <div className="relative h-[42vh] min-h-[280px] w-full overflow-hidden lg:hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 h-full w-full object-cover animate-slow-zoom"
+          >
+            <source src="/videos/auth-brand.webm" type="video/webm" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-black/45 to-black/40" />
+
+          <Link
+            to="/"
+            className="absolute left-5 top-5 flex items-center gap-1.5 text-sm text-white/85 transition-colors hover:text-white"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Voltar ao site
+          </Link>
+
+          <div className="absolute inset-x-0 bottom-0 p-6">
+            <Link to="/" className="flex items-center gap-2.5">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink p-1.5">
+                <img src={logoSrc} alt={companyName} className="h-full w-full object-contain" />
+              </span>
+              <span className="text-base font-bold text-white">
+                {companyName.split(" ")[0]}{" "}
+                <span className="text-primary">{companyName.split(" ").slice(1).join(" ")}</span>
+              </span>
+            </Link>
+            <h2 className="font-cta mt-3 text-3xl leading-[0.95] text-white">
+              Gestão <span className="text-primary">profissional</span>
+            </h2>
+          </div>
+        </div>
+
         <Link
           to="/"
-          className="absolute left-5 top-6 flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground sm:left-8"
+          className="absolute left-8 top-6 hidden items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground lg:flex"
         >
           <ArrowLeft className="h-4 w-4" />
           Voltar ao site
         </Link>
 
-        <div className="w-full max-w-md animate-fade-up">
+        <div className="w-full max-w-md animate-fade-up px-5 py-8 sm:px-8 lg:p-0">
           {/* mobile brand */}
           <Link to="/" className="mb-8 flex items-center justify-center gap-2.5 lg:hidden">
             <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink p-1.5">
