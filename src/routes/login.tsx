@@ -5,8 +5,11 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Camera, Loader2, ArrowLeft, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { Loader2, ArrowLeft, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
+import { useCompanySettings } from "@/lib/site-content";
+import { COMPANY_NAME } from "@/lib/site";
+import logoNlLight from "@/assets/logo-nl-light.png";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -21,6 +24,9 @@ export const Route = createFileRoute("/login")({
 function Login() {
   const navigate = useNavigate();
   const { session, isStaff, loading } = useAuth();
+  const { data: company } = useCompanySettings();
+  const companyName = company?.company_name || COMPANY_NAME;
+  const logoSrc = company?.logo_url || logoNlLight;
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -82,11 +88,12 @@ function Login() {
         {/* top brand */}
         <div className="absolute inset-x-0 top-0 flex items-center justify-between p-10">
           <Link to="/" className="flex items-center gap-2.5">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-black">
-              <Camera className="h-5 w-5" />
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink p-1.5">
+              <img src={logoSrc} alt={companyName} className="h-full w-full object-contain" />
             </span>
             <span className="text-lg font-bold text-white">
-              NL <span className="text-primary">Foto e Vídeo</span>
+              {companyName.split(" ")[0]}{" "}
+              <span className="text-primary">{companyName.split(" ").slice(1).join(" ")}</span>
             </span>
           </Link>
           <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white/80 backdrop-blur">
@@ -136,12 +143,13 @@ function Login() {
 
         <div className="w-full max-w-md animate-fade-up">
           {/* mobile brand */}
-          <Link to="/" className="mb-8 flex items-center justify-center gap-2 lg:hidden">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-ink text-background">
-              <Camera className="h-5 w-5" />
+          <Link to="/" className="mb-8 flex items-center justify-center gap-2.5 lg:hidden">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink p-1.5">
+              <img src={logoSrc} alt={companyName} className="h-full w-full object-contain" />
             </span>
             <span className="text-xl font-bold">
-              NL <span className="text-primary">Foto e Vídeo</span>
+              {companyName.split(" ")[0]}{" "}
+              <span className="text-primary">{companyName.split(" ").slice(1).join(" ")}</span>
             </span>
           </Link>
 
