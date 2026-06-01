@@ -76,8 +76,10 @@ export const LiquidMetalButton = forwardRef<
       {...props}
     >
       <span ref={shaderRef} aria-hidden className="absolute inset-0" />
-      <span className="absolute inset-0 bg-black/20" aria-hidden />
-      <span className="relative z-10 flex items-center gap-2">{children}</span>
+      <span className="absolute inset-0 bg-black/45" aria-hidden />
+      <span className="relative z-10 flex items-center gap-2 [text-shadow:0_1px_2px_rgba(0,0,0,0.5)]">
+        {children}
+      </span>
     </button>
   );
 });
