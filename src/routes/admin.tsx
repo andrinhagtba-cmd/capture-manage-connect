@@ -65,6 +65,9 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
+import logoNlFull from "@/assets/logo-nl-full.png";
+import logoNlEmblem from "@/assets/logo-nl-emblem.png";
+
 type RoleGate = "any" | "admin" | "content";
 
 type NavItem = {
@@ -257,15 +260,13 @@ function AdminSidebar() {
     <Sidebar collapsible="icon" className="border-sidebar-border">
       <SidebarContent className="bg-sidebar">
         <div className="flex items-center gap-2.5 px-4 py-5">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-[#7a0f12] text-white shadow-lg shadow-primary/30">
-            <Camera className="h-[18px] w-[18px]" />
-          </span>
-          {!collapsed && (
-            <span className="leading-tight">
-              <span className="block text-sm font-bold text-sidebar-foreground">NL Foto e Vídeo</span>
-              <span className="block text-[10px] uppercase tracking-widest text-sidebar-foreground/40">
-                Painel Admin
-              </span>
+          {collapsed ? (
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-lg shadow-primary/20">
+              <img src={logoNlEmblem} alt="NL Foto e Vídeo" className="h-full w-full object-contain p-0.5" />
+            </span>
+          ) : (
+            <span className="flex w-full items-center justify-center rounded-xl bg-white px-3 py-2 shadow-lg shadow-primary/20">
+              <img src={logoNlFull} alt="NL Foto e Vídeo" className="h-7 w-auto object-contain" />
             </span>
           )}
         </div>
