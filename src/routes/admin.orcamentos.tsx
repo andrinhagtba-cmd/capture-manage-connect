@@ -19,7 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MessageCircle, Trash2 } from "lucide-react";
+import { MessageCircle, Trash2, MessageSquareQuote, Inbox, CheckCircle2 } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/orcamentos")({
@@ -79,12 +80,20 @@ function Orcamentos() {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold tracking-tight">Orçamentos</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Solicitações recebidas pelo site.
-      </p>
-      <div className="mt-5 overflow-x-auto rounded-xl border border-border bg-card">
+    <div className="space-y-6">
+      <AdminPageHero
+        eyebrow="Visão Geral"
+        title="Orçamentos"
+        subtitle="Atenda clientes, acompanhe interesses e converta solicitações em vendas."
+        icon={MessageSquareQuote}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Orçamentos" }]}
+        metrics={[
+          { label: "Total", value: data?.length ?? 0, icon: MessageSquareQuote },
+          { label: "Novos", value: (data ?? []).filter((q: any) => q.status === "novo").length, icon: Inbox, tone: "info" },
+          { label: "Fechados", value: (data ?? []).filter((q: any) => q.status === "fechado").length, icon: CheckCircle2, tone: "success" },
+        ]}
+      />
+      <div className="overflow-x-auto rounded-xl border border-border bg-card">
         <Table>
           <TableHeader>
             <TableRow>

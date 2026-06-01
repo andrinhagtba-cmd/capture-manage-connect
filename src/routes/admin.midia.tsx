@@ -30,6 +30,7 @@ import {
   Pencil,
 } from "lucide-react";
 import { toast } from "sonner";
+import { AdminPageHero } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/midia")({
   component: MidiaAdmin,
@@ -127,15 +128,36 @@ function MidiaAdmin() {
     toast.success("URL copiada");
   }
 
+  const totalAssets = assets?.length ?? 0;
+  const imgCount = (assets ?? []).filter((a) => a.media_type === "image").length;
+  const vidCount = (assets ?? []).filter((a) => a.media_type === "video").length;
+
   return (
     <div className="space-y-6">
+      <AdminPageHero
+        eyebrow="Conteúdo do Site"
+        title="Biblioteca de Mídia"
+        subtitle="Gerencie imagens, vídeos, logos, banners e arquivos usados no site."
+        icon={ImageIcon}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Biblioteca de Mídia" }]}
+        metrics={[
+          { label: "Arquivos", value: totalAssets, icon: ImageIcon },
+          { label: "Imagens", value: imgCount, icon: ImageIcon, tone: "info" },
+          { label: "Vídeos", value: vidCount, icon: Film, tone: "primary" },
+        ]}
+        actions={
+          <Button
+            onClick={() => fileRef.current?.click()}
+            disabled={uploading}
+            className="gap-2 rounded-xl"
+          >
+            {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+            Enviar mídia
+          </Button>
+        }
+      />
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold">Biblioteca de Mídia</h1>
-          <p className="text-sm text-muted-foreground">
-            Envie e gerencie imagens e vídeos usados no site.
-          </p>
-        </div>
+        <p className="text-sm text-muted-foreground">Filtre por pasta para organizar seus arquivos.</p>
         <div className="flex items-center gap-2">
           <Select value={folder} onValueChange={setFolder}>
             <SelectTrigger className="w-40">

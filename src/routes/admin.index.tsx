@@ -38,8 +38,10 @@ import {
   Layers,
   ArrowUpRight,
   Inbox,
+  LayoutDashboard,
   type LucideIcon,
 } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/")({
   component: Dashboard,
@@ -138,32 +140,38 @@ function Dashboard() {
   ];
 
   return (
-    <div className="animate-fade-up space-y-6">
-      {/* Header */}
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="eyebrow text-primary">Central executiva</p>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight md:text-3xl">Dashboard</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Desempenho da NL Foto e Vídeo · {PERIOD_LABELS[period].toLowerCase()}.
-          </p>
-        </div>
-        <div className="flex items-center gap-1 rounded-xl border border-border bg-card p-1 shadow-sm">
-          {(["7d", "30d", "90d"] as DashboardPeriod[]).map((p) => (
-            <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-all ${
-                period === p
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
-            >
-              {p === "7d" ? "7 dias" : p === "30d" ? "30 dias" : "90 dias"}
-            </button>
-          ))}
-        </div>
-      </div>
+    <div className="space-y-6">
+      <AdminPageHero
+        eyebrow="Central executiva"
+        title="Painel de Controle"
+        subtitle="Acompanhe acessos, produtos, leads, orçamentos e desempenho do catálogo em tempo real."
+        icon={LayoutDashboard}
+        breadcrumb={[{ label: "Admin" }, { label: "Dashboard" }]}
+        metrics={[
+          { label: "Visitantes", value: kpis?.visitors ?? 0, icon: Users },
+          { label: "Orçamentos", value: kpis?.quotes ?? 0, icon: MessageSquareQuote, tone: "primary" },
+          { label: "Views de produtos", value: kpis?.productViews ?? 0, icon: Package, tone: "info" },
+          { label: "Conversão", value: `${kpis?.conversion ?? 0}%`, icon: TrendingUp, tone: "success" },
+        ]}
+        actions={
+          <div className="flex items-center gap-1 rounded-xl border border-white/15 bg-white/5 p-1">
+            {(["7d", "30d", "90d"] as DashboardPeriod[]).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-all ${
+                  period === p
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-white/60 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                {p === "7d" ? "7 dias" : p === "30d" ? "30 dias" : "90 dias"}
+              </button>
+            ))}
+          </div>
+        }
+      />
+      <p className="sr-only">{PERIOD_LABELS[period]}</p>
 
       {data?.isSample && (
         <div className="flex items-start gap-3 rounded-2xl border border-dashed border-primary/40 bg-primary/5 p-4">

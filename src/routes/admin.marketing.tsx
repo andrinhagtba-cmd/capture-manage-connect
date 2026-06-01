@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Loader2, Facebook, BarChart3, Megaphone, Tag, ShieldCheck } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/marketing")({
   component: Marketing,
@@ -83,19 +84,20 @@ function Marketing() {
   }
 
   return (
-    <div className="max-w-4xl">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Marketing e Rastreamento</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Configure pixels, conversões e consentimento LGPD do site.
-          </p>
-        </div>
-        <Button onClick={save} disabled={saving}>
-          {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Salvar alterações
-        </Button>
-      </div>
+    <div className="max-w-4xl space-y-6">
+      <AdminPageHero
+        eyebrow="Marketing"
+        title="Marketing e Pixels"
+        subtitle="Configure rastreamento, anúncios, analytics e consentimento LGPD do site."
+        icon={Megaphone}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Marketing e Pixels" }]}
+        actions={
+          <Button onClick={save} disabled={saving} className="gap-2 rounded-xl">
+            {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+            Salvar alterações
+          </Button>
+        }
+      />
 
       <Tabs defaultValue="meta" className="mt-6">
         <TabsList className="flex flex-wrap">

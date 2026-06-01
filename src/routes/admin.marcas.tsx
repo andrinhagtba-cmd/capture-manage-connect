@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Loader2 } from "lucide-react";
+import { Loader2, Tag, Eye } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/marcas")({
@@ -45,13 +46,17 @@ function MarcasAdmin() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Páginas de Marca</h1>
-        <p className="text-sm text-muted-foreground">
-          Textos de introdução, botões, SEO e visibilidade de cada página de marca. O hero/vídeo de cada
-          marca é configurado na aba Banners e Heros (selecione o "Local" da marca).
-        </p>
-      </div>
+      <AdminPageHero
+        eyebrow="Catálogo"
+        title="Páginas de Marca"
+        subtitle="Gerencie a identidade, textos, botões e SEO das páginas dedicadas de Canon, DJI, Sony e GoPro."
+        icon={Tag}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Páginas de Marca" }]}
+        metrics={[
+          { label: "Marcas", value: pages?.length ?? 0, icon: Tag },
+          { label: "Publicadas", value: (pages ?? []).filter((p) => p.is_published).length, icon: Eye, tone: "success" },
+        ]}
+      />
 
       <div className="space-y-4">
         {(pages ?? []).map((p) => (

@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Save } from "lucide-react";
+import { Loader2, Save, Building2 } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/empresa")({
@@ -128,18 +129,19 @@ function EmpresaAdmin() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Configurações da Empresa</h1>
-          <p className="text-sm text-muted-foreground">
-            Dados institucionais usados em todo o site (header, footer, contato).
-          </p>
-        </div>
-        <Button onClick={save} disabled={saving} className="gap-2">
-          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          Salvar
-        </Button>
-      </div>
+      <AdminPageHero
+        eyebrow="Configurações"
+        title="Configurações da Empresa"
+        subtitle="Centralize os dados institucionais usados no site, footer, contato e WhatsApp."
+        icon={Building2}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Configurações da Empresa" }]}
+        actions={
+          <Button onClick={save} disabled={saving} className="gap-2 rounded-xl">
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            Salvar
+          </Button>
+        }
+      />
 
       <Section title="Identidade">
         {FIELDS_TEXT.map((f) => (

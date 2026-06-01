@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, ArrowUp, ArrowDown } from "lucide-react";
+import { Loader2, ArrowUp, ArrowDown, Home as HomeIcon, Eye } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/home")({
@@ -61,12 +62,17 @@ function HomeAdmin() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Home Page</h1>
-        <p className="text-sm text-muted-foreground">
-          Ligue/desligue, reordene e edite os textos das seções da página inicial. O hero é gerenciado na aba Banners e Heros.
-        </p>
-      </div>
+      <AdminPageHero
+        eyebrow="Conteúdo do Site"
+        title="Home Page"
+        subtitle="Monte a página inicial com seções, vídeos, marcas, produtos em destaque e chamadas premium."
+        icon={HomeIcon}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Home Page" }]}
+        metrics={[
+          { label: "Seções", value: sections?.length ?? 0, icon: HomeIcon },
+          { label: "Ativas", value: (sections ?? []).filter((s) => s.is_active).length, icon: Eye, tone: "success" },
+        ]}
+      />
 
       <div className="space-y-3">
         {(sections ?? []).map((s, idx) => (

@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth, type AppRole } from "@/hooks/use-auth";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Loader2, ShieldAlert } from "lucide-react";
+import { Loader2, ShieldAlert, UserCog } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/usuarios")({
@@ -99,13 +100,14 @@ function UsuariosAdmin() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Usuários e Permissões</h1>
-        <p className="text-sm text-muted-foreground">
-          Defina o papel de cada usuário. Administrador edita tudo; Editor cuida
-          do conteúdo; Vendedor acessa apenas leads e orçamentos.
-        </p>
-      </div>
+      <AdminPageHero
+        eyebrow="Configurações"
+        title="Usuários e Permissões"
+        subtitle="Gerencie acessos, cargos e permissões da equipe. Administrador edita tudo; Editor cuida do conteúdo; Vendedor acessa leads e orçamentos."
+        icon={UserCog}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Usuários" }]}
+        metrics={[{ label: "Usuários", value: users?.length ?? 0, icon: UserCog }]}
+      />
 
       <div className="space-y-4">
         {(users ?? []).map((u) => (

@@ -7,7 +7,8 @@ import {
 } from "@/lib/products-admin";
 import { CategoriesManager } from "@/components/admin/CategoriesManager";
 import { Button } from "@/components/ui/button";
-import { Tags, ExternalLink, ArrowRight, Package, Loader2 } from "lucide-react";
+import { Tags, ExternalLink, ArrowRight, Package, Loader2, Boxes, Star, ImageOff } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/produtos/")({
   component: ProdutosAdmin,
@@ -54,34 +55,32 @@ function ProdutosAdmin() {
   );
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Produtos</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Escolha uma marca para gerenciar suas categorias e produtos.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" className="gap-2" onClick={() => setCatsOpen(true)}>
-            <Tags className="h-4 w-4" /> Gerenciar categorias
-          </Button>
-          <Button asChild variant="ghost" className="gap-2">
-            <Link to="/catalogo" target="_blank">
-              Ver catálogo público <ExternalLink className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </div>
-
-      {/* Global overview */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
-        <StatCard label="Produtos no total" value={stats.total} />
-        <StatCard label="Ativos" value={stats.active} tone="ok" />
-        <StatCard label="Em destaque" value={stats.featured} tone="amber" />
-        <StatCard label="Sem imagem" value={stats.noImage} tone="warn" />
-        <StatCard label="Sem categoria" value={stats.noCat} tone="warn" />
-      </div>
+    <div className="space-y-6">
+      <AdminPageHero
+        eyebrow="Catálogo"
+        title="Catálogo de Produtos"
+        subtitle="Organize produtos por marca, categoria, mídia, disponibilidade e destaque."
+        icon={Package}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Produtos" }]}
+        metrics={[
+          { label: "Total de produtos", value: stats.total, icon: Package },
+          { label: "Ativos", value: stats.active, icon: Boxes, tone: "success" },
+          { label: "Em destaque", value: stats.featured, icon: Star, tone: "warning" },
+          { label: "Sem imagem", value: stats.noImage, icon: ImageOff, tone: stats.noImage > 0 ? "primary" : "default" },
+        ]}
+        actions={
+          <>
+            <Button variant="secondary" className="gap-2 rounded-xl" onClick={() => setCatsOpen(true)}>
+              <Tags className="h-4 w-4" /> Categorias
+            </Button>
+            <Button asChild variant="outline" className="gap-2 rounded-xl border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white">
+              <Link to="/catalogo" target="_blank">
+                Ver catálogo <ExternalLink className="h-4 w-4" />
+              </Link>
+            </Button>
+          </>
+        }
+      />
 
       {/* Level 1 — Brand cards */}
       <div>
@@ -155,24 +154,7 @@ function ProdutosAdmin() {
   );
 }
 
-function StatCard({ label, value, tone }: { label: string; value: number; tone?: string }) {
-  const c =
-    tone === "ok"
-      ? "text-emerald-600"
-      : tone === "amber"
-        ? "text-amber-600"
-        : tone === "warn"
-          ? value > 0
-            ? "text-destructive"
-            : "text-foreground"
-          : "text-foreground";
-  return (
-    <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={`mt-1 text-2xl font-bold ${c}`}>{value}</p>
-    </div>
-  );
-}
+
 
 function Mini({ label, value }: { label: string; value: number }) {
   return (

@@ -18,7 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MessageCircle, Trash2 } from "lucide-react";
+import { MessageCircle, Trash2, Users, Inbox, CheckCircle2 } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/leads")({
@@ -62,12 +63,20 @@ function Leads() {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold tracking-tight">Leads / CRM</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Contatos captados pelo site e formulários.
-      </p>
-      <div className="mt-5 overflow-x-auto rounded-xl border border-border bg-card">
+    <div className="space-y-6">
+      <AdminPageHero
+        eyebrow="Visão Geral"
+        title="Leads e CRM"
+        subtitle="Acompanhe contatos captados pelo site, qualifique interesses e converta em vendas."
+        icon={Users}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Leads / CRM" }]}
+        metrics={[
+          { label: "Total", value: data?.length ?? 0, icon: Users },
+          { label: "Novos", value: (data ?? []).filter((l: any) => l.status === "novo").length, icon: Inbox, tone: "info" },
+          { label: "Convertidos", value: (data ?? []).filter((l: any) => l.status === "convertido").length, icon: CheckCircle2, tone: "success" },
+        ]}
+      />
+      <div className="overflow-x-auto rounded-xl border border-border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
