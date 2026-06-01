@@ -19,8 +19,12 @@ import placeholder from "@/assets/product-placeholder.jpg";
 
 export const Route = createFileRoute("/produto/$slug")({
   loader: async ({ params }) => {
-    const seo = await getProductSeo({ data: { slug: params.slug } });
-    return { seo };
+    try {
+      const seo = await getProductSeo({ data: { slug: params.slug } });
+      return { seo };
+    } catch {
+      return { seo: null };
+    }
   },
   head: ({ params, loaderData }) => {
     const seo = loaderData?.seo;
