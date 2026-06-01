@@ -45,13 +45,17 @@ function PaginasAdmin() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Páginas do Site</h1>
-        <p className="text-sm text-muted-foreground">
-          Edite o conteúdo institucional, o SEO (título, descrição, imagem de
-          compartilhamento) e o status de cada página.
-        </p>
-      </div>
+      <AdminPageHero
+        eyebrow="Conteúdo do Site"
+        title="Páginas do Site"
+        subtitle="Edite conteúdos, SEO, banners e seções das páginas públicas."
+        icon={FileText}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Páginas do Site" }]}
+        metrics={[
+          { label: "Páginas", value: pages?.length ?? 0, icon: FileText },
+          { label: "Publicadas", value: (pages ?? []).filter((p) => p.is_published).length, icon: Eye, tone: "success" },
+        ]}
+      />
 
       <div className="space-y-4">
         {(pages ?? []).map((p) => (
