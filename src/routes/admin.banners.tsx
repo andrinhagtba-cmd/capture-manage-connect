@@ -159,17 +159,28 @@ function BannersAdmin() {
                   <Textarea defaultValue={b.subtitle ?? ""} rows={2} onBlur={(e) => e.target.value !== (b.subtitle ?? "") && update(b.id, { subtitle: e.target.value })} />
                 </Field>
               </div>
-              <Field label="Imagem desktop (URL)">
-                <Input defaultValue={b.desktop_image_url ?? ""} onBlur={(e) => e.target.value !== (b.desktop_image_url ?? "") && update(b.id, { desktop_image_url: e.target.value })} />
-              </Field>
-              <Field label="Imagem mobile (URL)">
-                <Input defaultValue={b.mobile_image_url ?? ""} onBlur={(e) => e.target.value !== (b.mobile_image_url ?? "") && update(b.id, { mobile_image_url: e.target.value })} />
-              </Field>
+              <MediaUploadField
+                label="Imagem desktop"
+                value={b.desktop_image_url}
+                folder="banners"
+                onChange={(url) => update(b.id, { desktop_image_url: url })}
+              />
+              <MediaUploadField
+                label="Imagem mobile"
+                value={b.mobile_image_url}
+                folder="banners"
+                onChange={(url) => update(b.id, { mobile_image_url: url })}
+              />
               {b.media_type === "video" && (
                 <div className="sm:col-span-2">
-                  <Field label="Vídeo (URL)">
-                    <Input defaultValue={b.video_url ?? ""} onBlur={(e) => e.target.value !== (b.video_url ?? "") && update(b.id, { video_url: e.target.value })} />
-                  </Field>
+                  <MediaUploadField
+                    label="Vídeo do banner"
+                    value={b.video_url}
+                    folder="videos"
+                    kind="video"
+                    accept="video/*"
+                    onChange={(url) => update(b.id, { video_url: url })}
+                  />
                 </div>
               )}
               <Field label="Botão principal — texto">
