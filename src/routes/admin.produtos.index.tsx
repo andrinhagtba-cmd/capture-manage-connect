@@ -154,24 +154,7 @@ function ProdutosAdmin() {
   );
 }
 
-function StatCard({ label, value, tone }: { label: string; value: number; tone?: string }) {
-  const c =
-    tone === "ok"
-      ? "text-emerald-600"
-      : tone === "amber"
-        ? "text-amber-600"
-        : tone === "warn"
-          ? value > 0
-            ? "text-destructive"
-            : "text-foreground"
-          : "text-foreground";
-  return (
-    <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={`mt-1 text-2xl font-bold ${c}`}>{value}</p>
-    </div>
-  );
-}
+
 
 function Mini({ label, value }: { label: string; value: number }) {
   return (
