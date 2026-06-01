@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth, type AppRole } from "@/hooks/use-auth";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Loader2, ShieldAlert } from "lucide-react";
+import { Loader2, ShieldAlert, UserCog } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/usuarios")({
