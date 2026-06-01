@@ -88,11 +88,12 @@ function Login() {
         {/* top brand */}
         <div className="absolute inset-x-0 top-0 flex items-center justify-between p-10">
           <Link to="/" className="flex items-center gap-2.5">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-black">
-              <Camera className="h-5 w-5" />
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink p-1.5">
+              <img src={logoSrc} alt={companyName} className="h-full w-full object-contain" />
             </span>
             <span className="text-lg font-bold text-white">
-              NL <span className="text-primary">Foto e Vídeo</span>
+              {companyName.split(" ")[0]}{" "}
+              <span className="text-primary">{companyName.split(" ").slice(1).join(" ")}</span>
             </span>
           </Link>
           <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white/80 backdrop-blur">
