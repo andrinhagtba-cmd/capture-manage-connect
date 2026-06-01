@@ -16,6 +16,7 @@ import {
 export const getProductSeo = createServerFn({ method: "GET" })
   .inputValidator((data: { slug: string }) => data)
   .handler(async ({ data }): Promise<ResolvedSeo | null> => {
+   try {
     const { data: product } = await supabaseAdmin
       .from("products")
       .select(
