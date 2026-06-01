@@ -56,8 +56,12 @@ const GOPRO_LINES: { title: string; desc: string; cat: string; image: string }[]
 
 export const Route = createFileRoute("/marca/$slug")({
   loader: async ({ params }) => {
-    const seo = await getBrandSeo({ data: { slug: params.slug } });
-    return { seo };
+    try {
+      const seo = await getBrandSeo({ data: { slug: params.slug } });
+      return { seo };
+    } catch {
+      return { seo: null };
+    }
   },
   head: ({ params, loaderData }) => {
     const seo = loaderData?.seo;
