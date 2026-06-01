@@ -99,7 +99,7 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-2 lg:flex">
           <QuoteDialog
-            trigger={<Button size="sm" className="btn-glow">Solicitar orçamento</Button>}
+            trigger={<Button size="sm">Solicitar orçamento</Button>}
           />
         </div>
 
@@ -166,7 +166,7 @@ export function SiteHeader() {
                 <div className="px-3 pt-4">
                   <QuoteDialog
                     trigger={
-                      <Button size="lg" className="btn-glow w-full">
+                      <Button size="lg" className="w-full">
                         Solicitar orçamento
                       </Button>
                     }
