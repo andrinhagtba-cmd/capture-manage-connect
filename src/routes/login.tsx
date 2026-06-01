@@ -179,17 +179,6 @@ function Login() {
         </Link>
 
         <div className="w-full max-w-md animate-fade-up px-5 py-8 sm:px-8 lg:p-0">
-          {/* mobile brand */}
-          <Link to="/" className="mb-8 flex items-center justify-center gap-2.5 lg:hidden">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-ink p-1.5">
-              <img src={logoSrc} alt={companyName} className="h-full w-full object-contain" />
-            </span>
-            <span className="text-xl font-bold">
-              {companyName.split(" ")[0]}{" "}
-              <span className="text-primary">{companyName.split(" ").slice(1).join(" ")}</span>
-            </span>
-          </Link>
-
           <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted-foreground">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
             {mode === "login" ? "Acesso restrito" : "Novo acesso"}
