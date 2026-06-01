@@ -8,7 +8,6 @@ import {
 import { CategoriesManager } from "@/components/admin/CategoriesManager";
 import { Button } from "@/components/ui/button";
 import { Tags, ExternalLink, ArrowRight, Package, Loader2, Boxes, Star, ImageOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { AdminPageHero } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/produtos/")({
