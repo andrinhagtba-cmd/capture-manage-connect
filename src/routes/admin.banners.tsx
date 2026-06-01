@@ -76,17 +76,23 @@ function BannersAdmin() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Banners e Heros</h1>
-          <p className="text-sm text-muted-foreground">
-            Gerencie os heros da home e de marcas. Cole URLs de imagens/vídeos da Biblioteca de Mídia.
-          </p>
-        </div>
-        <Button onClick={add} className="gap-2">
-          <Plus className="h-4 w-4" /> Banner
-        </Button>
-      </div>
+      <AdminPageHero
+        eyebrow="Conteúdo do Site"
+        title="Banners e Heros"
+        subtitle="Controle os banners principais, vídeos e chamadas visuais de cada página do site."
+        icon={GalleryHorizontalEnd}
+        breadcrumb={[{ label: "Admin", to: "/admin" }, { label: "Banners e Heros" }]}
+        metrics={[
+          { label: "Banners", value: banners?.length ?? 0, icon: GalleryHorizontalEnd },
+          { label: "Ativos", value: (banners ?? []).filter((b) => b.is_active).length, icon: Eye, tone: "success" },
+          { label: "Com vídeo", value: (banners ?? []).filter((b) => b.media_type === "video").length, icon: Film, tone: "info" },
+        ]}
+        actions={
+          <Button onClick={add} className="gap-2 rounded-xl">
+            <Plus className="h-4 w-4" /> Novo banner
+          </Button>
+        }
+      />
 
       <div className="space-y-4">
         {(banners ?? []).map((b, idx) => (
