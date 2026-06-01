@@ -19,7 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MessageCircle, Trash2 } from "lucide-react";
+import { MessageCircle, Trash2, MessageSquareQuote, Inbox, CheckCircle2 } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/orcamentos")({
