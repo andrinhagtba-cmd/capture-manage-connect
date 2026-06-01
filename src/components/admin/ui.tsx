@@ -1,7 +1,21 @@
 import { Link } from "@tanstack/react-router";
-import { type ReactNode } from "react";
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { useRef, useState, type ReactNode } from "react";
+import {
+  ChevronRight,
+  ImageIcon,
+  LayoutGrid,
+  Loader2,
+  Table as TableIcon,
+  Trash2,
+  Upload,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { uploadToMedia } from "@/lib/products-admin";
+import { toast } from "sonner";
 
 /* ----------------------------------------------------------------- Page Hero */
 
@@ -312,6 +326,142 @@ export function EmptyStatePremium({
         <p className="mt-1 max-w-sm text-sm text-muted-foreground">{description}</p>
       )}
       {action && <div className="mt-5">{action}</div>}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------- Media Upload */
+
+export function MediaUploadField({
+  label,
+  value,
+  onChange,
+  folder = "geral",
+  accept = "image/*",
+  kind = "image",
+  hint,
+  aspect = "aspect-video",
+}: {
+  label: string;
+  value: string | null | undefined;
+  onChange: (url: string) => void;
+  folder?: string;
+  accept?: string;
+  kind?: "image" | "video";
+  hint?: string;
+  aspect?: string;
+}) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [drag, setDrag] = useState(false);
+
+  async function handleFile(file?: File) {
+    if (!file) return;
+    setBusy(true);
+    try {
+      const url = await uploadToMedia(file, folder);
+      onChange(url);
+      toast.success("Arquivo enviado");
+    } catch (e) {
+      toast.error((e as Error).message ?? "Falha no upload");
+    } finally {
+      setBusy(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  return (
+    <div className="space-y-1.5">
+      <Label className="text-sm">{label}</Label>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        className="hidden"
+        onChange={(e) => handleFile(e.target.files?.[0])}
+      />
+
+      {value ? (
+        <div className={cn("group relative overflow-hidden rounded-xl border border-border bg-surface", aspect)}>
+          {kind === "video" ? (
+            <video src={value} className="h-full w-full object-cover" muted playsInline />
+          ) : (
+            <img src={value} alt="" className="h-full w-full object-cover" />
+          )}
+          <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/45 opacity-0 transition-opacity group-hover:opacity-100">
+            <Button type="button" size="sm" variant="secondary" className="gap-1.5 rounded-lg" onClick={() => inputRef.current?.click()} disabled={busy}>
+              {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
+              Trocar
+            </Button>
+            <Button type="button" size="sm" variant="destructive" className="gap-1.5 rounded-lg" onClick={() => onChange("")} disabled={busy}>
+              <Trash2 className="h-3.5 w-3.5" /> Remover
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+          onDragLeave={() => setDrag(false)}
+          onDrop={(e) => { e.preventDefault(); setDrag(false); handleFile(e.dataTransfer.files?.[0]); }}
+          className={cn(
+            "flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed bg-surface/50 px-4 py-7 text-center transition-colors",
+            drag ? "border-primary bg-primary/5" : "border-border hover:border-primary/50",
+            aspect,
+          )}
+        >
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : kind === "video" ? <Upload className="h-5 w-5" /> : <ImageIcon className="h-5 w-5" />}
+          </span>
+          <span className="text-sm font-medium">{busy ? "Enviando…" : "Clique ou arraste para enviar"}</span>
+          <span className="text-xs text-muted-foreground">{hint ?? (kind === "video" ? "MP4, WEBM" : "JPG, PNG, WEBP")}</span>
+        </button>
+      )}
+
+      <Input
+        value={value ?? ""}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="ou cole uma URL…"
+        className="mt-1 text-xs"
+      />
+    </div>
+  );
+}
+
+/* --------------------------------------------------------------- View Toggle */
+
+export type AdminView = "cards" | "table";
+
+export function ViewToggle({
+  view,
+  onChange,
+}: {
+  view: AdminView;
+  onChange: (v: AdminView) => void;
+}) {
+  return (
+    <div className="inline-flex items-center gap-1 rounded-xl border border-border bg-card p-1">
+      <button
+        type="button"
+        onClick={() => onChange("cards")}
+        className={cn(
+          "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+          view === "cards" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+        )}
+      >
+        <LayoutGrid className="h-3.5 w-3.5" /> Cards
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange("table")}
+        className={cn(
+          "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+          view === "table" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+        )}
+      >
+        <TableIcon className="h-3.5 w-3.5" /> Tabela
+      </button>
     </div>
   );
 }

@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, Plus, Trash2, ArrowUp, ArrowDown, GalleryHorizontalEnd, Eye, Film } from "lucide-react";
-import { AdminPageHero } from "@/components/admin/ui";
+import { AdminPageHero, MediaUploadField, EmptyStatePremium } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/banners")({
@@ -159,17 +159,28 @@ function BannersAdmin() {
                   <Textarea defaultValue={b.subtitle ?? ""} rows={2} onBlur={(e) => e.target.value !== (b.subtitle ?? "") && update(b.id, { subtitle: e.target.value })} />
                 </Field>
               </div>
-              <Field label="Imagem desktop (URL)">
-                <Input defaultValue={b.desktop_image_url ?? ""} onBlur={(e) => e.target.value !== (b.desktop_image_url ?? "") && update(b.id, { desktop_image_url: e.target.value })} />
-              </Field>
-              <Field label="Imagem mobile (URL)">
-                <Input defaultValue={b.mobile_image_url ?? ""} onBlur={(e) => e.target.value !== (b.mobile_image_url ?? "") && update(b.id, { mobile_image_url: e.target.value })} />
-              </Field>
+              <MediaUploadField
+                label="Imagem desktop"
+                value={b.desktop_image_url}
+                folder="banners"
+                onChange={(url) => update(b.id, { desktop_image_url: url })}
+              />
+              <MediaUploadField
+                label="Imagem mobile"
+                value={b.mobile_image_url}
+                folder="banners"
+                onChange={(url) => update(b.id, { mobile_image_url: url })}
+              />
               {b.media_type === "video" && (
                 <div className="sm:col-span-2">
-                  <Field label="Vídeo (URL)">
-                    <Input defaultValue={b.video_url ?? ""} onBlur={(e) => e.target.value !== (b.video_url ?? "") && update(b.id, { video_url: e.target.value })} />
-                  </Field>
+                  <MediaUploadField
+                    label="Vídeo do banner"
+                    value={b.video_url}
+                    folder="videos"
+                    kind="video"
+                    accept="video/*"
+                    onChange={(url) => update(b.id, { video_url: url })}
+                  />
                 </div>
               )}
               <Field label="Botão principal — texto">
@@ -186,15 +197,19 @@ function BannersAdmin() {
               </Field>
             </div>
 
-            {b.desktop_image_url && (
-              <img src={b.desktop_image_url} alt="" className="mt-4 h-32 w-full rounded-lg object-cover" />
-            )}
           </div>
         ))}
         {(banners ?? []).length === 0 && (
-          <p className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-            Nenhum banner ainda. Clique em "Banner" para criar.
-          </p>
+          <EmptyStatePremium
+            icon={GalleryHorizontalEnd}
+            title="Nenhum banner ainda"
+            description="Crie o primeiro banner para destacar campanhas, marcas e vídeos no topo do site."
+            action={
+              <Button onClick={add} className="gap-2 rounded-xl">
+                <Plus className="h-4 w-4" /> Novo banner
+              </Button>
+            }
+          />
         )}
       </div>
     </div>
