@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { Loader2, Plus, Trash2, ArrowUp, ArrowDown, Menu as MenuIcon, Eye } from "lucide-react";
+import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/menu")({
