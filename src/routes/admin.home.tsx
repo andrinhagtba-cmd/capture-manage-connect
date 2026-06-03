@@ -17,6 +17,7 @@ export const Route = createFileRoute("/admin/home")({
 
 const SECTION_LABELS: Record<string, string> = {
   brands: "Marcas (grade de cards)",
+  premium: "Produto Premium em Destaque",
   features: "Por que comprar (diferenciais)",
   drones: "Vitrine Drones / DJI",
   canon: "Vitrine Canon",
