@@ -105,7 +105,7 @@ export function useCategoryProducts(categorySlug: string) {
         .eq("is_active", true)
         .eq("categories.slug", categorySlug)
         .order("is_featured", { ascending: false })
-        .order("name");
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data as unknown as Product[];
     },
@@ -122,7 +122,7 @@ export function useCategoriesProducts(categorySlugs: string[]) {
         .eq("is_active", true)
         .in("categories.slug", categorySlugs)
         .order("is_featured", { ascending: false })
-        .order("name");
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data as unknown as Product[];
     },
