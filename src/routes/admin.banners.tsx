@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Plus, Trash2, ArrowUp, ArrowDown, GalleryHorizontalEnd, Eye, Film, ImageOff, Home, Star } from "lucide-react";
+import { Loader2, Plus, Trash2, ArrowUp, ArrowDown, GalleryHorizontalEnd, Eye, Film, ImageOff, Home, Star, Save } from "lucide-react";
 import { AdminPageHero, MediaUploadField, EmptyStatePremium } from "@/components/admin/ui";
 import { toast } from "sonner";
 
