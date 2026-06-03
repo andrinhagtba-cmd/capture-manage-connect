@@ -149,8 +149,37 @@ function BannersAdmin() {
       </div>
 
 
-      <div className="space-y-6">
-        {(banners ?? []).map((b, idx) => (
+      {list.length === 0 ? (
+        <EmptyStatePremium
+          icon={GalleryHorizontalEnd}
+          title="Nenhum banner ainda"
+          description="Crie o primeiro banner para destacar campanhas, marcas e vídeos no topo do site."
+          action={
+            <Button onClick={add} className="gap-2 rounded-xl">
+              <Plus className="h-4 w-4" /> Novo banner
+            </Button>
+          }
+        />
+      ) : (
+        groups.map((group) => (
+          <div key={group.loc} className="space-y-4">
+            <div className="flex items-center gap-2 pt-2">
+              {group.loc === "home" ? (
+                <Home className="h-4 w-4 text-primary" />
+              ) : (
+                <GalleryHorizontalEnd className="h-4 w-4 text-muted-foreground" />
+              )}
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                {LOCATION_LABELS[group.loc] ?? group.loc}
+              </h2>
+              <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
+                {group.items.length}
+              </span>
+            </div>
+
+            {group.items.map((b) => {
+              const idx = list.findIndex((i) => i.id === b.id);
+              return (
           <div
             key={b.id}
             className="animate-fade-up overflow-hidden rounded-[24px] border border-border/70 bg-card shadow-sm"
@@ -179,7 +208,7 @@ function BannersAdmin() {
                   <Button size="icon" variant="ghost" disabled={idx === 0} onClick={() => move(b, -1)}>
                     <ArrowUp className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" disabled={idx === (banners?.length ?? 0) - 1} onClick={() => move(b, 1)}>
+                  <Button size="icon" variant="ghost" disabled={idx === list.length - 1} onClick={() => move(b, 1)}>
                     <ArrowDown className="h-4 w-4" />
                   </Button>
                   <Button size="icon" variant="ghost" onClick={() => remove(b.id)}>
@@ -285,23 +314,25 @@ function BannersAdmin() {
               </div>
             </div>
           </div>
-        ))}
-        {(banners ?? []).length === 0 && (
-          <EmptyStatePremium
-            icon={GalleryHorizontalEnd}
-            title="Nenhum banner ainda"
-            description="Crie o primeiro banner para destacar campanhas, marcas e vídeos no topo do site."
-            action={
-              <Button onClick={add} className="gap-2 rounded-xl">
-                <Plus className="h-4 w-4" /> Novo banner
-              </Button>
-            }
-          />
-        )}
-      </div>
+              );
+            })}
+          </div>
+        ))
+      )}
     </div>
   );
 }
+
+const LOCATION_ORDER = ["home", "canon", "dji", "sony", "gopro"];
+
+const LOCATION_LABELS: Record<string, string> = {
+  home: "Home",
+  canon: "Marca: Canon",
+  dji: "Marca: DJI",
+  sony: "Marca: Sony",
+  gopro: "Marca: GoPro",
+};
+
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
