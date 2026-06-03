@@ -66,7 +66,12 @@ function ProductPage() {
   const { data: related } = useProducts({ brandSlug: brand?.slug });
 
   const gallery = product ? asArray(product.gallery_json) : [];
-  const images = [product?.main_image_url, ...gallery].filter(Boolean) as string[];
+  const imageUrls = [product?.main_image_url, ...gallery].filter(Boolean) as string[];
+  type Media = { type: "image" | "video"; src: string };
+  const media: Media[] = [
+    ...(product?.video_url ? [{ type: "video" as const, src: product.video_url }] : []),
+    ...imageUrls.map((src) => ({ type: "image" as const, src })),
+  ];
   const [active, setActive] = useState(0);
 
   useEffect(() => {
