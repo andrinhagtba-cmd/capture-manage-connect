@@ -106,6 +106,8 @@ function Home() {
 
   const renderSection = (s: { section_key: string; eyebrow: string | null; title: string | null; subtitle: string | null }) => {
     switch (s.section_key) {
+      case "premium":
+        return <PremiumShowcase key="premium" />;
       case "brands":
         return (
           <section key="brands" className="container-page -mt-12 relative z-10">
