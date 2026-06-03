@@ -89,7 +89,6 @@ export function useProducts(opts?: {
       if (opts?.brandSlug)
         query = query.eq("brands.slug", opts.brandSlug);
       const { data, error } = await query
-        .order("is_featured", { ascending: false })
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data as unknown as Product[];
@@ -106,7 +105,6 @@ export function useCategoryProducts(categorySlug: string) {
         .select("*, categories!inner(slug)")
         .eq("is_active", true)
         .eq("categories.slug", categorySlug)
-        .order("is_featured", { ascending: false })
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data as unknown as Product[];
@@ -123,7 +121,6 @@ export function useCategoriesProducts(categorySlugs: string[]) {
         .select("*, categories!inner(slug)")
         .eq("is_active", true)
         .in("categories.slug", categorySlugs)
-        .order("is_featured", { ascending: false })
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data as unknown as Product[];
