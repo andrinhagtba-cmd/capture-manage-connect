@@ -7,6 +7,7 @@ import { DronesShowcase } from "@/components/DronesShowcase";
 import { CanonShowcase } from "@/components/CanonShowcase";
 import { SonyShowcase } from "@/components/SonyShowcase";
 import { GoProShowcase } from "@/components/GoProShowcase";
+import { PremiumShowcase } from "@/components/PremiumShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { GridGlowBackground } from "@/components/ui/grid-glow-background";
 import { Button } from "@/components/ui/button";
@@ -58,6 +59,7 @@ const FEATURES = [
 // Default section order/content used when the DB has no rows yet.
 const DEFAULT_SECTIONS: Pick<HomeSection, "section_key" | "eyebrow" | "title" | "subtitle" | "is_active" | "order_index">[] = [
   { section_key: "brands", eyebrow: null, title: "Marcas", subtitle: null, is_active: true, order_index: 1 },
+  { section_key: "premium", eyebrow: "Destaque premium", title: "Produto Premium em Destaque", subtitle: null, is_active: true, order_index: 2 },
   { section_key: "features", eyebrow: null, title: "Por que comprar conosco", subtitle: null, is_active: true, order_index: 2 },
   { section_key: "drones", eyebrow: null, title: "Drones", subtitle: null, is_active: true, order_index: 3 },
   { section_key: "canon", eyebrow: null, title: "Canon", subtitle: null, is_active: true, order_index: 4 },
@@ -104,6 +106,8 @@ function Home() {
 
   const renderSection = (s: { section_key: string; eyebrow: string | null; title: string | null; subtitle: string | null }) => {
     switch (s.section_key) {
+      case "premium":
+        return <PremiumShowcase key="premium" />;
       case "brands":
         return (
           <section key="brands" className="container-page -mt-12 relative z-10">

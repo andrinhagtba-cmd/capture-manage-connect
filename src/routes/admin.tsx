@@ -53,6 +53,7 @@ import {
   Plus,
   Upload,
   ChevronDown,
+  Star,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -99,6 +100,7 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
     items: [
       { title: "Banners e Heros", url: "/admin/banners", icon: GalleryHorizontalEnd, gate: "content" },
       { title: "Home Page", url: "/admin/home", icon: HomeIcon, gate: "content" },
+      { title: "Produto Premium destaque", url: "/admin/premium", icon: Star, gate: "content" },
       { title: "Páginas do Site", url: "/admin/paginas", icon: FileText, gate: "content" },
       { title: "Footer", url: "/admin/footer", icon: PanelBottom, gate: "content" },
       { title: "Menu / Navegação", url: "/admin/menu", icon: MenuIcon, gate: "content" },

@@ -417,6 +417,39 @@ export function useHomeSections() {
   });
 }
 
+export type PremiumShowcase = {
+  id: string;
+  eyebrow: string | null;
+  title: string | null;
+  subtitle: string | null;
+  background_image_url: string | null;
+  background_video_url: string | null;
+  cta_label: string | null;
+  cta_url: string | null;
+  product_ids: string[];
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+/** Premium featured-products showcase configuration (single row). */
+export function usePremiumShowcase() {
+  return useQuery({
+    queryKey: ["premium_showcase"],
+    queryFn: async (): Promise<PremiumShowcase | null> => {
+      const { data, error } = await supabase
+        .from("premium_showcase")
+        .select("*")
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return data as PremiumShowcase | null;
+    },
+  });
+}
+
+
 export type BrandPageSettings = {
   id: string;
   brand_slug: string;
