@@ -100,6 +100,8 @@ export type CategoryShowcaseProps = {
   eyebrow?: string;
   /** Big section title */
   title: string;
+  /** Optional supporting paragraph below the title */
+  subtitle?: string | null;
   /** Path to the hero video (in /public). Optional when using imageSrc. */
   videoSrc?: string;
   /** Background image (imported asset URL). Used when no videoSrc is set. */
@@ -108,6 +110,8 @@ export type CategoryShowcaseProps = {
   categorySlug?: string;
   /** Multiple category slugs (union) to fetch products from */
   categorySlugs?: string[];
+  /** Explicit list of products to display (overrides category fetching) */
+  products?: Product[];
   /** Brand label used in quote dialogs (e.g. "DJI") */
   brandLabel?: string;
   /** Brand slug used in the "Mostrar todos" link */
@@ -116,23 +120,28 @@ export type CategoryShowcaseProps = {
   ctaLabel?: string;
   /** Where the floating CTA should lead */
   ctaTo?: "catalog" | "brand";
+  /** Custom href for the floating CTA (overrides ctaTo) */
+  ctaHref?: string;
 };
 
 export function CategoryShowcase({
   eyebrow = "Vitrine premium",
   title,
+  subtitle,
   videoSrc,
   imageSrc,
   categorySlug,
   categorySlugs,
+  products: productsProp,
   brandLabel = "DJI",
   brandSlug = "dji",
   ctaLabel = "Mostrar Todos",
   ctaTo = "catalog",
+  ctaHref,
 }: CategoryShowcaseProps) {
   const single = useCategoryProducts(categorySlug ?? "");
   const multi = useCategoriesProducts(categorySlugs ?? []);
-  const products = categorySlugs?.length ? multi.data : single.data;
+  const products = productsProp ?? (categorySlugs?.length ? multi.data : single.data);
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { align: "start", loop: false, slidesToScroll: 1 },
     [Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })],
@@ -146,7 +155,11 @@ export function CategoryShowcase({
       <div className="mb-6">
         <p className="eyebrow text-primary">{eyebrow}</p>
         <h2 className="display-lg mt-1 text-3xl md:text-4xl">{title}</h2>
+        {subtitle && (
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">{subtitle}</p>
+        )}
       </div>
+
 
       <div className="relative">
         <div className="relative overflow-hidden rounded-[2rem] shadow-xl">
