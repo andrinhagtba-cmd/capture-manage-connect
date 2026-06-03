@@ -131,28 +131,50 @@ function ProductPage() {
           {/* Gallery */}
           <div>
             <div className="aspect-square overflow-hidden rounded-2xl border border-border bg-surface">
-              <img
-                src={images[active] || placeholder}
-                alt={product.name}
-                className="h-full w-full object-cover"
-              />
+              {media[active]?.type === "video" ? (
+                <video
+                  src={media[active].src}
+                  controls
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <img
+                  src={media[active]?.src || placeholder}
+                  alt={product.name}
+                  className="h-full w-full object-cover"
+                />
+              )}
             </div>
-            {images.length > 1 && (
-              <div className="mt-3 flex gap-3">
-                {images.map((img, i) => (
+            {media.length > 1 && (
+              <div className="mt-3 flex flex-wrap gap-3">
+                {media.map((item, i) => (
                   <button
                     key={i}
                     onClick={() => setActive(i)}
-                    className={`h-20 w-20 overflow-hidden rounded-lg border-2 ${
+                    className={`relative h-20 w-20 overflow-hidden rounded-lg border-2 ${
                       active === i ? "border-primary" : "border-border"
                     }`}
                   >
-                    <img src={img} alt="" className="h-full w-full object-cover" />
+                    {item.type === "video" ? (
+                      <>
+                        <video src={item.src} muted playsInline className="h-full w-full object-cover" />
+                        <span className="absolute inset-0 grid place-items-center bg-black/30 text-white">
+                          <Play className="h-6 w-6" />
+                        </span>
+                      </>
+                    ) : (
+                      <img src={item.src} alt="" className="h-full w-full object-cover" />
+                    )}
                   </button>
                 ))}
               </div>
             )}
           </div>
+
 
           {/* Info */}
           <div>
