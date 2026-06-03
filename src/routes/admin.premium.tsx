@@ -305,6 +305,17 @@ function PremiumAdmin() {
           )}
         </div>
       </div>
+
+      {/* Save bar (always reachable at the bottom too) */}
+      <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-xl border border-border bg-background/95 p-4 shadow-lg backdrop-blur">
+        <p className="text-sm text-muted-foreground">
+          {selected.length} produto(s) selecionado(s)
+        </p>
+        <Button onClick={save} disabled={saving} className="gap-2 rounded-xl">
+          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+          Salvar alterações
+        </Button>
+      </div>
     </div>
   );
 }
