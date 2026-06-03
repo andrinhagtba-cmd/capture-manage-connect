@@ -319,6 +319,26 @@ function BannersAdmin() {
           </div>
         ))
       )}
+
+      {/* Barra de salvar — as alterações são aplicadas automaticamente ao sair de cada campo */}
+      {list.length > 0 && (
+        <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-xl border border-border bg-background/95 p-4 shadow-lg backdrop-blur">
+          <p className="text-sm text-muted-foreground">
+            As alterações são salvas automaticamente ao sair de cada campo.
+          </p>
+          <Button
+            onClick={() => {
+              (document.activeElement as HTMLElement | null)?.blur();
+              invalidate();
+              toast.success("Alterações salvas");
+            }}
+            className="gap-2 rounded-xl"
+          >
+            <Save className="h-4 w-4" />
+            Salvar alterações
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
