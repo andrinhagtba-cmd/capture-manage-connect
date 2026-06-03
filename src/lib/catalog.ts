@@ -88,7 +88,9 @@ export function useProducts(opts?: {
       if (opts?.featured) query = query.eq("is_featured", true);
       if (opts?.brandSlug)
         query = query.eq("brands.slug", opts.brandSlug);
-      const { data, error } = await query.order("name");
+      const { data, error } = await query
+        .order("is_featured", { ascending: false })
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data as unknown as Product[];
     },
