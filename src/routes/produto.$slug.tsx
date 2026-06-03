@@ -14,7 +14,7 @@ import { getProductSeo } from "@/lib/seo.functions";
 import { buildSeoHead, DEFAULT_SITE_URL } from "@/lib/seo-meta";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
-import { ExternalLink, MessageCircle, ChevronRight } from "lucide-react";
+import { ExternalLink, MessageCircle, ChevronRight, Play } from "lucide-react";
 import placeholder from "@/assets/product-placeholder.jpg";
 
 export const Route = createFileRoute("/produto/$slug")({
@@ -66,7 +66,12 @@ function ProductPage() {
   const { data: related } = useProducts({ brandSlug: brand?.slug });
 
   const gallery = product ? asArray(product.gallery_json) : [];
-  const images = [product?.main_image_url, ...gallery].filter(Boolean) as string[];
+  const imageUrls = [product?.main_image_url, ...gallery].filter(Boolean) as string[];
+  type Media = { type: "image" | "video"; src: string };
+  const media: Media[] = [
+    ...(product?.video_url ? [{ type: "video" as const, src: product.video_url }] : []),
+    ...imageUrls.map((src) => ({ type: "image" as const, src })),
+  ];
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -126,28 +131,50 @@ function ProductPage() {
           {/* Gallery */}
           <div>
             <div className="aspect-square overflow-hidden rounded-2xl border border-border bg-surface">
-              <img
-                src={images[active] || placeholder}
-                alt={product.name}
-                className="h-full w-full object-cover"
-              />
+              {media[active]?.type === "video" ? (
+                <video
+                  src={media[active].src}
+                  controls
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <img
+                  src={media[active]?.src || placeholder}
+                  alt={product.name}
+                  className="h-full w-full object-cover"
+                />
+              )}
             </div>
-            {images.length > 1 && (
-              <div className="mt-3 flex gap-3">
-                {images.map((img, i) => (
+            {media.length > 1 && (
+              <div className="mt-3 flex flex-wrap gap-3">
+                {media.map((item, i) => (
                   <button
                     key={i}
                     onClick={() => setActive(i)}
-                    className={`h-20 w-20 overflow-hidden rounded-lg border-2 ${
+                    className={`relative h-20 w-20 overflow-hidden rounded-lg border-2 ${
                       active === i ? "border-primary" : "border-border"
                     }`}
                   >
-                    <img src={img} alt="" className="h-full w-full object-cover" />
+                    {item.type === "video" ? (
+                      <>
+                        <video src={item.src} muted playsInline className="h-full w-full object-cover" />
+                        <span className="absolute inset-0 grid place-items-center bg-black/30 text-white">
+                          <Play className="h-6 w-6" />
+                        </span>
+                      </>
+                    ) : (
+                      <img src={item.src} alt="" className="h-full w-full object-cover" />
+                    )}
                   </button>
                 ))}
               </div>
             )}
           </div>
+
 
           {/* Info */}
           <div>
