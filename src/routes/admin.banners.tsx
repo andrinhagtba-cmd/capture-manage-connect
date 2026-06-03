@@ -75,6 +75,17 @@ function BannersAdmin() {
     );
   }
 
+  const list = banners ?? [];
+  // Hero atualmente aplicado na home (primeiro ativo da localização "home").
+  const activeHome = list
+    .filter((b) => b.location === "home" && b.is_active)
+    .sort((a, b) => a.order_index - b.order_index)[0];
+
+  // Agrupa banners por localização para organizar a lista.
+  const groups = LOCATION_ORDER
+    .map((loc) => ({ loc, items: list.filter((b) => b.location === loc) }))
+    .filter((g) => g.items.length > 0);
+
   return (
     <div className="space-y-6">
       <AdminPageHero
@@ -94,6 +105,49 @@ function BannersAdmin() {
           </Button>
         }
       />
+
+      {/* Hero da Home atual — destaque para localização rápida */}
+      <div className="overflow-hidden rounded-[24px] border border-primary/30 bg-primary/5 shadow-sm">
+        <div className="flex items-center gap-2 border-b border-primary/20 bg-primary/10 px-5 py-3 md:px-6">
+          <Star className="h-[18px] w-[18px] text-primary" />
+          <div>
+            <p className="text-sm font-semibold tracking-tight">Hero aplicado na Home agora</p>
+            <p className="text-xs text-muted-foreground">
+              Esta é a imagem que aparece no topo da página inicial. Edite o card correspondente abaixo.
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:p-6">
+          <div className="relative aspect-[16/7] w-full overflow-hidden rounded-2xl border border-border/60 bg-surface md:w-80">
+            {activeHome?.desktop_image_url ? (
+              <img
+                src={activeHome.desktop_image_url}
+                alt={activeHome.title ?? "Hero da home"}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-muted-foreground">
+                <ImageOff className="h-6 w-6" />
+                <span className="text-xs">Nenhum hero ativo na home</span>
+              </div>
+            )}
+          </div>
+          <div className="flex-1 space-y-1">
+            <p className="text-base font-semibold">
+              {activeHome?.title?.trim() || "Sem hero ativo"}
+            </p>
+            {activeHome?.subtitle && (
+              <p className="text-sm text-muted-foreground line-clamp-2">{activeHome.subtitle}</p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              {activeHome
+                ? `${activeHome.media_type === "video" ? "Vídeo" : "Imagem"} · localização: home`
+                : "Ative um banner na localização Home para exibir o hero."}
+            </p>
+          </div>
+        </div>
+      </div>
+
 
       <div className="space-y-6">
         {(banners ?? []).map((b, idx) => (
