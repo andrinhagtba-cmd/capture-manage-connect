@@ -31,6 +31,7 @@ export type Product = {
   short_description: string | null;
   full_description: string | null;
   main_image_url: string | null;
+  video_url: string | null;
   gallery_json: unknown;
   specifications_json: unknown;
   use_cases_json: unknown;
