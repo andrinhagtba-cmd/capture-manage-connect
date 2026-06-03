@@ -188,7 +188,9 @@ export function CategoryShowcase({
               size="sm"
               className="rounded-full bg-background px-4 text-xs text-foreground shadow-lg hover:bg-background/90 sm:px-6 sm:text-sm md:h-11 md:px-7 md:text-base"
             >
-              {ctaTo === "brand" ? (
+              {ctaHref ? (
+                <a href={ctaHref}>{ctaLabel}</a>
+              ) : ctaTo === "brand" ? (
                 <Link to="/marca/$slug" params={{ slug: brandSlug }}>
                   {ctaLabel}
                 </Link>
