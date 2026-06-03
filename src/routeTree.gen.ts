@@ -20,6 +20,7 @@ import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 import { Route as MarcaSlugRouteImport } from './routes/marca.$slug'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
+import { Route as AdminPremiumRouteImport } from './routes/admin.premium'
 import { Route as AdminPaginasRouteImport } from './routes/admin.paginas'
 import { Route as AdminOrcamentosRouteImport } from './routes/admin.orcamentos'
 import { Route as AdminMidiaRouteImport } from './routes/admin.midia'
@@ -87,6 +88,11 @@ const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
 const AdminProdutosRoute = AdminProdutosRouteImport.update({
   id: '/produtos',
   path: '/produtos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPremiumRoute = AdminPremiumRouteImport.update({
+  id: '/premium',
+  path: '/premium',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminPaginasRoute = AdminPaginasRouteImport.update({
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/paginas': typeof AdminPaginasRoute
+  '/admin/premium': typeof AdminPremiumRoute
   '/admin/produtos': typeof AdminProdutosRouteWithChildren
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/marca/$slug': typeof MarcaSlugRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/paginas': typeof AdminPaginasRoute
+  '/admin/premium': typeof AdminPremiumRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/marca/$slug': typeof MarcaSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -224,6 +232,7 @@ export interface FileRoutesById {
   '/admin/midia': typeof AdminMidiaRoute
   '/admin/orcamentos': typeof AdminOrcamentosRoute
   '/admin/paginas': typeof AdminPaginasRoute
+  '/admin/premium': typeof AdminPremiumRoute
   '/admin/produtos': typeof AdminProdutosRouteWithChildren
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/marca/$slug': typeof MarcaSlugRoute
@@ -252,6 +261,7 @@ export interface FileRouteTypes {
     | '/admin/midia'
     | '/admin/orcamentos'
     | '/admin/paginas'
+    | '/admin/premium'
     | '/admin/produtos'
     | '/admin/usuarios'
     | '/marca/$slug'
@@ -277,6 +287,7 @@ export interface FileRouteTypes {
     | '/admin/midia'
     | '/admin/orcamentos'
     | '/admin/paginas'
+    | '/admin/premium'
     | '/admin/usuarios'
     | '/marca/$slug'
     | '/produto/$slug'
@@ -302,6 +313,7 @@ export interface FileRouteTypes {
     | '/admin/midia'
     | '/admin/orcamentos'
     | '/admin/paginas'
+    | '/admin/premium'
     | '/admin/produtos'
     | '/admin/usuarios'
     | '/marca/$slug'
@@ -399,6 +411,13 @@ declare module '@tanstack/react-router' {
       path: '/produtos'
       fullPath: '/admin/produtos'
       preLoaderRoute: typeof AdminProdutosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/premium': {
+      id: '/admin/premium'
+      path: '/premium'
+      fullPath: '/admin/premium'
+      preLoaderRoute: typeof AdminPremiumRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/paginas': {
@@ -521,6 +540,7 @@ interface AdminRouteChildren {
   AdminMidiaRoute: typeof AdminMidiaRoute
   AdminOrcamentosRoute: typeof AdminOrcamentosRoute
   AdminPaginasRoute: typeof AdminPaginasRoute
+  AdminPremiumRoute: typeof AdminPremiumRoute
   AdminProdutosRoute: typeof AdminProdutosRouteWithChildren
   AdminUsuariosRoute: typeof AdminUsuariosRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -538,6 +558,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMidiaRoute: AdminMidiaRoute,
   AdminOrcamentosRoute: AdminOrcamentosRoute,
   AdminPaginasRoute: AdminPaginasRoute,
+  AdminPremiumRoute: AdminPremiumRoute,
   AdminProdutosRoute: AdminProdutosRouteWithChildren,
   AdminUsuariosRoute: AdminUsuariosRoute,
   AdminIndexRoute: AdminIndexRoute,

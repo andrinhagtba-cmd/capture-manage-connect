@@ -53,6 +53,7 @@ import {
   Plus,
   Upload,
   ChevronDown,
+  Star,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
