@@ -7,6 +7,7 @@ import { DronesShowcase } from "@/components/DronesShowcase";
 import { CanonShowcase } from "@/components/CanonShowcase";
 import { SonyShowcase } from "@/components/SonyShowcase";
 import { GoProShowcase } from "@/components/GoProShowcase";
+import { PremiumShowcase } from "@/components/PremiumShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { GridGlowBackground } from "@/components/ui/grid-glow-background";
 import { Button } from "@/components/ui/button";
