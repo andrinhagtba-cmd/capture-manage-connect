@@ -956,6 +956,51 @@ export type Database = {
           },
         ]
       }
+      premium_showcase: {
+        Row: {
+          background_image_url: string | null
+          background_video_url: string | null
+          created_at: string
+          cta_label: string | null
+          cta_url: string | null
+          eyebrow: string | null
+          id: string
+          is_active: boolean
+          product_ids: string[]
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          background_image_url?: string | null
+          background_video_url?: string | null
+          created_at?: string
+          cta_label?: string | null
+          cta_url?: string | null
+          eyebrow?: string | null
+          id?: string
+          is_active?: boolean
+          product_ids?: string[]
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          background_image_url?: string | null
+          background_video_url?: string | null
+          created_at?: string
+          cta_label?: string | null
+          cta_url?: string | null
+          eyebrow?: string | null
+          id?: string
+          is_active?: boolean
+          product_ids?: string[]
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_related: {
         Row: {
           created_at: string
