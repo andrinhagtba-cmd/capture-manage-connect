@@ -135,6 +135,9 @@ function ProductPage() {
                 <video
                   src={media[active].src}
                   controls
+                  controlsList="nodownload"
+                  disablePictureInPicture
+                  disableRemotePlayback
                   autoPlay
                   muted
                   loop
