@@ -1,6 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { track } from "@/lib/analytics";
 import { PublicLayout } from "@/components/PublicLayout";
 import { ProductCard } from "@/components/ProductCard";
 import { DronesShowcase } from "@/components/DronesShowcase";
@@ -9,13 +7,12 @@ import { SonyShowcase } from "@/components/SonyShowcase";
 import { GoProShowcase } from "@/components/GoProShowcase";
 import { PremiumShowcase } from "@/components/PremiumShowcase";
 import { QuoteDialog } from "@/components/QuoteDialog";
-import { GridGlowBackground } from "@/components/ui/grid-glow-background";
+import { HeroSlider } from "@/components/HeroSlider";
 import { Button } from "@/components/ui/button";
 import { useBrands, useProducts } from "@/lib/catalog";
-import { useActiveHero, useHomeSections, type HomeSection } from "@/lib/site-content";
-import { BRAND_THEME, COMPANY_NAME } from "@/lib/site";
+import { useHomeSections, type HomeSection } from "@/lib/site-content";
+import { BRAND_THEME } from "@/lib/site";
 import { ShieldCheck, Award, Headphones, Truck, ArrowRight } from "lucide-react";
-import heroHome from "@/assets/hero-home.jpg";
 import brandCanon from "@/assets/brand-canon.jpg";
 import brandDji from "@/assets/brand-dji.jpg";
 import brandSony from "@/assets/brand-sony.jpg";
@@ -72,35 +69,13 @@ const DEFAULT_SECTIONS: Pick<HomeSection, "section_key" | "eyebrow" | "title" | 
 function Home() {
   const { data: brands } = useBrands();
   const { data: featured } = useProducts({ featured: true });
-  const { data: hero } = useActiveHero("home");
   const { data: dbSections } = useHomeSections();
 
   const sections = (dbSections && dbSections.length > 0 ? dbSections : DEFAULT_SECTIONS)
     .filter((s) => s.is_active)
     .sort((a, b) => a.order_index - b.order_index);
 
-  const heroEyebrow = hero?.eyebrow ?? `${COMPANY_NAME} · Brasília-DF`;
-  const heroTitle = hero?.title ?? "Equipamentos profissionais de";
-  const heroHighlight = hero?.highlight ?? "foto e vídeo";
-  const heroSubtitle =
-    hero?.subtitle ??
-    "Curadoria oficial das marcas Canon, DJI, Sony e GoPro. Conte com mais de 20 anos de expertise para escolher o equipamento certo.";
-  const heroBadge = hero?.badge_text ?? "Revendedor autorizado de todas as linhas das marcas";
-  const heroImage = hero?.desktop_image_url || heroHome;
-  const heroOverlay = hero?.overlay_opacity ?? 0.7;
-  const primaryLabel = hero?.primary_button_label ?? "Ver catálogo";
-  const primaryUrl = hero?.primary_button_url ?? "/catalogo";
-  const secondaryLabel = hero?.secondary_button_label ?? "Solicitar orçamento";
-  const secondaryUrl = hero?.secondary_button_url ?? "";
 
-  useEffect(() => {
-    if (hero?.id)
-      track("banner_view", { banner_id: hero.id, content_name: hero.title ?? "Hero home" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hero?.id]);
-
-  const onBannerClick = () =>
-    track("banner_click", { banner_id: hero?.id ?? null, content_name: hero?.title ?? "Hero home" });
 
 
 
@@ -257,69 +232,8 @@ function Home() {
 
   return (
     <PublicLayout>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-ink">
-        <div className="absolute inset-0">
-          {hero?.media_type === "video" && hero.video_url ? (
-            <video
-              src={hero.video_url}
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster={heroImage}
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <img src={heroImage} alt="" className="h-full w-full object-cover" />
-          )}
-          {/* Vertical gradient on mobile for legibility, horizontal on desktop */}
-          <div
-            className="absolute inset-0 bg-gradient-to-t from-ink via-ink/80 to-ink/40 md:bg-gradient-to-r md:from-ink md:via-ink/70 md:to-ink/30"
-            style={{ opacity: heroOverlay }}
-          />
-          <GridGlowBackground className="pointer-events-none absolute inset-0 h-full w-full mix-blend-screen opacity-70" />
-        </div>
-        <div className="container-page relative flex min-h-[88vh] flex-col justify-center py-24 sm:py-32 md:py-48">
-          <div className="max-w-2xl animate-fade-up">
-            <p className="eyebrow mb-3 text-background/70 sm:mb-4">{heroEyebrow}</p>
-            <h1 className="display-hero text-[2.5rem] leading-[1.05] text-background sm:text-5xl md:text-6xl">
-              {heroTitle}{" "}
-              {heroHighlight && <span className="text-primary">{heroHighlight}</span>}
-            </h1>
-            <p className="mt-5 max-w-xl text-base text-background/80 sm:mt-6 sm:text-lg">{heroSubtitle}</p>
-            {heroBadge && (
-              <div className="mt-5 inline-flex items-start gap-2 rounded-2xl border border-primary/40 bg-primary/10 px-4 py-2.5 backdrop-blur-md sm:mt-6 sm:items-center sm:rounded-full">
-                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary sm:mt-0" />
-                <span className="text-sm font-semibold leading-snug text-background">{heroBadge}</span>
-              </div>
-            )}
-            <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
-              {primaryLabel && (
-                <Button asChild size="lg" className="w-full gap-2 sm:w-auto">
-                  <a href={primaryUrl} onClick={onBannerClick}>
-                    {primaryLabel} <ArrowRight className="h-4 w-4" />
-                  </a>
-                </Button>
-              )}
-              {secondaryLabel &&
-                (secondaryUrl ? (
-                  <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
-                    <a href={secondaryUrl} onClick={onBannerClick}>{secondaryLabel}</a>
-                  </Button>
-                ) : (
-                  <QuoteDialog
-                    trigger={
-                      <Button size="lg" variant="secondary" className="w-full sm:w-auto">
-                        {secondaryLabel}
-                      </Button>
-                    }
-                  />
-                ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero — vira slider automático quando há mais de um banner ativo na home */}
+      <HeroSlider />
 
       {sections.map((s) => renderSection(s))}
     </PublicLayout>
