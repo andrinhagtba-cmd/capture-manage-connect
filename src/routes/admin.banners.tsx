@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Plus, Trash2, ArrowUp, ArrowDown, GalleryHorizontalEnd, Eye, Film } from "lucide-react";
+import { Loader2, Plus, Trash2, ArrowUp, ArrowDown, GalleryHorizontalEnd, Eye, Film, ImageOff, Home, Star } from "lucide-react";
 import { AdminPageHero, MediaUploadField, EmptyStatePremium } from "@/components/admin/ui";
 import { toast } from "sonner";
 
@@ -75,6 +75,17 @@ function BannersAdmin() {
     );
   }
 
+  const list = banners ?? [];
+  // Hero atualmente aplicado na home (primeiro ativo da localização "home").
+  const activeHome = list
+    .filter((b) => b.location === "home" && b.is_active)
+    .sort((a, b) => a.order_index - b.order_index)[0];
+
+  // Agrupa banners por localização para organizar a lista.
+  const groups = LOCATION_ORDER
+    .map((loc) => ({ loc, items: list.filter((b) => b.location === loc) }))
+    .filter((g) => g.items.length > 0);
+
   return (
     <div className="space-y-6">
       <AdminPageHero
@@ -95,8 +106,80 @@ function BannersAdmin() {
         }
       />
 
-      <div className="space-y-6">
-        {(banners ?? []).map((b, idx) => (
+      {/* Hero da Home atual — destaque para localização rápida */}
+      <div className="overflow-hidden rounded-[24px] border border-primary/30 bg-primary/5 shadow-sm">
+        <div className="flex items-center gap-2 border-b border-primary/20 bg-primary/10 px-5 py-3 md:px-6">
+          <Star className="h-[18px] w-[18px] text-primary" />
+          <div>
+            <p className="text-sm font-semibold tracking-tight">Hero aplicado na Home agora</p>
+            <p className="text-xs text-muted-foreground">
+              Esta é a imagem que aparece no topo da página inicial. Edite o card correspondente abaixo.
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:p-6">
+          <div className="relative aspect-[16/7] w-full overflow-hidden rounded-2xl border border-border/60 bg-surface md:w-80">
+            {activeHome?.desktop_image_url ? (
+              <img
+                src={activeHome.desktop_image_url}
+                alt={activeHome.title ?? "Hero da home"}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-muted-foreground">
+                <ImageOff className="h-6 w-6" />
+                <span className="text-xs">Nenhum hero ativo na home</span>
+              </div>
+            )}
+          </div>
+          <div className="flex-1 space-y-1">
+            <p className="text-base font-semibold">
+              {activeHome?.title?.trim() || "Sem hero ativo"}
+            </p>
+            {activeHome?.subtitle && (
+              <p className="text-sm text-muted-foreground line-clamp-2">{activeHome.subtitle}</p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              {activeHome
+                ? `${activeHome.media_type === "video" ? "Vídeo" : "Imagem"} · localização: home`
+                : "Ative um banner na localização Home para exibir o hero."}
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      {list.length === 0 ? (
+        <EmptyStatePremium
+          icon={GalleryHorizontalEnd}
+          title="Nenhum banner ainda"
+          description="Crie o primeiro banner para destacar campanhas, marcas e vídeos no topo do site."
+          action={
+            <Button onClick={add} className="gap-2 rounded-xl">
+              <Plus className="h-4 w-4" /> Novo banner
+            </Button>
+          }
+        />
+      ) : (
+        groups.map((group) => (
+          <div key={group.loc} className="space-y-4">
+            <div className="flex items-center gap-2 pt-2">
+              {group.loc === "home" ? (
+                <Home className="h-4 w-4 text-primary" />
+              ) : (
+                <GalleryHorizontalEnd className="h-4 w-4 text-muted-foreground" />
+              )}
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                {LOCATION_LABELS[group.loc] ?? group.loc}
+              </h2>
+              <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
+                {group.items.length}
+              </span>
+            </div>
+
+            {group.items.map((b) => {
+              const idx = list.findIndex((i) => i.id === b.id);
+              return (
           <div
             key={b.id}
             className="animate-fade-up overflow-hidden rounded-[24px] border border-border/70 bg-card shadow-sm"
@@ -125,7 +208,7 @@ function BannersAdmin() {
                   <Button size="icon" variant="ghost" disabled={idx === 0} onClick={() => move(b, -1)}>
                     <ArrowUp className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" disabled={idx === (banners?.length ?? 0) - 1} onClick={() => move(b, 1)}>
+                  <Button size="icon" variant="ghost" disabled={idx === list.length - 1} onClick={() => move(b, 1)}>
                     <ArrowDown className="h-4 w-4" />
                   </Button>
                   <Button size="icon" variant="ghost" onClick={() => remove(b.id)}>
@@ -231,23 +314,25 @@ function BannersAdmin() {
               </div>
             </div>
           </div>
-        ))}
-        {(banners ?? []).length === 0 && (
-          <EmptyStatePremium
-            icon={GalleryHorizontalEnd}
-            title="Nenhum banner ainda"
-            description="Crie o primeiro banner para destacar campanhas, marcas e vídeos no topo do site."
-            action={
-              <Button onClick={add} className="gap-2 rounded-xl">
-                <Plus className="h-4 w-4" /> Novo banner
-              </Button>
-            }
-          />
-        )}
-      </div>
+              );
+            })}
+          </div>
+        ))
+      )}
     </div>
   );
 }
+
+const LOCATION_ORDER = ["home", "canon", "dji", "sony", "gopro"];
+
+const LOCATION_LABELS: Record<string, string> = {
+  home: "Home",
+  canon: "Marca: Canon",
+  dji: "Marca: DJI",
+  sony: "Marca: Sony",
+  gopro: "Marca: GoPro",
+};
+
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
