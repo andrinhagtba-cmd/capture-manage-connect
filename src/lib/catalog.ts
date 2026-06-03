@@ -128,6 +128,27 @@ export function useCategoriesProducts(categorySlugs: string[]) {
   });
 }
 
+/** Fetch active products by a list of ids, preserving the given order. */
+export function useProductsByIds(ids: string[]) {
+  return useQuery({
+    queryKey: ["products-by-ids", ...ids],
+    enabled: ids.length > 0,
+    queryFn: async (): Promise<Product[]> => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("is_active", true)
+        .in("id", ids);
+      if (error) throw error;
+      const rows = (data ?? []) as unknown as Product[];
+      // preserve the order defined by `ids`
+      return ids
+        .map((id) => rows.find((p) => p.id === id))
+        .filter((p): p is Product => Boolean(p));
+    },
+  });
+}
+
 export function useProduct(slug: string) {
   return useQuery({
     queryKey: ["product", slug],
