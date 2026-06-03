@@ -1,6 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { track } from "@/lib/analytics";
 import { PublicLayout } from "@/components/PublicLayout";
 import { ProductCard } from "@/components/ProductCard";
 import { DronesShowcase } from "@/components/DronesShowcase";
@@ -13,7 +11,7 @@ import { HeroSlider } from "@/components/HeroSlider";
 import { Button } from "@/components/ui/button";
 import { useBrands, useProducts } from "@/lib/catalog";
 import { useHomeSections, type HomeSection } from "@/lib/site-content";
-import { BRAND_THEME, COMPANY_NAME } from "@/lib/site";
+import { BRAND_THEME } from "@/lib/site";
 import { ShieldCheck, Award, Headphones, Truck, ArrowRight } from "lucide-react";
 import brandCanon from "@/assets/brand-canon.jpg";
 import brandDji from "@/assets/brand-dji.jpg";
