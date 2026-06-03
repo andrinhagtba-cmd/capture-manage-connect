@@ -190,7 +190,10 @@ export function SiteHeader() {
               <Link
                 key={cat.id}
                 to="/catalogo"
-                search={{ marca: brands?.find((b) => b.id === openBrand)?.slug }}
+                search={{
+                  marca: brands?.find((b) => b.id === openBrand)?.slug,
+                  cat: cat.id,
+                }}
                 onClick={() => setOpenBrand(null)}
                 className="text-sm text-foreground/75 transition-colors hover:text-primary"
               >
