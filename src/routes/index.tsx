@@ -71,35 +71,13 @@ const DEFAULT_SECTIONS: Pick<HomeSection, "section_key" | "eyebrow" | "title" | 
 function Home() {
   const { data: brands } = useBrands();
   const { data: featured } = useProducts({ featured: true });
-  const { data: hero } = useActiveHero("home");
   const { data: dbSections } = useHomeSections();
 
   const sections = (dbSections && dbSections.length > 0 ? dbSections : DEFAULT_SECTIONS)
     .filter((s) => s.is_active)
     .sort((a, b) => a.order_index - b.order_index);
 
-  const heroEyebrow = hero?.eyebrow ?? `${COMPANY_NAME} · Brasília-DF`;
-  const heroTitle = hero?.title ?? "Equipamentos profissionais de";
-  const heroHighlight = hero?.highlight ?? "foto e vídeo";
-  const heroSubtitle =
-    hero?.subtitle ??
-    "Curadoria oficial das marcas Canon, DJI, Sony e GoPro. Conte com mais de 20 anos de expertise para escolher o equipamento certo.";
-  const heroBadge = hero?.badge_text ?? "Revendedor autorizado de todas as linhas das marcas";
-  const heroImage = hero?.desktop_image_url || heroHome;
-  const heroOverlay = hero?.overlay_opacity ?? 0.7;
-  const primaryLabel = hero?.primary_button_label ?? "Ver catálogo";
-  const primaryUrl = hero?.primary_button_url ?? "/catalogo";
-  const secondaryLabel = hero?.secondary_button_label ?? "Solicitar orçamento";
-  const secondaryUrl = hero?.secondary_button_url ?? "";
 
-  useEffect(() => {
-    if (hero?.id)
-      track("banner_view", { banner_id: hero.id, content_name: hero.title ?? "Hero home" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hero?.id]);
-
-  const onBannerClick = () =>
-    track("banner_click", { banner_id: hero?.id ?? null, content_name: hero?.title ?? "Hero home" });
 
 
 
