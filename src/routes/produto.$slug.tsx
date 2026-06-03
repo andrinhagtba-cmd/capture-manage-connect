@@ -14,7 +14,7 @@ import { getProductSeo } from "@/lib/seo.functions";
 import { buildSeoHead, DEFAULT_SITE_URL } from "@/lib/seo-meta";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
-import { ExternalLink, MessageCircle, ChevronRight } from "lucide-react";
+import { ExternalLink, MessageCircle, ChevronRight, Play } from "lucide-react";
 import placeholder from "@/assets/product-placeholder.jpg";
 
 export const Route = createFileRoute("/produto/$slug")({
