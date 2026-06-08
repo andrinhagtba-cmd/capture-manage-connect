@@ -1,0 +1,325 @@
+import { useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { supabase } from "@/integrations/supabase/client";
+import { scrapeProducts, type ScrapedProduct } from "@/lib/scrape.functions";
+import {
+  slugify,
+  type AdminBrand,
+  type AdminCategory,
+} from "@/lib/products-admin";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Link2,
+  Loader2,
+  CheckCircle2,
+  Search,
+  ImageOff,
+  AlertTriangle,
+} from "lucide-react";
+import { toast } from "sonner";
+import placeholder from "@/assets/product-placeholder.jpg";
+
+export function LinkImportDialog({
+  open,
+  onOpenChange,
+  brand,
+  categories,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  brand: AdminBrand;
+  categories: AdminCategory[];
+}) {
+  const qc = useQueryClient();
+  const runScrape = useServerFn(scrapeProducts);
+
+  const [url, setUrl] = useState("");
+  const [scraping, setScraping] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [found, setFound] = useState<ScrapedProduct[] | null>(null);
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [categoryId, setCategoryId] = useState<string>("");
+
+  const brandCats = useMemo(
+    () =>
+      categories
+        .filter((c) => c.brand_id === brand.id)
+        .sort((a, b) => a.sort_order - b.sort_order),
+    [categories, brand.id],
+  );
+
+  function reset() {
+    setUrl("");
+    setFound(null);
+    setSelected(new Set());
+    setScraping(false);
+    setImporting(false);
+  }
+
+  async function doScrape() {
+    if (!url.trim()) {
+      toast.error("Cole o link da página de produtos.");
+      return;
+    }
+    setScraping(true);
+    setFound(null);
+    try {
+      const result = await runScrape({ data: { url: url.trim() } });
+      if (!result.ok) {
+        toast.error(result.error ?? "Não foi possível ler a página.");
+        return;
+      }
+      setFound(result.products);
+      setSelected(new Set(result.products.map((_, i) => i)));
+      toast.success(`${result.products.length} produto(s) encontrado(s).`);
+    } catch (e: any) {
+      toast.error(e?.message ?? "Erro ao fazer o scraping.");
+    } finally {
+      setScraping(false);
+    }
+  }
+
+  function toggle(i: number) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i);
+      else next.add(i);
+      return next;
+    });
+  }
+
+  async function confirmImport() {
+    if (!found) return;
+    const chosen = found.filter((_, i) => selected.has(i));
+    if (!chosen.length) {
+      toast.error("Selecione ao menos um produto.");
+      return;
+    }
+    setImporting(true);
+
+    const existing =
+      (await supabase
+        .from("products")
+        .select("slug, brand_id")
+        .eq("brand_id", brand.id)).data ?? [];
+    const existingSlugs = new Set(existing.map((p: any) => p.slug));
+
+    let imported = 0;
+    let failed = 0;
+    let skipped = 0;
+
+    for (const p of chosen) {
+      let slug = slugify(p.name);
+      if (!slug) {
+        failed++;
+        continue;
+      }
+      if (existingSlugs.has(slug)) {
+        // make unique
+        slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
+      }
+
+      const payload: any = {
+        name: p.name,
+        slug,
+        brand_id: brand.id,
+        category_id: categoryId || null,
+        model: p.model,
+        sku: p.sku,
+        short_description: p.short_description,
+        full_description: p.full_description,
+        main_image_url: p.main_image_url,
+        gallery_json: p.gallery,
+        specifications_json: p.specifications,
+        official_product_url: p.product_url,
+        internal_notes: p.price ? `Preço no site de origem: ${p.price}` : null,
+        availability_status: "sob_consulta",
+        is_active: true,
+        is_featured: false,
+      };
+
+      const { error } = await supabase.from("products").insert(payload);
+      if (error) {
+        failed++;
+      } else {
+        imported++;
+        existingSlugs.add(slug);
+      }
+    }
+
+    setImporting(false);
+    toast.success(
+      `Importação: ${imported} criado(s)${failed ? `, ${failed} falha(s)` : ""}${
+        skipped ? `, ${skipped} ignorado(s)` : ""
+      }.`,
+    );
+    qc.invalidateQueries({ queryKey: ["admin-products"] });
+    qc.invalidateQueries({ queryKey: ["products"] });
+    reset();
+    onOpenChange(false);
+  }
+
+  const selectedCount = selected.size;
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        if (!v) reset();
+        onOpenChange(v);
+      }}
+    >
+      <DialogContent className="max-h-[92vh] gap-0 overflow-hidden p-0 sm:max-w-2xl">
+        <DialogHeader className="border-b border-border px-6 py-4">
+          <DialogTitle className="flex items-center gap-2">
+            <Link2 className="h-5 w-5" /> Importar via link — {brand.name}
+          </DialogTitle>
+          <DialogDescription>
+            Cole o link de uma página de produto ou de uma categoria. Buscamos os
+            produtos automaticamente e você escolhe quais cadastrar.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4 px-6 py-5">
+          <div className="flex gap-2">
+            <Input
+              placeholder="https://loja.exemplo.com/produto..."
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !scraping) doScrape();
+              }}
+            />
+            <Button onClick={doScrape} disabled={scraping} className="gap-2">
+              {scraping ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Search className="h-4 w-4" />
+              )}
+              Buscar
+            </Button>
+          </div>
+
+          {found && found.length > 0 && (
+            <>
+              <div className="grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
+                <div>
+                  <Label className="text-xs">Categoria para os importados</Label>
+                  <Select value={categoryId} onValueChange={setCategoryId}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Sem categoria" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {brandCats.map((c) => (
+                        <SelectItem key={c.id} value={c.id}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {selectedCount} de {found.length} selecionado(s)
+                </p>
+              </div>
+
+              <div className="max-h-[46vh] space-y-2 overflow-y-auto pr-1">
+                {found.map((p, i) => (
+                  <label
+                    key={i}
+                    className={`flex cursor-pointer items-center gap-3 rounded-xl border p-2.5 transition-colors ${
+                      selected.has(i)
+                        ? "border-primary/50 bg-primary/5"
+                        : "border-border hover:bg-muted/50"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selected.has(i)}
+                      onChange={() => toggle(i)}
+                      className="h-4 w-4 accent-[hsl(var(--primary))]"
+                    />
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-surface">
+                      {p.main_image_url ? (
+                        <img
+                          src={p.main_image_url}
+                          alt={p.name}
+                          className="h-full w-full object-contain p-1"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = placeholder;
+                          }}
+                        />
+                      ) : (
+                        <ImageOff className="h-5 w-5 text-muted-foreground" />
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{p.name}</p>
+                      {p.short_description && (
+                        <p className="truncate text-xs text-muted-foreground">
+                          {p.short_description}
+                        </p>
+                      )}
+                      {p.price && (
+                        <p className="text-xs font-semibold text-primary">
+                          {p.price}
+                        </p>
+                      )}
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </>
+          )}
+
+          {found && found.length === 0 && (
+            <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border py-10 text-center text-muted-foreground">
+              <AlertTriangle className="h-6 w-6" />
+              Nenhum produto encontrado nessa página.
+            </div>
+          )}
+        </div>
+
+        <DialogFooter className="border-t border-border px-6 py-4">
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={importing}
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={confirmImport}
+            disabled={!found || selectedCount === 0 || importing}
+            className="gap-2"
+          >
+            {importing ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <CheckCircle2 className="h-4 w-4" />
+            )}
+            Cadastrar {selectedCount > 0 ? `(${selectedCount})` : ""}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
