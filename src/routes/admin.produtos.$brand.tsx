@@ -60,6 +60,7 @@ function BrandProductsAdmin() {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<AdminProduct | null>(null);
   const [csvOpen, setCsvOpen] = useState(false);
+  const [linkOpen, setLinkOpen] = useState(false);
   const [catsOpen, setCatsOpen] = useState(false);
 
   const brandCats = useMemo(
