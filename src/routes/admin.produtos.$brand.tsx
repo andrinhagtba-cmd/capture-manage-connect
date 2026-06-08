@@ -33,6 +33,7 @@ import {
   FolderOpen,
   Star,
   ImageOff,
+  Link2,
 } from "lucide-react";
 import { toast } from "sonner";
 import placeholder from "@/assets/product-placeholder.jpg";
