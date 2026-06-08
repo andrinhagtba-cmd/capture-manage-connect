@@ -91,7 +91,13 @@ export function LinkImportDialog({
       setSelected(new Set(result.products.map((_, i) => i)));
       toast.success(`${result.products.length} produto(s) encontrado(s).`);
     } catch (e: any) {
-      toast.error(e?.message ?? "Erro ao fazer o scraping.");
+      const raw = String(e?.message ?? "");
+      const friendly = /upstream|timeout|timed out|network|failed to fetch|502|504/i.test(
+        raw,
+      )
+        ? "A busca demorou demais ou o serviço ficou indisponível. Tente novamente em instantes ou use um link mais específico (página de um produto)."
+        : raw || "Erro ao fazer o scraping.";
+      toast.error(friendly);
     } finally {
       setScraping(false);
     }
