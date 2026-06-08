@@ -360,6 +360,12 @@ function BrandProductsAdmin() {
         categories={categories}
         forcedBrandId={brand.id}
       />
+      <LinkImportDialog
+        open={linkOpen}
+        onOpenChange={setLinkOpen}
+        brand={brand}
+        categories={categories}
+      />
       <CategoriesManager
         open={catsOpen}
         onOpenChange={setCatsOpen}
