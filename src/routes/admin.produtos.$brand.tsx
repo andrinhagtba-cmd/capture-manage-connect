@@ -199,6 +199,9 @@ function BrandProductsAdmin() {
           <Button className="gap-2" onClick={openNew}>
             <Plus className="h-4 w-4" /> Novo produto {brand.name}
           </Button>
+          <Button className="gap-2" variant="secondary" onClick={() => setLinkOpen(true)}>
+            <Link2 className="h-4 w-4" /> Importar via link
+          </Button>
           <Button variant="outline" className="gap-2" onClick={() => setCsvOpen(true)}>
             <Upload className="h-4 w-4" /> Importar CSV
           </Button>
