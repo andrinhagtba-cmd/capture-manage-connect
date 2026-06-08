@@ -12,6 +12,7 @@ import {
 import { AVAILABILITY_LABELS } from "@/lib/site";
 import { ProductForm } from "@/components/admin/ProductForm";
 import { CsvImportDialog } from "@/components/admin/CsvImportDialog";
+import { LinkImportDialog } from "@/components/admin/LinkImportDialog";
 import { CategoriesManager } from "@/components/admin/CategoriesManager";
 import { AdminProductCard } from "@/components/admin/AdminProductCard";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,7 @@ import {
   FolderOpen,
   Star,
   ImageOff,
+  Link2,
 } from "lucide-react";
 import { toast } from "sonner";
 import placeholder from "@/assets/product-placeholder.jpg";
@@ -58,6 +60,7 @@ function BrandProductsAdmin() {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<AdminProduct | null>(null);
   const [csvOpen, setCsvOpen] = useState(false);
+  const [linkOpen, setLinkOpen] = useState(false);
   const [catsOpen, setCatsOpen] = useState(false);
 
   const brandCats = useMemo(
@@ -195,6 +198,9 @@ function BrandProductsAdmin() {
         <div className="flex flex-wrap gap-2">
           <Button className="gap-2" onClick={openNew}>
             <Plus className="h-4 w-4" /> Novo produto {brand.name}
+          </Button>
+          <Button className="gap-2" variant="secondary" onClick={() => setLinkOpen(true)}>
+            <Link2 className="h-4 w-4" /> Importar via link
           </Button>
           <Button variant="outline" className="gap-2" onClick={() => setCsvOpen(true)}>
             <Upload className="h-4 w-4" /> Importar CSV
@@ -353,6 +359,12 @@ function BrandProductsAdmin() {
         brands={brands}
         categories={categories}
         forcedBrandId={brand.id}
+      />
+      <LinkImportDialog
+        open={linkOpen}
+        onOpenChange={setLinkOpen}
+        brand={brand}
+        categories={categories}
       />
       <CategoriesManager
         open={catsOpen}
