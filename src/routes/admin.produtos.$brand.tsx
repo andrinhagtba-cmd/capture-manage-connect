@@ -12,6 +12,7 @@ import {
 import { AVAILABILITY_LABELS } from "@/lib/site";
 import { ProductForm } from "@/components/admin/ProductForm";
 import { CsvImportDialog } from "@/components/admin/CsvImportDialog";
+import { LinkImportDialog } from "@/components/admin/LinkImportDialog";
 import { CategoriesManager } from "@/components/admin/CategoriesManager";
 import { AdminProductCard } from "@/components/admin/AdminProductCard";
 import { Button } from "@/components/ui/button";
