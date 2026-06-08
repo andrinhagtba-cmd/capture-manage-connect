@@ -131,9 +131,13 @@ export const scrapeProducts = createServerFn({ method: "POST" })
       };
     }
 
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 28000);
+
     try {
       const res = await fetch("https://api.firecrawl.dev/v2/scrape", {
         method: "POST",
+        signal: controller.signal,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${apiKey}`,
@@ -141,6 +145,7 @@ export const scrapeProducts = createServerFn({ method: "POST" })
         body: JSON.stringify({
           url: data.url,
           onlyMainContent: true,
+          timeout: 25000,
           formats: [
             {
               type: "json",
@@ -174,6 +179,19 @@ export const scrapeProducts = createServerFn({ method: "POST" })
       }
 
       const payload = await res.json();
+      const status = payload?.data?.metadata?.statusCode;
+      if (status && status >= 400) {
+        return {
+          ok: false,
+          error:
+            status === 404
+              ? "Página não encontrada (404). Verifique se o link está completo e correto."
+              : `A página retornou um erro (HTTP ${status}). Verifique o link.`,
+          source_url: data.url,
+          products: [],
+        };
+      }
+
       const json = payload?.data?.json ?? payload?.json ?? {};
       const products = toArray(json?.products)
         .map(normalizeProduct)
@@ -190,12 +208,17 @@ export const scrapeProducts = createServerFn({ method: "POST" })
 
       return { ok: true, source_url: data.url, products };
     } catch (e: any) {
+      const aborted = e?.name === "AbortError";
       console.error("[scrapeProducts] error", e);
       return {
         ok: false,
-        error: "Erro inesperado ao fazer o scraping da página.",
+        error: aborted
+          ? "A página demorou demais para responder. Tente novamente ou use um link mais específico."
+          : "Erro inesperado ao fazer o scraping da página.",
         source_url: data.url,
         products: [],
       };
+    } finally {
+      clearTimeout(timer);
     }
   });
