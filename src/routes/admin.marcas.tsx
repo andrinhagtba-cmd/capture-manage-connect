@@ -182,6 +182,47 @@ function MarcasAdmin() {
           </p>
         )}
       </div>
+
+      <Dialog open={createOpen} onOpenChange={(o) => !saving && setCreateOpen(o)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Nova marca de produto</DialogTitle>
+            <DialogDescription>
+              Cria a marca no catálogo (disponível ao cadastrar produtos) e sua página dedicada.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <Field label="Nome da marca">
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Ex.: Nikon"
+                autoFocus
+              />
+              {name.trim() && (
+                <p className="text-xs text-muted-foreground">Endereço: /marca/{slugify(name)}</p>
+              )}
+            </Field>
+            <Field label="Descrição (opcional)">
+              <Textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+                placeholder="Breve descrição da marca"
+              />
+            </Field>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateOpen(false)} disabled={saving}>
+              Cancelar
+            </Button>
+            <Button onClick={createBrand} disabled={saving}>
+              {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Criar marca
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
