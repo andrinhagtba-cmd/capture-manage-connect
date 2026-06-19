@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useBrands, type Brand } from "@/lib/catalog";
 import { useBrandPageSettingsList, useHeroBanners, type BrandPageSettings } from "@/lib/site-content";
 import { slugify } from "@/lib/products-admin";
 import { Button } from "@/components/ui/button";
