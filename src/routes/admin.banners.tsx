@@ -354,15 +354,7 @@ function BannersAdmin() {
   );
 }
 
-const LOCATION_ORDER = ["home", "canon", "dji", "sony", "gopro"];
 
-const LOCATION_LABELS: Record<string, string> = {
-  home: "Home",
-  canon: "Marca: Canon",
-  dji: "Marca: DJI",
-  sony: "Marca: Sony",
-  gopro: "Marca: GoPro",
-};
 
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
