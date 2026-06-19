@@ -168,6 +168,36 @@ function MarcasAdmin() {
               </div>
             </div>
 
+            {(() => {
+              const banner = (heroBanners ?? []).find((b) => b.location === p.brand_slug);
+              return (
+                <div className="mb-4 rounded-lg border border-border/70 bg-surface/40 p-4">
+                  <div className="mb-3 flex items-center gap-2">
+                    <ImageIcon className="h-4 w-4 text-primary" />
+                    <p className="text-sm font-semibold">Imagem do banner (topo da página)</p>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <MediaUploadField
+                      label="Imagem desktop"
+                      value={banner?.desktop_image_url}
+                      folder="banners"
+                      onChange={(url) => setBrandHeroImage(p.brand_slug, "desktop_image_url", url)}
+                    />
+                    <MediaUploadField
+                      label="Imagem mobile (opcional)"
+                      value={banner?.mobile_image_url}
+                      folder="banners"
+                      onChange={(url) => setBrandHeroImage(p.brand_slug, "mobile_image_url", url)}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Para textos, botões e vídeo do banner, use a página de Banners e Heros.
+                  </p>
+                </div>
+              );
+            })()}
+
+
             <div className="grid gap-3 sm:grid-cols-2">
               <Field label="Chapéu (eyebrow)">
                 <Input defaultValue={p.intro_eyebrow ?? ""} onBlur={(e) => e.target.value !== (p.intro_eyebrow ?? "") && update(p.id, { intro_eyebrow: e.target.value })} />
