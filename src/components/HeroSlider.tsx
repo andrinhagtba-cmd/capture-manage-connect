@@ -4,6 +4,7 @@ import { QuoteDialog } from "@/components/QuoteDialog";
 import { GridGlowBackground } from "@/components/ui/grid-glow-background";
 import { Button } from "@/components/ui/button";
 import { useHeroBanners, type HeroBanner } from "@/lib/site-content";
+import { useAutoplayVideoRef } from "@/hooks/use-autoplay-video";
 import { COMPANY_NAME } from "@/lib/site";
 import { ShieldCheck, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import heroHome from "@/assets/hero-home.jpg";
