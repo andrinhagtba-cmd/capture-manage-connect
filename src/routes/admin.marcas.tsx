@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useBrandPageSettingsList, type BrandPageSettings } from "@/lib/site-content";
+import { useBrandPageSettingsList, useHeroBanners, type BrandPageSettings } from "@/lib/site-content";
 import { slugify } from "@/lib/products-admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,8 +17,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, Tag, Eye, Plus } from "lucide-react";
-import { AdminPageHero } from "@/components/admin/ui";
+import { Loader2, Tag, Eye, Plus, ImageIcon } from "lucide-react";
+import { AdminPageHero, MediaUploadField } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/marcas")({
