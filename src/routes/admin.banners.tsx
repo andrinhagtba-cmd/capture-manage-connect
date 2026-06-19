@@ -92,7 +92,7 @@ function BannersAdmin() {
     .sort((a, b) => a.order_index - b.order_index)[0];
 
   // Agrupa banners por localização para organizar a lista.
-  const groups = LOCATION_ORDER
+  const groups = locationOrder
     .map((loc) => ({ loc, items: list.filter((b) => b.location === loc) }))
     .filter((g) => g.items.length > 0);
 
@@ -180,7 +180,7 @@ function BannersAdmin() {
                 <GalleryHorizontalEnd className="h-4 w-4 text-muted-foreground" />
               )}
               <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                {LOCATION_LABELS[group.loc] ?? group.loc}
+                {locationLabels[group.loc] ?? group.loc}
               </h2>
               <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
                 {group.items.length}
