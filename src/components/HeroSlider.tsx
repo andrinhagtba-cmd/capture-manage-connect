@@ -104,6 +104,7 @@ export function HeroSlider() {
 }
 
 function HeroMedia({ banner, active }: { banner: HeroBanner | null; active: boolean }) {
+  const videoRef = useAutoplayVideoRef();
   const image = banner?.desktop_image_url || heroHome;
   const overlay = banner?.overlay_opacity ?? 0.7;
   return (
@@ -112,11 +113,13 @@ function HeroMedia({ banner, active }: { banner: HeroBanner | null; active: bool
     >
       {banner?.media_type === "video" && banner.video_url ? (
         <video
+          ref={videoRef}
           src={banner.video_url}
           autoPlay
           muted
           loop
           playsInline
+          preload="auto"
           poster={image}
           className="h-full w-full object-cover"
         />
