@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { useCategoryProducts, useCategoriesProducts, type Product } from "@/lib/catalog";
 import { useCompany } from "@/lib/site-content";
+import { useAutoplayVideoRef } from "@/hooks/use-autoplay-video";
 import placeholder from "@/assets/product-placeholder.jpg";
 
 function StarRating() {
