@@ -8,6 +8,7 @@ export type Brand = {
   description: string | null;
   logo_url: string | null;
   hero_image_url: string | null;
+  card_image_url: string | null;
   theme_primary_color: string | null;
   official_site_url: string | null;
   sort_order: number;

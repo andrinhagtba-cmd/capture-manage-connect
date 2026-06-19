@@ -84,6 +84,15 @@ function MarcasAdmin() {
     invalidate();
   }
 
+  async function updateBrandCardImage(slug: string, url: string) {
+    const brand = brands?.find((b) => b.slug === slug);
+    if (!brand) return;
+    const { error } = await supabase.from("brands").update({ card_image_url: url }).eq("id", brand.id);
+    if (error) return toast.error(error.message);
+    toast.success("Imagem do card atualizada");
+    invalidate();
+  }
+
   async function createBrand() {
     const trimmed = name.trim();
     if (!trimmed) return toast.error("Informe o nome da marca.");
@@ -212,25 +221,41 @@ function MarcasAdmin() {
                       folder="banners"
                       onChange={(url) => setBrandHeroImage(p.brand_slug, "desktop_image_url", url)}
                     />
-                    <MediaUploadField
-                      label="Imagem mobile (opcional)"
-                      value={banner?.mobile_image_url}
-                      folder="banners"
-                      onChange={(url) => setBrandHeroImage(p.brand_slug, "mobile_image_url", url)}
-                    />
-                  </div>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    Para textos, botões e vídeo do banner, use a página de Banners e Heros.
-                  </p>
+                  <MediaUploadField
+                    label="Imagem mobile (opcional)"
+                    value={banner?.mobile_image_url}
+                    folder="banners"
+                    onChange={(url) => setBrandHeroImage(p.brand_slug, "mobile_image_url", url)}
+                  />
                 </div>
-              );
-            })()}
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Para textos, botões e vídeo do banner, use a página de Banners e Heros.
+                </p>
+              </div>
+            );
+          })()}
 
+          {/* Imagem do card da home */}
+          <div className="mb-4 rounded-lg border border-border/70 bg-surface/40 p-4">
+            <div className="mb-3 flex items-center gap-2">
+              <ImageIcon className="h-4 w-4 text-primary" />
+              <p className="text-sm font-semibold">Imagem do card (home)</p>
+            </div>
+            <MediaUploadField
+              label="Imagem do card"
+              value={brandMap.get(p.brand_slug)?.card_image_url}
+              folder="banners"
+              onChange={(url) => updateBrandCardImage(p.brand_slug, url)}
+            />
+            <p className="mt-2 text-xs text-muted-foreground">
+              Imagem exibida no card da marca na página inicial.
+            </p>
+          </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Field label="Chapéu (eyebrow)">
-                <Input defaultValue={p.intro_eyebrow ?? ""} onBlur={(e) => e.target.value !== (p.intro_eyebrow ?? "") && update(p.id, { intro_eyebrow: e.target.value })} />
-              </Field>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Field label="Chapéu (eyebrow)">
+              <Input defaultValue={p.intro_eyebrow ?? ""} onBlur={(e) => e.target.value !== (p.intro_eyebrow ?? "") && update(p.id, { intro_eyebrow: e.target.value })} />
+            </Field>
               <Field label="Título da introdução">
                 <Input defaultValue={p.intro_title ?? ""} onBlur={(e) => e.target.value !== (p.intro_title ?? "") && update(p.id, { intro_title: e.target.value })} />
               </Field>
