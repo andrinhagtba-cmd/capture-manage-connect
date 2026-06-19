@@ -18,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, Tag, Eye, Plus, ImageIcon } from "lucide-react";
+import { Loader2, Tag, Eye, Plus, ImageIcon, ArrowUp, ArrowDown } from "lucide-react";
 import { AdminPageHero, MediaUploadField } from "@/components/admin/ui";
 import { toast } from "sonner";
 
@@ -36,6 +36,7 @@ const BRAND_NAMES: Record<string, string> = {
 function MarcasAdmin() {
   const qc = useQueryClient();
   const { data: pages, isLoading } = useBrandPageSettingsList();
+  const { data: brands } = useBrands();
   const { data: heroBanners } = useHeroBanners();
   const [createOpen, setCreateOpen] = useState(false);
   const [name, setName] = useState("");
