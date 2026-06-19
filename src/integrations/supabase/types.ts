@@ -210,6 +210,7 @@ export type Database = {
       }
       brands: {
         Row: {
+          card_image_url: string | null
           created_at: string
           description: string | null
           hero_image_url: string | null
@@ -224,6 +225,7 @@ export type Database = {
           theme_secondary_color: string | null
         }
         Insert: {
+          card_image_url?: string | null
           created_at?: string
           description?: string | null
           hero_image_url?: string | null
@@ -238,6 +240,7 @@ export type Database = {
           theme_secondary_color?: string | null
         }
         Update: {
+          card_image_url?: string | null
           created_at?: string
           description?: string | null
           hero_image_url?: string | null
