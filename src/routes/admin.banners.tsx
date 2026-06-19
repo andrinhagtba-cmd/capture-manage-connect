@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useHeroBanners, type HeroBanner } from "@/lib/site-content";
+import { useBrands } from "@/lib/catalog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,6 +26,15 @@ export const Route = createFileRoute("/admin/banners")({
 function BannersAdmin() {
   const qc = useQueryClient();
   const { data: banners, isLoading } = useHeroBanners();
+  const { data: brands } = useBrands();
+
+  // Localizações disponíveis: Home + cada marca cadastrada (dinâmico).
+  const brandLocations = (brands ?? []).map((b) => ({ slug: b.slug, name: b.name }));
+  const locationOrder = ["home", ...brandLocations.map((b) => b.slug)];
+  const locationLabels: Record<string, string> = {
+    home: "Home",
+    ...Object.fromEntries(brandLocations.map((b) => [b.slug, `Marca: ${b.name}`])),
+  };
 
   function invalidate() {
     qc.invalidateQueries({ queryKey: ["hero_banners"] });
@@ -82,7 +92,7 @@ function BannersAdmin() {
     .sort((a, b) => a.order_index - b.order_index)[0];
 
   // Agrupa banners por localização para organizar a lista.
-  const groups = LOCATION_ORDER
+  const groups = locationOrder
     .map((loc) => ({ loc, items: list.filter((b) => b.location === loc) }))
     .filter((g) => g.items.length > 0);
 
@@ -170,7 +180,7 @@ function BannersAdmin() {
                 <GalleryHorizontalEnd className="h-4 w-4 text-muted-foreground" />
               )}
               <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                {LOCATION_LABELS[group.loc] ?? group.loc}
+                {locationLabels[group.loc] ?? group.loc}
               </h2>
               <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
                 {group.items.length}
@@ -256,10 +266,11 @@ function BannersAdmin() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="home">Home</SelectItem>
-                        <SelectItem value="canon">Marca: Canon</SelectItem>
-                        <SelectItem value="dji">Marca: DJI</SelectItem>
-                        <SelectItem value="sony">Marca: Sony</SelectItem>
-                        <SelectItem value="gopro">Marca: GoPro</SelectItem>
+                        {brandLocations.map((bl) => (
+                          <SelectItem key={bl.slug} value={bl.slug}>
+                            Marca: {bl.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </Field>
@@ -343,15 +354,7 @@ function BannersAdmin() {
   );
 }
 
-const LOCATION_ORDER = ["home", "canon", "dji", "sony", "gopro"];
 
-const LOCATION_LABELS: Record<string, string> = {
-  home: "Home",
-  canon: "Marca: Canon",
-  dji: "Marca: DJI",
-  sony: "Marca: Sony",
-  gopro: "Marca: GoPro",
-};
 
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
