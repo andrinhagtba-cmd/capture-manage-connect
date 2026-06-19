@@ -82,7 +82,7 @@ function Home() {
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {(brands ?? []).map((b) => {
                 const theme = BRAND_THEME[b.slug];
-                const image = BRAND_IMAGES[b.slug];
+                const image = b.hero_image_url;
                 return (
                   <Link
                     key={b.id}
@@ -91,7 +91,7 @@ function Home() {
                     className="hover-lift group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden gradient-dark">
-                      {image && (
+                      {image ? (
                         <img
                           src={image}
                           alt={`Produtos ${b.name}`}
@@ -100,6 +100,10 @@ function Home() {
                           height={600}
                           className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                         />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-muted">
+                          <span className="text-sm text-muted-foreground">Sem imagem</span>
+                        </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                       <span className="absolute left-5 top-5 inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-md">
