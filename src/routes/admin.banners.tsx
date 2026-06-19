@@ -266,10 +266,11 @@ function BannersAdmin() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="home">Home</SelectItem>
-                        <SelectItem value="canon">Marca: Canon</SelectItem>
-                        <SelectItem value="dji">Marca: DJI</SelectItem>
-                        <SelectItem value="sony">Marca: Sony</SelectItem>
-                        <SelectItem value="gopro">Marca: GoPro</SelectItem>
+                        {brandLocations.map((bl) => (
+                          <SelectItem key={bl.slug} value={bl.slug}>
+                            Marca: {bl.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </Field>
