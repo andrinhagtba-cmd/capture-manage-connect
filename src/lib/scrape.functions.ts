@@ -174,7 +174,10 @@ export const scrapeProducts = createServerFn({ method: "POST" })
         console.error("[scrapeProducts] Firecrawl error", res.status, text);
         return {
           ok: false,
-          error: `Falha ao acessar a página (HTTP ${res.status}).`,
+          error:
+            res.status === 408
+              ? "A página demorou demais para responder (timeout). Ela pode ter proteção contra robôs. Tente novamente em alguns segundos."
+              : `Falha ao acessar a página (HTTP ${res.status}).`,
           source_url: data.url,
           products: [],
         };
