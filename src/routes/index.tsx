@@ -13,17 +13,10 @@ import { useBrands, useProducts } from "@/lib/catalog";
 import { useHomeSections, type HomeSection } from "@/lib/site-content";
 import { BRAND_THEME } from "@/lib/site";
 import { ShieldCheck, Award, Headphones, Truck, ArrowRight } from "lucide-react";
-import brandCanon from "@/assets/brand-canon.jpg";
-import brandDji from "@/assets/brand-dji.jpg";
-import brandSony from "@/assets/brand-sony.jpg";
-import brandGopro from "@/assets/brand-gopro.jpg";
+import placeholder from "@/assets/product-placeholder.jpg";
 
-const BRAND_IMAGES: Record<string, string> = {
-  canon: brandCanon,
-  dji: brandDji,
-  sony: brandSony,
-  gopro: brandGopro,
-};
+const BRAND_FALLBACK: Record<string, string> = {};
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
