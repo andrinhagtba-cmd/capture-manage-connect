@@ -57,9 +57,13 @@ function MarcasAdmin() {
   ) {
     const existing = (heroBanners ?? []).find((b) => b.location === slug);
     if (existing) {
+      const patch =
+        field === "desktop_image_url"
+          ? { desktop_image_url: url }
+          : { mobile_image_url: url };
       const { error } = await supabase
         .from("hero_banners")
-        .update({ [field]: url })
+        .update(patch)
         .eq("id", existing.id);
       if (error) return toast.error(error.message);
     } else {
@@ -69,7 +73,8 @@ function MarcasAdmin() {
         media_type: "image",
         is_active: true,
         order_index: 0,
-        [field]: url,
+        desktop_image_url: field === "desktop_image_url" ? url : null,
+        mobile_image_url: field === "mobile_image_url" ? url : null,
       });
       if (error) return toast.error(error.message);
     }
