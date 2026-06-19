@@ -35,6 +35,7 @@ const BRAND_NAMES: Record<string, string> = {
 function MarcasAdmin() {
   const qc = useQueryClient();
   const { data: pages, isLoading } = useBrandPageSettingsList();
+  const { data: heroBanners } = useHeroBanners();
   const [createOpen, setCreateOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -44,6 +45,36 @@ function MarcasAdmin() {
     qc.invalidateQueries({ queryKey: ["brand_page_settings"] });
     qc.invalidateQueries({ queryKey: ["admin-brands"] });
     qc.invalidateQueries({ queryKey: ["brands"] });
+    qc.invalidateQueries({ queryKey: ["hero_banners"] });
+  }
+
+  // Cria ou atualiza o banner (hero) usado no topo da página da marca.
+  // A imagem do banner da marca fica em hero_banners com location = slug.
+  async function setBrandHeroImage(
+    slug: string,
+    field: "desktop_image_url" | "mobile_image_url",
+    url: string,
+  ) {
+    const existing = (heroBanners ?? []).find((b) => b.location === slug);
+    if (existing) {
+      const { error } = await supabase
+        .from("hero_banners")
+        .update({ [field]: url })
+        .eq("id", existing.id);
+      if (error) return toast.error(error.message);
+    } else {
+      const { error } = await supabase.from("hero_banners").insert({
+        location: slug,
+        title: BRAND_NAMES[slug] ?? slug,
+        media_type: "image",
+        is_active: true,
+        order_index: 0,
+        [field]: url,
+      });
+      if (error) return toast.error(error.message);
+    }
+    toast.success("Imagem do banner atualizada");
+    invalidate();
   }
 
   async function createBrand() {
