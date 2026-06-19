@@ -65,15 +65,25 @@ function BannersAdmin() {
     invalidate();
   }
 
-  async function move(item: HeroBanner, dir: -1 | 1) {
-    const list = banners ?? [];
-    const idx = list.findIndex((i) => i.id === item.id);
-    const swap = list[idx + dir];
-    if (!swap) return;
-    await Promise.all([
-      supabase.from("hero_banners").update({ order_index: swap.order_index }).eq("id", item.id),
-      supabase.from("hero_banners").update({ order_index: item.order_index }).eq("id", swap.id),
-    ]);
+  // Reordena dentro do mesmo grupo (localização). Garante order_index distinto
+  // mesmo quando os banners novos foram criados com o mesmo valor.
+  async function move(groupItems: HeroBanner[], item: HeroBanner, dir: -1 | 1) {
+    const ordered = [...groupItems].sort((a, b) => a.order_index - b.order_index);
+    const idx = ordered.findIndex((i) => i.id === item.id);
+    const swapIdx = idx + dir;
+    if (swapIdx < 0 || swapIdx >= ordered.length) return;
+    const swap = ordered[swapIdx];
+    // Reescreve a sequência inteira do grupo para normalizar índices duplicados.
+    const reordered = [...ordered];
+    reordered[idx] = swap;
+    reordered[swapIdx] = item;
+    await Promise.all(
+      reordered.map((b, i) =>
+        b.order_index === i
+          ? Promise.resolve()
+          : supabase.from("hero_banners").update({ order_index: i }).eq("id", b.id),
+      ),
+    );
     invalidate();
   }
 
@@ -188,7 +198,7 @@ function BannersAdmin() {
             </div>
 
             {group.items.map((b) => {
-              const idx = list.findIndex((i) => i.id === b.id);
+              const gIdx = group.items.findIndex((i) => i.id === b.id);
               return (
           <div
             key={b.id}
@@ -215,10 +225,10 @@ function BannersAdmin() {
                   <Label className="text-xs font-medium">{b.is_active ? "Ativo" : "Inativo"}</Label>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Button size="icon" variant="ghost" disabled={idx === 0} onClick={() => move(b, -1)}>
+                  <Button size="icon" variant="ghost" disabled={gIdx === 0} onClick={() => move(group.items, b, -1)}>
                     <ArrowUp className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" disabled={idx === list.length - 1} onClick={() => move(b, 1)}>
+                  <Button size="icon" variant="ghost" disabled={gIdx === group.items.length - 1} onClick={() => move(group.items, b, 1)}>
                     <ArrowDown className="h-4 w-4" />
                   </Button>
                   <Button size="icon" variant="ghost" onClick={() => remove(b.id)}>
