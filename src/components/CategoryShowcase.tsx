@@ -167,6 +167,7 @@ export function CategoryShowcase({
         <div className="relative overflow-hidden rounded-[2rem] shadow-xl">
           {videoSrc ? (
             <video
+              ref={videoRef}
               className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
               src={videoSrc}
               autoPlay
@@ -174,6 +175,7 @@ export function CategoryShowcase({
               loop
               playsInline
               preload="auto"
+              poster={imageSrc}
             />
           ) : (
             <img
