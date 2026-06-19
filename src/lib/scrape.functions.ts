@@ -145,6 +145,7 @@ export const scrapeProducts = createServerFn({ method: "POST" })
         body: JSON.stringify({
           url: data.url,
           onlyMainContent: true,
+          waitFor: 2500,
           timeout: 25000,
           formats: [
             {
@@ -185,7 +186,7 @@ export const scrapeProducts = createServerFn({ method: "POST" })
           ok: false,
           error:
             status === 404
-              ? "Página não encontrada (404). Verifique se o link está completo e correto."
+              ? "Página não encontrada (404). Esse link não existe no site. Use o link completo da página de um produto específico (ex.: .../produto/modelo), não o de uma categoria geral."
               : `A página retornou um erro (HTTP ${status}). Verifique o link.`,
           source_url: data.url,
           products: [],

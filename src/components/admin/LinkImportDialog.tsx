@@ -55,6 +55,7 @@ export function LinkImportDialog({
   const [scraping, setScraping] = useState(false);
   const [importing, setImporting] = useState(false);
   const [found, setFound] = useState<ScrapedProduct[] | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [categoryId, setCategoryId] = useState<string>("");
 
@@ -69,6 +70,7 @@ export function LinkImportDialog({
   function reset() {
     setUrl("");
     setFound(null);
+    setErrorMsg(null);
     setSelected(new Set());
     setScraping(false);
     setImporting(false);
@@ -81,9 +83,11 @@ export function LinkImportDialog({
     }
     setScraping(true);
     setFound(null);
+    setErrorMsg(null);
     try {
       const result = await runScrape({ data: { url: url.trim() } });
       if (!result.ok) {
+        setErrorMsg(result.error ?? "Não foi possível ler a página.");
         toast.error(result.error ?? "Não foi possível ler a página.");
         return;
       }
@@ -97,6 +101,7 @@ export function LinkImportDialog({
       )
         ? "A busca demorou demais ou o serviço ficou indisponível. Tente novamente em instantes ou use um link mais específico (página de um produto)."
         : raw || "Erro ao fazer o scraping.";
+      setErrorMsg(friendly);
       toast.error(friendly);
     } finally {
       setScraping(false);
@@ -223,6 +228,13 @@ export function LinkImportDialog({
               Buscar
             </Button>
           </div>
+
+          {errorMsg && !found && (
+            <div className="flex items-start gap-2 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+          )}
 
           {found && found.length > 0 && (
             <>
