@@ -181,11 +181,17 @@ function MarcasAdmin() {
 
       <div className="space-y-4">
 
-        {(pages ?? []).map((p) => (
+        {orderedPages.map((p) => (
           <div key={p.id} className="rounded-xl border border-border bg-background p-5">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-bold">{BRAND_NAMES[p.brand_slug] ?? p.brand_slug}</h2>
               <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveBrand(p.brand_slug, -1)} title="Subir">
+                  <ArrowUp className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveBrand(p.brand_slug, 1)} title="Descer">
+                  <ArrowDown className="h-4 w-4" />
+                </Button>
                 <Switch checked={p.is_published} onCheckedChange={(v) => update(p.id, { is_published: v })} />
                 <Label className="text-sm">{p.is_published ? "Publicada" : "Rascunho"}</Label>
               </div>
