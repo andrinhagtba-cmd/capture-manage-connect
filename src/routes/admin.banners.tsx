@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useHeroBanners, type HeroBanner } from "@/lib/site-content";
+import { useBrands } from "@/lib/catalog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,6 +26,15 @@ export const Route = createFileRoute("/admin/banners")({
 function BannersAdmin() {
   const qc = useQueryClient();
   const { data: banners, isLoading } = useHeroBanners();
+  const { data: brands } = useBrands();
+
+  // Localizações disponíveis: Home + cada marca cadastrada (dinâmico).
+  const brandLocations = (brands ?? []).map((b) => ({ slug: b.slug, name: b.name }));
+  const locationOrder = ["home", ...brandLocations.map((b) => b.slug)];
+  const locationLabels: Record<string, string> = {
+    home: "Home",
+    ...Object.fromEntries(brandLocations.map((b) => [b.slug, `Marca: ${b.name}`])),
+  };
 
   function invalidate() {
     qc.invalidateQueries({ queryKey: ["hero_banners"] });
