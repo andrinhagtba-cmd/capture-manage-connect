@@ -55,6 +55,7 @@ export function LinkImportDialog({
   const [scraping, setScraping] = useState(false);
   const [importing, setImporting] = useState(false);
   const [found, setFound] = useState<ScrapedProduct[] | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [categoryId, setCategoryId] = useState<string>("");
 
