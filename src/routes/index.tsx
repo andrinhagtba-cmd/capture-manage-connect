@@ -13,8 +13,6 @@ import { useBrands, useProducts } from "@/lib/catalog";
 import { useHomeSections, type HomeSection } from "@/lib/site-content";
 import { BRAND_THEME } from "@/lib/site";
 import { ShieldCheck, Award, Headphones, Truck, ArrowRight } from "lucide-react";
-import placeholder from "@/assets/product-placeholder.jpg";
-
 const BRAND_FALLBACK: Record<string, string> = {};
 
 
@@ -82,7 +80,7 @@ function Home() {
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {(brands ?? []).map((b) => {
                 const theme = BRAND_THEME[b.slug];
-                const image = b.hero_image_url;
+                const image = b.card_image_url;
                 return (
                   <Link
                     key={b.id}
