@@ -1,13 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useBrandPageSettingsList, type BrandPageSettings } from "@/lib/site-content";
+import { slugify } from "@/lib/products-admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, Tag, Eye } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Loader2, Tag, Eye, Plus } from "lucide-react";
 import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
@@ -25,9 +35,55 @@ const BRAND_NAMES: Record<string, string> = {
 function MarcasAdmin() {
   const qc = useQueryClient();
   const { data: pages, isLoading } = useBrandPageSettingsList();
+  const [createOpen, setCreateOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [saving, setSaving] = useState(false);
 
   function invalidate() {
     qc.invalidateQueries({ queryKey: ["brand_page_settings"] });
+    qc.invalidateQueries({ queryKey: ["admin-brands"] });
+    qc.invalidateQueries({ queryKey: ["brands"] });
+  }
+
+  async function createBrand() {
+    const trimmed = name.trim();
+    if (!trimmed) return toast.error("Informe o nome da marca.");
+    const slug = slugify(trimmed);
+    if (!slug) return toast.error("Nome inválido para gerar o endereço (slug).");
+
+    setSaving(true);
+    try {
+      const maxSort = Math.max(0, ...(pages ?? []).map(() => 0));
+      const { error: brandErr } = await supabase.from("brands").insert({
+        name: trimmed,
+        slug,
+        description: description.trim() || null,
+        sort_order: maxSort,
+      });
+      if (brandErr) {
+        if (brandErr.code === "23505") throw new Error("Já existe uma marca com esse nome/endereço.");
+        throw brandErr;
+      }
+
+      // Cria a página de marca correspondente (ignora se já existir).
+      await supabase.from("brand_page_settings").insert({
+        brand_slug: slug,
+        intro_title: trimmed,
+        intro_text: description.trim() || null,
+        is_published: false,
+      });
+
+      toast.success(`Marca "${trimmed}" criada.`);
+      setName("");
+      setDescription("");
+      setCreateOpen(false);
+      invalidate();
+    } catch (e: any) {
+      toast.error(e?.message ?? "Não foi possível criar a marca.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function update(id: string, patch: Partial<BrandPageSettings>) {
@@ -58,7 +114,14 @@ function MarcasAdmin() {
         ]}
       />
 
+      <div className="flex justify-end">
+        <Button onClick={() => setCreateOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" /> Nova marca
+        </Button>
+      </div>
+
       <div className="space-y-4">
+
         {(pages ?? []).map((p) => (
           <div key={p.id} className="rounded-xl border border-border bg-background p-5">
             <div className="mb-4 flex items-center justify-between">
@@ -119,6 +182,47 @@ function MarcasAdmin() {
           </p>
         )}
       </div>
+
+      <Dialog open={createOpen} onOpenChange={(o) => !saving && setCreateOpen(o)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Nova marca de produto</DialogTitle>
+            <DialogDescription>
+              Cria a marca no catálogo (disponível ao cadastrar produtos) e sua página dedicada.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <Field label="Nome da marca">
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Ex.: Nikon"
+                autoFocus
+              />
+              {name.trim() && (
+                <p className="text-xs text-muted-foreground">Endereço: /marca/{slugify(name)}</p>
+              )}
+            </Field>
+            <Field label="Descrição (opcional)">
+              <Textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+                placeholder="Breve descrição da marca"
+              />
+            </Field>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateOpen(false)} disabled={saving}>
+              Cancelar
+            </Button>
+            <Button onClick={createBrand} disabled={saving}>
+              {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Criar marca
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
