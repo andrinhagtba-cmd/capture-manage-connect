@@ -198,7 +198,7 @@ function BannersAdmin() {
             </div>
 
             {group.items.map((b) => {
-              const idx = list.findIndex((i) => i.id === b.id);
+              const gIdx = group.items.findIndex((i) => i.id === b.id);
               return (
           <div
             key={b.id}
