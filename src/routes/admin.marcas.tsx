@@ -1,13 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useBrandPageSettingsList, type BrandPageSettings } from "@/lib/site-content";
+import { slugify } from "@/lib/products-admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, Tag, Eye } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Loader2, Tag, Eye, Plus } from "lucide-react";
 import { AdminPageHero } from "@/components/admin/ui";
 import { toast } from "sonner";
 
@@ -25,9 +35,55 @@ const BRAND_NAMES: Record<string, string> = {
 function MarcasAdmin() {
   const qc = useQueryClient();
   const { data: pages, isLoading } = useBrandPageSettingsList();
+  const [createOpen, setCreateOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [saving, setSaving] = useState(false);
 
   function invalidate() {
     qc.invalidateQueries({ queryKey: ["brand_page_settings"] });
+    qc.invalidateQueries({ queryKey: ["admin-brands"] });
+    qc.invalidateQueries({ queryKey: ["brands"] });
+  }
+
+  async function createBrand() {
+    const trimmed = name.trim();
+    if (!trimmed) return toast.error("Informe o nome da marca.");
+    const slug = slugify(trimmed);
+    if (!slug) return toast.error("Nome inválido para gerar o endereço (slug).");
+
+    setSaving(true);
+    try {
+      const maxSort = Math.max(0, ...(pages ?? []).map(() => 0));
+      const { error: brandErr } = await supabase.from("brands").insert({
+        name: trimmed,
+        slug,
+        description: description.trim() || null,
+        sort_order: maxSort,
+      });
+      if (brandErr) {
+        if (brandErr.code === "23505") throw new Error("Já existe uma marca com esse nome/endereço.");
+        throw brandErr;
+      }
+
+      // Cria a página de marca correspondente (ignora se já existir).
+      await supabase.from("brand_page_settings").insert({
+        brand_slug: slug,
+        intro_title: trimmed,
+        intro_text: description.trim() || null,
+        is_published: false,
+      });
+
+      toast.success(`Marca "${trimmed}" criada.`);
+      setName("");
+      setDescription("");
+      setCreateOpen(false);
+      invalidate();
+    } catch (e: any) {
+      toast.error(e?.message ?? "Não foi possível criar a marca.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function update(id: string, patch: Partial<BrandPageSettings>) {
