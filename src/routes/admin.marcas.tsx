@@ -114,7 +114,14 @@ function MarcasAdmin() {
         ]}
       />
 
+      <div className="flex justify-end">
+        <Button onClick={() => setCreateOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" /> Nova marca
+        </Button>
+      </div>
+
       <div className="space-y-4">
+
         {(pages ?? []).map((p) => (
           <div key={p.id} className="rounded-xl border border-border bg-background p-5">
             <div className="mb-4 flex items-center justify-between">
