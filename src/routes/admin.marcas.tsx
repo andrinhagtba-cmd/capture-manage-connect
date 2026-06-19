@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useBrandPageSettingsList, type BrandPageSettings } from "@/lib/site-content";
+import { useBrandPageSettingsList, useHeroBanners, type BrandPageSettings } from "@/lib/site-content";
 import { slugify } from "@/lib/products-admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,8 +17,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, Tag, Eye, Plus } from "lucide-react";
-import { AdminPageHero } from "@/components/admin/ui";
+import { Loader2, Tag, Eye, Plus, ImageIcon } from "lucide-react";
+import { AdminPageHero, MediaUploadField } from "@/components/admin/ui";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/marcas")({
@@ -35,6 +35,7 @@ const BRAND_NAMES: Record<string, string> = {
 function MarcasAdmin() {
   const qc = useQueryClient();
   const { data: pages, isLoading } = useBrandPageSettingsList();
+  const { data: heroBanners } = useHeroBanners();
   const [createOpen, setCreateOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -44,6 +45,41 @@ function MarcasAdmin() {
     qc.invalidateQueries({ queryKey: ["brand_page_settings"] });
     qc.invalidateQueries({ queryKey: ["admin-brands"] });
     qc.invalidateQueries({ queryKey: ["brands"] });
+    qc.invalidateQueries({ queryKey: ["hero_banners"] });
+  }
+
+  // Cria ou atualiza o banner (hero) usado no topo da página da marca.
+  // A imagem do banner da marca fica em hero_banners com location = slug.
+  async function setBrandHeroImage(
+    slug: string,
+    field: "desktop_image_url" | "mobile_image_url",
+    url: string,
+  ) {
+    const existing = (heroBanners ?? []).find((b) => b.location === slug);
+    if (existing) {
+      const patch =
+        field === "desktop_image_url"
+          ? { desktop_image_url: url }
+          : { mobile_image_url: url };
+      const { error } = await supabase
+        .from("hero_banners")
+        .update(patch)
+        .eq("id", existing.id);
+      if (error) return toast.error(error.message);
+    } else {
+      const { error } = await supabase.from("hero_banners").insert({
+        location: slug,
+        title: BRAND_NAMES[slug] ?? slug,
+        media_type: "image",
+        is_active: true,
+        order_index: 0,
+        desktop_image_url: field === "desktop_image_url" ? url : null,
+        mobile_image_url: field === "mobile_image_url" ? url : null,
+      });
+      if (error) return toast.error(error.message);
+    }
+    toast.success("Imagem do banner atualizada");
+    invalidate();
   }
 
   async function createBrand() {
@@ -131,6 +167,36 @@ function MarcasAdmin() {
                 <Label className="text-sm">{p.is_published ? "Publicada" : "Rascunho"}</Label>
               </div>
             </div>
+
+            {(() => {
+              const banner = (heroBanners ?? []).find((b) => b.location === p.brand_slug);
+              return (
+                <div className="mb-4 rounded-lg border border-border/70 bg-surface/40 p-4">
+                  <div className="mb-3 flex items-center gap-2">
+                    <ImageIcon className="h-4 w-4 text-primary" />
+                    <p className="text-sm font-semibold">Imagem do banner (topo da página)</p>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <MediaUploadField
+                      label="Imagem desktop"
+                      value={banner?.desktop_image_url}
+                      folder="banners"
+                      onChange={(url) => setBrandHeroImage(p.brand_slug, "desktop_image_url", url)}
+                    />
+                    <MediaUploadField
+                      label="Imagem mobile (opcional)"
+                      value={banner?.mobile_image_url}
+                      folder="banners"
+                      onChange={(url) => setBrandHeroImage(p.brand_slug, "mobile_image_url", url)}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Para textos, botões e vídeo do banner, use a página de Banners e Heros.
+                  </p>
+                </div>
+              );
+            })()}
+
 
             <div className="grid gap-3 sm:grid-cols-2">
               <Field label="Chapéu (eyebrow)">
