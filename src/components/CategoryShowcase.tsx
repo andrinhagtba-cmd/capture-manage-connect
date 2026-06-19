@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { useCategoryProducts, useCategoriesProducts, type Product } from "@/lib/catalog";
 import { useCompany } from "@/lib/site-content";
+import { useAutoplayVideoRef } from "@/hooks/use-autoplay-video";
 import placeholder from "@/assets/product-placeholder.jpg";
 
 function StarRating() {
@@ -139,6 +140,7 @@ export function CategoryShowcase({
   ctaTo = "catalog",
   ctaHref,
 }: CategoryShowcaseProps) {
+  const videoRef = useAutoplayVideoRef();
   const single = useCategoryProducts(categorySlug ?? "");
   const multi = useCategoriesProducts(categorySlugs ?? []);
   const products = productsProp ?? (categorySlugs?.length ? multi.data : single.data);
@@ -165,6 +167,7 @@ export function CategoryShowcase({
         <div className="relative overflow-hidden rounded-[2rem] shadow-xl">
           {videoSrc ? (
             <video
+              ref={videoRef}
               className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
               src={videoSrc}
               autoPlay
@@ -172,6 +175,7 @@ export function CategoryShowcase({
               loop
               playsInline
               preload="auto"
+              poster={imageSrc}
             />
           ) : (
             <img

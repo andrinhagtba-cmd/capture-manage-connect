@@ -4,6 +4,7 @@ import { QuoteDialog } from "@/components/QuoteDialog";
 import { GridGlowBackground } from "@/components/ui/grid-glow-background";
 import { Button } from "@/components/ui/button";
 import { useHeroBanners, type HeroBanner } from "@/lib/site-content";
+import { useAutoplayVideoRef } from "@/hooks/use-autoplay-video";
 import { COMPANY_NAME } from "@/lib/site";
 import { ShieldCheck, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import heroHome from "@/assets/hero-home.jpg";
@@ -103,6 +104,7 @@ export function HeroSlider() {
 }
 
 function HeroMedia({ banner, active }: { banner: HeroBanner | null; active: boolean }) {
+  const videoRef = useAutoplayVideoRef();
   const image = banner?.desktop_image_url || heroHome;
   const overlay = banner?.overlay_opacity ?? 0.7;
   return (
@@ -111,11 +113,13 @@ function HeroMedia({ banner, active }: { banner: HeroBanner | null; active: bool
     >
       {banner?.media_type === "video" && banner.video_url ? (
         <video
+          ref={videoRef}
           src={banner.video_url}
           autoPlay
           muted
           loop
           playsInline
+          preload="auto"
           poster={image}
           className="h-full w-full object-cover"
         />
