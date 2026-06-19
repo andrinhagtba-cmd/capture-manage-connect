@@ -84,6 +84,15 @@ function MarcasAdmin() {
     invalidate();
   }
 
+  async function updateBrandCardImage(slug: string, url: string) {
+    const brand = brands?.find((b) => b.slug === slug);
+    if (!brand) return;
+    const { error } = await supabase.from("brands").update({ card_image_url: url }).eq("id", brand.id);
+    if (error) return toast.error(error.message);
+    toast.success("Imagem do card atualizada");
+    invalidate();
+  }
+
   async function createBrand() {
     const trimmed = name.trim();
     if (!trimmed) return toast.error("Informe o nome da marca.");
