@@ -140,6 +140,7 @@ export function CategoryShowcase({
   ctaTo = "catalog",
   ctaHref,
 }: CategoryShowcaseProps) {
+  const videoRef = useAutoplayVideoRef();
   const single = useCategoryProducts(categorySlug ?? "");
   const multi = useCategoriesProducts(categorySlugs ?? []);
   const products = productsProp ?? (categorySlugs?.length ? multi.data : single.data);
