@@ -130,6 +130,27 @@ function MarcasAdmin() {
     invalidate();
   }
 
+  async function moveBrand(slug: string, dir: -1 | 1) {
+    if (!brands) return;
+    const sorted = [...brands].sort((a, b) => a.sort_order - b.sort_order);
+    const idx = sorted.findIndex((b) => b.slug === slug);
+    if (idx < 0) return;
+    const swapIdx = idx + dir;
+    if (swapIdx < 0 || swapIdx >= sorted.length) return;
+    const current = sorted[idx];
+    const swap = sorted[swapIdx];
+    const { error: err1 } = await supabase.from("brands").update({ sort_order: swap.sort_order }).eq("id", current.id);
+    const { error: err2 } = await supabase.from("brands").update({ sort_order: current.sort_order }).eq("id", swap.id);
+    if (err1 || err2) return toast.error((err1 || err2)?.message);
+    toast.success("Ordem atualizada");
+    invalidate();
+  }
+
+  const brandMap = new Map(brands?.map((b) => [b.slug, b]) ?? []);
+  const orderedPages = (pages ?? [])
+    .map((p) => ({ ...p, _sortOrder: brandMap.get(p.brand_slug)?.sort_order ?? 0 }))
+    .sort((a, b) => a._sortOrder - b._sortOrder);
+
   if (isLoading) {
     return (
       <div className="flex h-64 items-center justify-center">
