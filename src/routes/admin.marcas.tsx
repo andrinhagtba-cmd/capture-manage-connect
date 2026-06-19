@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useBrands, type Brand } from "@/lib/catalog";
 import { useBrandPageSettingsList, useHeroBanners, type BrandPageSettings } from "@/lib/site-content";
 import { slugify } from "@/lib/products-admin";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, Tag, Eye, Plus, ImageIcon } from "lucide-react";
+import { Loader2, Tag, Eye, Plus, ImageIcon, ArrowUp, ArrowDown } from "lucide-react";
 import { AdminPageHero, MediaUploadField } from "@/components/admin/ui";
 import { toast } from "sonner";
 
@@ -35,6 +36,7 @@ const BRAND_NAMES: Record<string, string> = {
 function MarcasAdmin() {
   const qc = useQueryClient();
   const { data: pages, isLoading } = useBrandPageSettingsList();
+  const { data: brands } = useBrands();
   const { data: heroBanners } = useHeroBanners();
   const [createOpen, setCreateOpen] = useState(false);
   const [name, setName] = useState("");
@@ -128,6 +130,27 @@ function MarcasAdmin() {
     invalidate();
   }
 
+  async function moveBrand(slug: string, dir: -1 | 1) {
+    if (!brands) return;
+    const sorted = [...brands].sort((a, b) => a.sort_order - b.sort_order);
+    const idx = sorted.findIndex((b) => b.slug === slug);
+    if (idx < 0) return;
+    const swapIdx = idx + dir;
+    if (swapIdx < 0 || swapIdx >= sorted.length) return;
+    const current = sorted[idx];
+    const swap = sorted[swapIdx];
+    const { error: err1 } = await supabase.from("brands").update({ sort_order: swap.sort_order }).eq("id", current.id);
+    const { error: err2 } = await supabase.from("brands").update({ sort_order: current.sort_order }).eq("id", swap.id);
+    if (err1 || err2) return toast.error((err1 || err2)?.message);
+    toast.success("Ordem atualizada");
+    invalidate();
+  }
+
+  const brandMap = new Map(brands?.map((b) => [b.slug, b]) ?? []);
+  const orderedPages = (pages ?? [])
+    .map((p) => ({ ...p, _sortOrder: brandMap.get(p.brand_slug)?.sort_order ?? 0 }))
+    .sort((a, b) => a._sortOrder - b._sortOrder);
+
   if (isLoading) {
     return (
       <div className="flex h-64 items-center justify-center">
@@ -158,11 +181,17 @@ function MarcasAdmin() {
 
       <div className="space-y-4">
 
-        {(pages ?? []).map((p) => (
+        {orderedPages.map((p) => (
           <div key={p.id} className="rounded-xl border border-border bg-background p-5">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-bold">{BRAND_NAMES[p.brand_slug] ?? p.brand_slug}</h2>
               <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveBrand(p.brand_slug, -1)} title="Subir">
+                  <ArrowUp className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveBrand(p.brand_slug, 1)} title="Descer">
+                  <ArrowDown className="h-4 w-4" />
+                </Button>
                 <Switch checked={p.is_published} onCheckedChange={(v) => update(p.id, { is_published: v })} />
                 <Label className="text-sm">{p.is_published ? "Publicada" : "Rascunho"}</Label>
               </div>
