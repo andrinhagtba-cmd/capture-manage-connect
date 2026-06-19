@@ -225,10 +225,10 @@ function BannersAdmin() {
                   <Label className="text-xs font-medium">{b.is_active ? "Ativo" : "Inativo"}</Label>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Button size="icon" variant="ghost" disabled={idx === 0} onClick={() => move(b, -1)}>
+                  <Button size="icon" variant="ghost" disabled={gIdx === 0} onClick={() => move(group.items, b, -1)}>
                     <ArrowUp className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" disabled={idx === list.length - 1} onClick={() => move(b, 1)}>
+                  <Button size="icon" variant="ghost" disabled={gIdx === group.items.length - 1} onClick={() => move(group.items, b, 1)}>
                     <ArrowDown className="h-4 w-4" />
                   </Button>
                   <Button size="icon" variant="ghost" onClick={() => remove(b.id)}>
