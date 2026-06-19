@@ -132,7 +132,7 @@ export const scrapeProducts = createServerFn({ method: "POST" })
     }
 
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 28000);
+    const timer = setTimeout(() => controller.abort(), 58000);
 
     try {
       const res = await fetch("https://api.firecrawl.dev/v2/scrape", {
@@ -146,7 +146,8 @@ export const scrapeProducts = createServerFn({ method: "POST" })
           url: data.url,
           onlyMainContent: true,
           waitFor: 2500,
-          timeout: 25000,
+          timeout: 50000,
+          proxy: "auto",
           formats: [
             {
               type: "json",
