@@ -229,6 +229,13 @@ export function LinkImportDialog({
             </Button>
           </div>
 
+          {errorMsg && !found && (
+            <div className="flex items-start gap-2 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+          )}
+
           {found && found.length > 0 && (
             <>
               <div className="grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
