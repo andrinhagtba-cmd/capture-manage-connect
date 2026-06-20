@@ -12,8 +12,11 @@ import { Button } from "@/components/ui/button";
 import { useBrands, useProducts } from "@/lib/catalog";
 import { useHomeSections, type HomeSection } from "@/lib/site-content";
 import { BRAND_THEME } from "@/lib/site";
-import { ShieldCheck, Award, Headphones, Truck, ArrowRight } from "lucide-react";
+import { ShieldCheck, Award, Headphones, Truck, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+import { useCallback, useEffect, useState } from "react";
 const BRAND_FALLBACK: Record<string, string> = {};
+
 
 
 export const Route = createFileRoute("/")({
@@ -57,36 +60,44 @@ const DEFAULT_SECTIONS: Pick<HomeSection, "section_key" | "eyebrow" | "title" | 
   { section_key: "cta", eyebrow: "Atendimento personalizado", title: "Não encontrou o que procura?", subtitle: "Nossa equipe monta um orçamento personalizado para o seu projeto, com as melhores condições e equipamentos das principais marcas do mundo.", is_active: true, order_index: 8 },
 ];
 
-function Home() {
-  const { data: brands } = useBrands();
-  const { data: featured } = useProducts({ featured: true });
-  const { data: dbSections } = useHomeSections();
+function BrandsCarousel({ brands }: { brands: ReturnType<typeof useBrands>['data'] }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: false, slidesToScroll: 1 });
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
 
-  const sections = (dbSections && dbSections.length > 0 ? dbSections : DEFAULT_SECTIONS)
-    .filter((s) => s.is_active)
-    .sort((a, b) => a.order_index - b.order_index);
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
 
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi, onSelect]);
 
-
-
-
-  const renderSection = (s: { section_key: string; eyebrow: string | null; title: string | null; subtitle: string | null }) => {
-    switch (s.section_key) {
-      case "premium":
-        return <PremiumShowcase key="premium" />;
-      case "brands":
-        return (
-          <section key="brands" className="container-page -mt-12 relative z-10">
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {(brands ?? []).map((b) => {
-                const theme = BRAND_THEME[b.slug];
-                const image = b.card_image_url;
-                return (
+  return (
+    <section className="container-page -mt-12 relative z-10">
+      <div className="relative">
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-5">
+            {(brands ?? []).map((b) => {
+              const theme = BRAND_THEME[b.slug];
+              const image = b.card_image_url;
+              return (
+                <div
+                  key={b.id}
+                  className="min-w-0 shrink-0 grow-0 basis-[85%] sm:basis-[48%] lg:basis-[calc(25%-15px)]"
+                >
                   <Link
-                    key={b.id}
                     to="/marca/$slug"
                     params={{ slug: b.slug }}
-                    className="hover-lift group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+                    className="hover-lift group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden gradient-dark">
                       {image ? (
@@ -120,11 +131,54 @@ function Home() {
                       </span>
                     </div>
                   </Link>
-                );
-              })}
-            </div>
-          </section>
-        );
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          aria-label="Anterior"
+          onClick={() => emblaApi?.scrollPrev()}
+          disabled={!canScrollPrev}
+          className="absolute -left-1 top-[42%] z-20 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-background text-foreground shadow-md transition-colors hover:bg-surface disabled:opacity-40 md:-left-5"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <button
+          type="button"
+          aria-label="Próximo"
+          onClick={() => emblaApi?.scrollNext()}
+          disabled={!canScrollNext}
+          className="absolute -right-1 top-[42%] z-20 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-background text-foreground shadow-md transition-colors hover:bg-surface disabled:opacity-40 md:-right-5"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function Home() {
+  const { data: brands } = useBrands();
+  const { data: featured } = useProducts({ featured: true });
+  const { data: dbSections } = useHomeSections();
+
+  const sections = (dbSections && dbSections.length > 0 ? dbSections : DEFAULT_SECTIONS)
+    .filter((s) => s.is_active)
+    .sort((a, b) => a.order_index - b.order_index);
+
+
+
+
+
+  const renderSection = (s: { section_key: string; eyebrow: string | null; title: string | null; subtitle: string | null }) => {
+    switch (s.section_key) {
+      case "premium":
+        return <PremiumShowcase key="premium" />;
+      case "brands":
+        return <BrandsCarousel key="brands" brands={brands ?? []} />;
       case "features":
         return (
           <section key="features" className="container-page mt-20">
