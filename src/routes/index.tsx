@@ -12,8 +12,11 @@ import { Button } from "@/components/ui/button";
 import { useBrands, useProducts } from "@/lib/catalog";
 import { useHomeSections, type HomeSection } from "@/lib/site-content";
 import { BRAND_THEME } from "@/lib/site";
-import { ShieldCheck, Award, Headphones, Truck, ArrowRight } from "lucide-react";
+import { ShieldCheck, Award, Headphones, Truck, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+import { useCallback, useEffect, useState } from "react";
 const BRAND_FALLBACK: Record<string, string> = {};
+
 
 
 export const Route = createFileRoute("/")({
