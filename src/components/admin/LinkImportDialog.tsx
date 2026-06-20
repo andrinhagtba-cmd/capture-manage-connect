@@ -63,6 +63,7 @@ export function LinkImportDialog({
   const [found, setFound] = useState<ScrapedProduct[] | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [dupes, setDupes] = useState<Set<number>>(new Set());
   const [categoryId, setCategoryId] = useState<string>("");
   const cancelRef = useRef(false);
 
