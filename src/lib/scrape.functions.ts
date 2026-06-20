@@ -147,7 +147,7 @@ export const scrapeProducts = createServerFn({ method: "POST" })
               type: "json",
               schema: PRODUCT_SCHEMA,
               prompt:
-                "Extraia todos os produtos visíveis nesta página. Pode ser a página de um único produto ou uma lista/categoria com vários produtos. Para cada produto inclua nome, descrições, preço, URL absoluta da imagem principal, imagens adicionais, link do produto, SKU, modelo e especificações técnicas quando disponíveis. Use sempre URLs absolutas para imagens e links.",
+                "Extraia todos os produtos visíveis nesta página. Pode ser a página de um único produto ou uma lista/categoria com vários produtos. Para cada produto inclua nome, descrições, preço, URL absoluta da imagem principal, imagens adicionais, SKU, modelo e especificações técnicas quando disponíveis. NÃO inclua o link/URL da página do produto. Use sempre URLs absolutas para imagens.",
             },
           ],
         }),
