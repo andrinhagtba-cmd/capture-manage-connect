@@ -70,6 +70,26 @@ function resolveStaticPath(pathname: string): string | null {
   return candidate;
 }
 
+function parseRangeHeader(rangeHeader: string | undefined, size: number) {
+  if (!rangeHeader?.startsWith("bytes=")) return null;
+  const [startRaw, endRaw] = rangeHeader.replace("bytes=", "").split("-");
+
+  let start = startRaw ? Number.parseInt(startRaw, 10) : Number.NaN;
+  let end = endRaw ? Number.parseInt(endRaw, 10) : Number.NaN;
+
+  if (Number.isNaN(start) && Number.isNaN(end)) return null;
+  if (Number.isNaN(start)) {
+    const suffixLength = end;
+    start = Math.max(size - suffixLength, 0);
+    end = size - 1;
+  } else if (Number.isNaN(end)) {
+    end = size - 1;
+  }
+
+  if (start < 0 || end >= size || start > end) return null;
+  return { start, end };
+}
+
 function tryServeStatic(req: IncomingMessage, res: ServerResponse, pathname: string): boolean {
   const method = req.method ?? "GET";
   if (method !== "GET" && method !== "HEAD") return false;
@@ -92,17 +112,30 @@ function tryServeStatic(req: IncomingMessage, res: ServerResponse, pathname: str
     ? "public, max-age=31536000, immutable"
     : "public, max-age=3600";
 
-  res.statusCode = 200;
+  const range = parseRangeHeader(req.headers.range, stat.size);
+
+  if (req.headers.range && !range) {
+    res.statusCode = 416;
+    res.setHeader("Content-Range", `bytes */${stat.size}`);
+    res.end();
+    return true;
+  }
+
+  res.statusCode = range ? 206 : 200;
   res.setHeader("Content-Type", mimeFor(filePath));
-  res.setHeader("Content-Length", String(stat.size));
+  res.setHeader("Accept-Ranges", "bytes");
+  res.setHeader("Content-Length", String(range ? range.end - range.start + 1 : stat.size));
   res.setHeader("Cache-Control", cacheControl);
+  if (range) {
+    res.setHeader("Content-Range", `bytes ${range.start}-${range.end}/${stat.size}`);
+  }
 
   if (method === "HEAD") {
     res.end();
     return true;
   }
 
-  const stream = createReadStream(filePath);
+  const stream = createReadStream(filePath, range ? { start: range.start, end: range.end } : undefined);
   stream.on("error", () => {
     if (!res.headersSent) res.statusCode = 500;
     res.end();
