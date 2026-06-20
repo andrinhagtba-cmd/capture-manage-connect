@@ -60,6 +60,106 @@ const DEFAULT_SECTIONS: Pick<HomeSection, "section_key" | "eyebrow" | "title" | 
   { section_key: "cta", eyebrow: "Atendimento personalizado", title: "Não encontrou o que procura?", subtitle: "Nossa equipe monta um orçamento personalizado para o seu projeto, com as melhores condições e equipamentos das principais marcas do mundo.", is_active: true, order_index: 8 },
 ];
 
+function BrandsCarousel({ brands }: { brands: ReturnType<typeof useBrands>['data'] }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: false, slidesToScroll: 1 });
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
+  return (
+    <section className="container-page -mt-12 relative z-10">
+      <div className="relative">
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-5">
+            {(brands ?? []).map((b) => {
+              const theme = BRAND_THEME[b.slug];
+              const image = b.card_image_url;
+              return (
+                <div
+                  key={b.id}
+                  className="min-w-0 shrink-0 grow-0 basis-[85%] sm:basis-[48%] lg:basis-[calc(25%-15px)]"
+                >
+                  <Link
+                    to="/marca/$slug"
+                    params={{ slug: b.slug }}
+                    className="hover-lift group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+                  >
+                    <div className="relative aspect-[4/3] overflow-hidden gradient-dark">
+                      {image ? (
+                        <img
+                          src={image}
+                          alt={`Produtos ${b.name}`}
+                          loading="lazy"
+                          width={800}
+                          height={600}
+                          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-muted">
+                          <span className="text-sm text-muted-foreground">Sem imagem</span>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                      <span className="absolute left-5 top-5 inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-md">
+                        {b.name}
+                      </span>
+                    </div>
+                    <div className="flex flex-1 flex-col p-6">
+                      <span
+                        className="inline-block h-1.5 w-12 rounded-full"
+                        style={{ background: theme?.color ?? "#888" }}
+                      />
+                      <h3 className="mt-4 text-2xl font-bold tracking-tight">{b.name}</h3>
+                      <p className="mt-2 flex-1 text-sm text-muted-foreground">{theme?.blurb}</p>
+                      <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+                        Explorar <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          aria-label="Anterior"
+          onClick={() => emblaApi?.scrollPrev()}
+          disabled={!canScrollPrev}
+          className="absolute -left-1 top-[42%] z-20 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-background text-foreground shadow-md transition-colors hover:bg-surface disabled:opacity-40 md:-left-5"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <button
+          type="button"
+          aria-label="Próximo"
+          onClick={() => emblaApi?.scrollNext()}
+          disabled={!canScrollNext}
+          className="absolute -right-1 top-[42%] z-20 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-border bg-background text-foreground shadow-md transition-colors hover:bg-surface disabled:opacity-40 md:-right-5"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      </div>
+    </section>
+  );
+}
+
 function Home() {
   const { data: brands } = useBrands();
   const { data: featured } = useProducts({ featured: true });
