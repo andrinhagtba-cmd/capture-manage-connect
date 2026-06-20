@@ -249,7 +249,7 @@ export type ScrapeStatusResult = {
 };
 
 const EXTRACT_PROMPT =
-  "Extraia TODOS os produtos visíveis nesta página, sem pular nenhum. Pode ser a página de um único produto ou uma lista/categoria com vários produtos paginados. Para cada produto inclua nome, descrições, preço, URL absoluta da imagem principal, imagens adicionais, link do produto, SKU, modelo e especificações técnicas quando disponíveis. Use sempre URLs absolutas para imagens e links.";
+  "Extraia TODOS os produtos listados nesta página, sem exceção e SEM LIMITE de quantidade. NÃO pare em 10 itens: percorra a grade/lista inteira do início ao fim e devolva todos os produtos encontrados (podem ser 20, 30, 50 ou mais). Pode ser a página de um único produto ou uma lista/categoria com vários produtos. Para cada produto inclua nome, descrições, preço, URL absoluta da imagem principal, imagens adicionais, link do produto, SKU, modelo e especificações técnicas quando disponíveis. Use sempre URLs absolutas para imagens e links.";
 
 export const startScrape = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
