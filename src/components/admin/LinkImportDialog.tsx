@@ -63,6 +63,7 @@ export function LinkImportDialog({
   const [found, setFound] = useState<ScrapedProduct[] | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [dupes, setDupes] = useState<Set<number>>(new Set());
   const [categoryId, setCategoryId] = useState<string>("");
   const cancelRef = useRef(false);
 
@@ -80,10 +81,14 @@ export function LinkImportDialog({
     setFound(null);
     setErrorMsg(null);
     setSelected(new Set());
+    setDupes(new Set());
     setScraping(false);
     setProgress(null);
     setImporting(false);
   }
+
+  const normName = (s: string | null | undefined) =>
+    (s ?? "").trim().toLowerCase().replace(/\s+/g, " ");
 
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -123,12 +128,55 @@ export function LinkImportDialog({
           return;
         }
         if (st.status === "completed") {
-          setFound(st.products);
-          setSelected(new Set(st.products.map((_, i) => i)));
-          if (st.products.length === 0) {
+          // Remove duplicados dentro do próprio resultado do scrape.
+          const seen = new Set<string>();
+          const unique = st.products.filter((p) => {
+            const key = normName(p.name);
+            if (!key || seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          });
+
+          // Busca o que já existe no banco para esta marca.
+          const existing =
+            (await supabase
+              .from("products")
+              .select("slug, name")
+              .eq("brand_id", brand.id)).data ?? [];
+          const existingKeys = new Set<string>();
+          for (const e of existing as any[]) {
+            if (e.slug) existingKeys.add(`slug:${slugify(e.name ?? "")}`);
+            if (e.name) existingKeys.add(`name:${normName(e.name)}`);
+          }
+
+          const dupeSet = new Set<number>();
+          unique.forEach((p, i) => {
+            const isDupe =
+              existingKeys.has(`name:${normName(p.name)}`) ||
+              existingKeys.has(`slug:${slugify(p.name)}`);
+            if (isDupe) dupeSet.add(i);
+          });
+
+          setFound(unique);
+          setDupes(dupeSet);
+          // Seleciona apenas os que ainda não existem.
+          setSelected(
+            new Set(
+              unique
+                .map((_, i) => i)
+                .filter((i) => !dupeSet.has(i)),
+            ),
+          );
+
+          const novos = unique.length - dupeSet.size;
+          if (unique.length === 0) {
             toast.error("Nenhum produto encontrado nesta página.");
+          } else if (dupeSet.size > 0) {
+            toast.success(
+              `${unique.length} encontrado(s) — ${novos} novo(s), ${dupeSet.size} já cadastrado(s) (ignorados).`,
+            );
           } else {
-            toast.success(`${st.products.length} produto(s) encontrado(s).`);
+            toast.success(`${unique.length} produto(s) encontrado(s).`);
           }
           return;
         }
@@ -173,23 +221,35 @@ export function LinkImportDialog({
     const existing =
       (await supabase
         .from("products")
-        .select("slug, brand_id")
+        .select("slug, name, brand_id")
         .eq("brand_id", brand.id)).data ?? [];
     const existingSlugs = new Set(existing.map((p: any) => p.slug));
+    const existingNames = new Set(
+      (existing as any[]).map((p) => normName(p.name)),
+    );
+
+    // Evita duplicados dentro do próprio lote selecionado.
+    const batchNames = new Set<string>();
 
     let imported = 0;
     let failed = 0;
     let skipped = 0;
 
     for (const p of chosen) {
-      let slug = slugify(p.name);
-      if (!slug) {
+      const slug = slugify(p.name);
+      const nkey = normName(p.name);
+      if (!slug || !nkey) {
         failed++;
         continue;
       }
-      if (existingSlugs.has(slug)) {
-        // make unique
-        slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
+      // Já existe no banco ou já foi inserido neste lote → ignora.
+      if (
+        existingSlugs.has(slug) ||
+        existingNames.has(nkey) ||
+        batchNames.has(nkey)
+      ) {
+        skipped++;
+        continue;
       }
 
       const payload: any = {
@@ -217,6 +277,8 @@ export function LinkImportDialog({
       } else {
         imported++;
         existingSlugs.add(slug);
+        existingNames.add(nkey);
+        batchNames.add(nkey);
       }
     }
 
@@ -341,7 +403,14 @@ export function LinkImportDialog({
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{p.name}</p>
+                      <p className="truncate text-sm font-medium">
+                        {p.name}
+                        {dupes.has(i) && (
+                          <span className="ml-2 rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-600">
+                            Já cadastrado
+                          </span>
+                        )}
+                      </p>
                       {p.short_description && (
                         <p className="truncate text-xs text-muted-foreground">
                           {p.short_description}
