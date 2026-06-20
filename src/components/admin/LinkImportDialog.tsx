@@ -273,6 +273,13 @@ export function LinkImportDialog({
             </Button>
           </div>
 
+          {scraping && progress && (
+            <div className="flex items-center gap-2 rounded-xl border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
+              <span>{progress}</span>
+            </div>
+          )}
+
           {errorMsg && !found && (
             <div className="flex items-start gap-2 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
