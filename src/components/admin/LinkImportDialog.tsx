@@ -221,23 +221,35 @@ export function LinkImportDialog({
     const existing =
       (await supabase
         .from("products")
-        .select("slug, brand_id")
+        .select("slug, name, brand_id")
         .eq("brand_id", brand.id)).data ?? [];
     const existingSlugs = new Set(existing.map((p: any) => p.slug));
+    const existingNames = new Set(
+      (existing as any[]).map((p) => normName(p.name)),
+    );
+
+    // Evita duplicados dentro do próprio lote selecionado.
+    const batchNames = new Set<string>();
 
     let imported = 0;
     let failed = 0;
     let skipped = 0;
 
     for (const p of chosen) {
-      let slug = slugify(p.name);
-      if (!slug) {
+      const slug = slugify(p.name);
+      const nkey = normName(p.name);
+      if (!slug || !nkey) {
         failed++;
         continue;
       }
-      if (existingSlugs.has(slug)) {
-        // make unique
-        slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
+      // Já existe no banco ou já foi inserido neste lote → ignora.
+      if (
+        existingSlugs.has(slug) ||
+        existingNames.has(nkey) ||
+        batchNames.has(nkey)
+      ) {
+        skipped++;
+        continue;
       }
 
       const payload: any = {
@@ -265,6 +277,8 @@ export function LinkImportDialog({
       } else {
         imported++;
         existingSlugs.add(slug);
+        existingNames.add(nkey);
+        batchNames.add(nkey);
       }
     }
 
