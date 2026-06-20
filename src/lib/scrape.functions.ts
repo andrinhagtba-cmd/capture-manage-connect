@@ -49,10 +49,6 @@ const PRODUCT_SCHEMA = {
             items: { type: "string" },
             description: "URLs absolutas de imagens adicionais",
           },
-          product_url: {
-            type: "string",
-            description: "URL absoluta da página do produto",
-          },
           sku: { type: "string" },
           model: { type: "string" },
           specifications: {
