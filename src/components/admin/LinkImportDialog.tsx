@@ -81,10 +81,14 @@ export function LinkImportDialog({
     setFound(null);
     setErrorMsg(null);
     setSelected(new Set());
+    setDupes(new Set());
     setScraping(false);
     setProgress(null);
     setImporting(false);
   }
+
+  const normName = (s: string | null | undefined) =>
+    (s ?? "").trim().toLowerCase().replace(/\s+/g, " ");
 
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
