@@ -1,5 +1,6 @@
 import { CategoryShowcase } from "@/components/CategoryShowcase";
-import dronesPoster from "../../public/videos/drones-com-camera-poster.jpg";
+
+const dronesPoster = "/videos/drones-com-camera-poster.jpg";
 
 export function DronesShowcase() {
   return (

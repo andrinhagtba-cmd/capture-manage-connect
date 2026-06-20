@@ -1,5 +1,6 @@
 import { CategoryShowcase } from "@/components/CategoryShowcase";
-import goproPoster from "../../public/videos/gopro-hero13-poster.jpg";
+
+const goproPoster = "/videos/gopro-hero13-poster.jpg";
 
 export function GoProShowcase() {
   return (
