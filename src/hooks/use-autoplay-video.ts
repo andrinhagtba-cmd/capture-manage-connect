@@ -24,6 +24,7 @@ export function useAutoplayVideoRef({ enabled = true }: { enabled?: boolean } = 
 
   const playVideo = useCallback((el: HTMLVideoElement) => {
     prepareVideo(el);
+    if (el.readyState === 0) el.load();
     const p = el.play();
     if (p && typeof p.catch === "function") p.catch(() => {});
   }, [prepareVideo]);
@@ -59,11 +60,19 @@ export function useAutoplayVideoRef({ enabled = true }: { enabled?: boolean } = 
     observer.observe(el);
     el.addEventListener("loadeddata", tryPlayIfVisible);
     el.addEventListener("canplay", tryPlayIfVisible);
+    window.addEventListener("touchstart", tryPlayIfVisible, { passive: true });
+    window.addEventListener("touchend", tryPlayIfVisible, { passive: true });
+    window.addEventListener("pointerdown", tryPlayIfVisible, { passive: true });
+    window.addEventListener("pointerup", tryPlayIfVisible, { passive: true });
 
     return () => {
       observer.disconnect();
       el.removeEventListener("loadeddata", tryPlayIfVisible);
       el.removeEventListener("canplay", tryPlayIfVisible);
+      window.removeEventListener("touchstart", tryPlayIfVisible);
+      window.removeEventListener("touchend", tryPlayIfVisible);
+      window.removeEventListener("pointerdown", tryPlayIfVisible);
+      window.removeEventListener("pointerup", tryPlayIfVisible);
       el.pause();
     };
   }, [enabled, playVideo, prepareVideo]);

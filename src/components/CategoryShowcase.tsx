@@ -166,28 +166,16 @@ export function CategoryShowcase({
       <div className="relative">
         <div className="relative overflow-hidden rounded-[2rem] shadow-xl">
           {videoSrc ? (
-            <>
-              {imageSrc && (
-                <img
-                  className="absolute inset-0 h-full w-full object-cover"
-                  src={imageSrc}
-                  alt=""
-                  loading="lazy"
-                  aria-hidden="true"
-                />
-              )}
-              <video
-                ref={videoRef}
-                className="relative h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
-                src={videoSrc}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                poster={imageSrc}
-              />
-            </>
+            <video
+              ref={videoRef}
+              className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
+              src={videoSrc}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
           ) : (
             <img
               className="h-[260px] w-full object-cover sm:h-[360px] md:h-[460px]"
