@@ -128,12 +128,55 @@ export function LinkImportDialog({
           return;
         }
         if (st.status === "completed") {
-          setFound(st.products);
-          setSelected(new Set(st.products.map((_, i) => i)));
-          if (st.products.length === 0) {
+          // Remove duplicados dentro do próprio resultado do scrape.
+          const seen = new Set<string>();
+          const unique = st.products.filter((p) => {
+            const key = normName(p.name);
+            if (!key || seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          });
+
+          // Busca o que já existe no banco para esta marca.
+          const existing =
+            (await supabase
+              .from("products")
+              .select("slug, name")
+              .eq("brand_id", brand.id)).data ?? [];
+          const existingKeys = new Set<string>();
+          for (const e of existing as any[]) {
+            if (e.slug) existingKeys.add(`slug:${slugify(e.name ?? "")}`);
+            if (e.name) existingKeys.add(`name:${normName(e.name)}`);
+          }
+
+          const dupeSet = new Set<number>();
+          unique.forEach((p, i) => {
+            const isDupe =
+              existingKeys.has(`name:${normName(p.name)}`) ||
+              existingKeys.has(`slug:${slugify(p.name)}`);
+            if (isDupe) dupeSet.add(i);
+          });
+
+          setFound(unique);
+          setDupes(dupeSet);
+          // Seleciona apenas os que ainda não existem.
+          setSelected(
+            new Set(
+              unique
+                .map((_, i) => i)
+                .filter((i) => !dupeSet.has(i)),
+            ),
+          );
+
+          const novos = unique.length - dupeSet.size;
+          if (unique.length === 0) {
             toast.error("Nenhum produto encontrado nesta página.");
+          } else if (dupeSet.size > 0) {
+            toast.success(
+              `${unique.length} encontrado(s) — ${novos} novo(s), ${dupeSet.size} já cadastrado(s) (ignorados).`,
+            );
           } else {
-            toast.success(`${st.products.length} produto(s) encontrado(s).`);
+            toast.success(`${unique.length} produto(s) encontrado(s).`);
           }
           return;
         }
