@@ -1,8 +1,12 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { scrapeProducts, type ScrapedProduct } from "@/lib/scrape.functions";
+import {
+  startScrape,
+  getScrapeStatus,
+  type ScrapedProduct,
+} from "@/lib/scrape.functions";
 import {
   slugify,
   type AdminBrand,
