@@ -10,7 +10,6 @@ export type ScrapedProduct = {
   price: string | null;
   main_image_url: string | null;
   gallery: string[];
-  product_url: string | null;
   sku: string | null;
   model: string | null;
   specifications: ScrapedSpec[];
