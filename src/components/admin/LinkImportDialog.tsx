@@ -1,8 +1,12 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { scrapeProducts, type ScrapedProduct } from "@/lib/scrape.functions";
+import {
+  startScrape,
+  getScrapeStatus,
+  type ScrapedProduct,
+} from "@/lib/scrape.functions";
 import {
   slugify,
   type AdminBrand,
@@ -49,15 +53,18 @@ export function LinkImportDialog({
   categories: AdminCategory[];
 }) {
   const qc = useQueryClient();
-  const runScrape = useServerFn(scrapeProducts);
+  const runStart = useServerFn(startScrape);
+  const runStatus = useServerFn(getScrapeStatus);
 
   const [url, setUrl] = useState("");
   const [scraping, setScraping] = useState(false);
+  const [progress, setProgress] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [found, setFound] = useState<ScrapedProduct[] | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [categoryId, setCategoryId] = useState<string>("");
+  const cancelRef = useRef(false);
 
   const brandCats = useMemo(
     () =>
@@ -68,32 +75,68 @@ export function LinkImportDialog({
   );
 
   function reset() {
+    cancelRef.current = true;
     setUrl("");
     setFound(null);
     setErrorMsg(null);
     setSelected(new Set());
     setScraping(false);
+    setProgress(null);
     setImporting(false);
   }
+
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
   async function doScrape() {
     if (!url.trim()) {
       toast.error("Cole o link da página de produtos.");
       return;
     }
+    cancelRef.current = false;
     setScraping(true);
     setFound(null);
     setErrorMsg(null);
+    setProgress("Iniciando a leitura da página…");
     try {
-      const result = await runScrape({ data: { url: url.trim() } });
-      if (!result.ok) {
-        setErrorMsg(result.error ?? "Não foi possível ler a página.");
-        toast.error(result.error ?? "Não foi possível ler a página.");
+      const start = await runStart({ data: { url: url.trim() } });
+      if (!start.ok || !start.jobId) {
+        const msg = start.error ?? "Não foi possível ler a página.";
+        setErrorMsg(msg);
+        toast.error(msg);
         return;
       }
-      setFound(result.products);
-      setSelected(new Set(result.products.map((_, i) => i)));
-      toast.success(`${result.products.length} produto(s) encontrado(s).`);
+
+      // Poll até concluir. Até ~4 minutos (120 tentativas x 2s).
+      const maxAttempts = 120;
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        if (cancelRef.current) return;
+        await sleep(2000);
+        if (cancelRef.current) return;
+        setProgress(
+          `Lendo a página e extraindo produtos… (${attempt + 1})`,
+        );
+        const st = await runStatus({ data: { jobId: start.jobId } });
+        if (!st.ok) {
+          const msg = st.error ?? "Falha ao ler a página.";
+          setErrorMsg(msg);
+          toast.error(msg);
+          return;
+        }
+        if (st.status === "completed") {
+          setFound(st.products);
+          setSelected(new Set(st.products.map((_, i) => i)));
+          if (st.products.length === 0) {
+            toast.error("Nenhum produto encontrado nesta página.");
+          } else {
+            toast.success(`${st.products.length} produto(s) encontrado(s).`);
+          }
+          return;
+        }
+      }
+      setErrorMsg(
+        "A leitura demorou mais que o esperado. Tente novamente ou use um link mais específico.",
+      );
+      toast.error("A leitura demorou demais. Tente novamente.");
     } catch (e: any) {
       const raw = String(e?.message ?? "");
       const friendly = /upstream|timeout|timed out|network|failed to fetch|502|504/i.test(
@@ -105,6 +148,7 @@ export function LinkImportDialog({
       toast.error(friendly);
     } finally {
       setScraping(false);
+      setProgress(null);
     }
   }
 
@@ -228,6 +272,13 @@ export function LinkImportDialog({
               Buscar
             </Button>
           </div>
+
+          {scraping && progress && (
+            <div className="flex items-center gap-2 rounded-xl border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
+              <span>{progress}</span>
+            </div>
+          )}
 
           {errorMsg && !found && (
             <div className="flex items-start gap-2 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
