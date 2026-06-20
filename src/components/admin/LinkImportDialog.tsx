@@ -273,6 +273,7 @@ export function LinkImportDialog({
         gallery_json: p.gallery,
         specifications_json: p.specifications,
         official_product_url: null,
+        order_index: --nextIndex,
         internal_notes: p.price ? `Preço no site de origem: ${p.price}` : null,
         availability_status: "sob_consulta",
         is_active: true,
