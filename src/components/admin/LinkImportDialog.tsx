@@ -264,7 +264,7 @@ export function LinkImportDialog({
         main_image_url: p.main_image_url,
         gallery_json: p.gallery,
         specifications_json: p.specifications,
-        official_product_url: p.product_url,
+        official_product_url: null,
         internal_notes: p.price ? `Preço no site de origem: ${p.price}` : null,
         availability_status: "sob_consulta",
         is_active: true,
