@@ -1,4 +1,5 @@
 import { CategoryShowcase } from "@/components/CategoryShowcase";
+import goproPoster from "../../public/videos/gopro-hero13-poster.jpg";
 
 export function GoProShowcase() {
   return (
@@ -6,6 +7,7 @@ export function GoProShowcase() {
       eyebrow="Linha GoPro"
       title="Câmeras de Ação GoPro"
       videoSrc="/videos/gopro-hero13.mp4"
+      imageSrc={goproPoster}
       categorySlug="gopro-acao"
       brandLabel="GoPro"
       brandSlug="gopro"
