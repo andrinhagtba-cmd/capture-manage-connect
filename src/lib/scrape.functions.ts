@@ -91,7 +91,6 @@ function normalizeProduct(raw: any): ScrapedProduct | null {
     gallery: toArray(raw?.gallery)
       .map((g) => clean(g))
       .filter((g): g is string => Boolean(g)),
-    product_url: clean(raw?.product_url),
     sku: clean(raw?.sku),
     model: clean(raw?.model),
     specifications: toArray(raw?.specifications)
