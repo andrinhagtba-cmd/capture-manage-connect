@@ -221,11 +221,19 @@ export function LinkImportDialog({
     const existing =
       (await supabase
         .from("products")
-        .select("slug, name, brand_id")
+        .select("slug, name, brand_id, order_index")
         .eq("brand_id", brand.id)).data ?? [];
     const existingSlugs = new Set(existing.map((p: any) => p.slug));
     const existingNames = new Set(
       (existing as any[]).map((p) => normName(p.name)),
+    );
+
+    // Menor order_index atual: novos produtos entram antes dos existentes,
+    // e o último cadastrado fica como o primeiro da lista.
+    let nextIndex = Math.min(
+      0,
+      ...(existing as any[])
+        .map((p) => (typeof p.order_index === "number" ? p.order_index : 0)),
     );
 
     // Evita duplicados dentro do próprio lote selecionado.
