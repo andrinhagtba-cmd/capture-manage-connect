@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 /**
  * iOS Safari (iPhone/iPad) só faz autoplay de vídeos que estejam REALMENTE
@@ -9,25 +9,67 @@ import { useCallback } from "react";
  * Este ref callback força `muted = true` e dispara `play()` manualmente,
  * garantindo a reprodução inline no iPhone.
  */
-export function useAutoplayVideoRef() {
-  return useCallback((el: HTMLVideoElement | null) => {
-    if (!el) return;
+export function useAutoplayVideoRef({ enabled = true }: { enabled?: boolean } = {}) {
+  const videoEl = useRef<HTMLVideoElement | null>(null);
+
+  const prepareVideo = useCallback((el: HTMLVideoElement) => {
     // Garante mudo antes de tentar tocar (exigência do iOS).
     el.muted = true;
     el.defaultMuted = true;
     el.setAttribute("muted", "");
+    el.setAttribute("playsinline", "");
+    el.setAttribute("webkit-playsinline", "");
     el.playsInline = true;
+  }, []);
 
-    const tryPlay = () => {
-      const p = el.play();
-      if (p && typeof p.catch === "function") p.catch(() => {});
+  const playVideo = useCallback((el: HTMLVideoElement) => {
+    prepareVideo(el);
+    const p = el.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  }, [prepareVideo]);
+
+  useEffect(() => {
+    const el = videoEl.current;
+    if (!el) return;
+
+    prepareVideo(el);
+
+    if (!enabled) {
+      el.pause();
+      return;
+    }
+
+    let isVisible = false;
+    const tryPlayIfVisible = () => {
+      if (isVisible) playVideo(el);
     };
 
-    if (el.readyState >= 2) {
-      tryPlay();
-    } else {
-      el.addEventListener("loadeddata", tryPlay, { once: true });
-      el.addEventListener("canplay", tryPlay, { once: true });
-    }
-  }, []);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting && entry.intersectionRatio > 0.15;
+        if (isVisible) {
+          playVideo(el);
+        } else {
+          el.pause();
+        }
+      },
+      { threshold: [0, 0.15, 0.5] },
+    );
+
+    observer.observe(el);
+    el.addEventListener("loadeddata", tryPlayIfVisible);
+    el.addEventListener("canplay", tryPlayIfVisible);
+
+    return () => {
+      observer.disconnect();
+      el.removeEventListener("loadeddata", tryPlayIfVisible);
+      el.removeEventListener("canplay", tryPlayIfVisible);
+      el.pause();
+    };
+  }, [enabled, playVideo, prepareVideo]);
+
+  return useCallback((el: HTMLVideoElement | null) => {
+    videoEl.current = el;
+    if (el) prepareVideo(el);
+  }, [prepareVideo]);
 }

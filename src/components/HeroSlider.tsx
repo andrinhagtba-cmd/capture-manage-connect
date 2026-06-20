@@ -104,7 +104,7 @@ export function HeroSlider() {
 }
 
 function HeroMedia({ banner, active }: { banner: HeroBanner | null; active: boolean }) {
-  const videoRef = useAutoplayVideoRef();
+  const videoRef = useAutoplayVideoRef({ enabled: active });
   const image = banner?.desktop_image_url || heroHome;
   const overlay = banner?.overlay_opacity ?? 0.7;
   return (
