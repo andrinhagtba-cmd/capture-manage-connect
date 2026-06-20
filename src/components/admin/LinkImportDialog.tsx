@@ -403,7 +403,14 @@ export function LinkImportDialog({
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{p.name}</p>
+                      <p className="truncate text-sm font-medium">
+                        {p.name}
+                        {dupes.has(i) && (
+                          <span className="ml-2 rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-600">
+                            Já cadastrado
+                          </span>
+                        )}
+                      </p>
                       {p.short_description && (
                         <p className="truncate text-xs text-muted-foreground">
                           {p.short_description}
